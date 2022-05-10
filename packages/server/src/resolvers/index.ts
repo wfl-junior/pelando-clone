@@ -1,1 +1,1 @@
-export * from "./HelloResolver";
+export * from "./hello.resolver";
