@@ -1,0 +1,12 @@
+{
+  "name": "pelando-clone",
+  "version": "0.0.1",
+  "author": "Wallace Júnior",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "web": "cd packages/web && yarn dev"
+  }
+}
