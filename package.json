@@ -3,10 +3,17 @@
   "version": "0.0.1",
   "author": "Wallace Júnior",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/@nestjs",
+      "**/@nestjs/**"
+    ]
+  },
   "scripts": {
-    "web": "cd packages/web && yarn dev"
+    "web": "cd packages/web && yarn dev",
+    "server": "cd packages/server && yarn start:dev"
   }
 }
