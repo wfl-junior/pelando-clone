@@ -10,7 +10,7 @@ export class Product extends EntityNode {
   body: string;
 
   @Field()
-  @Column()
+  @Column({ name: "coupon_code" })
   couponCode: string;
 
   @Field()
@@ -18,7 +18,7 @@ export class Product extends EntityNode {
   price: number;
 
   @Field()
-  @Column()
+  @Column({ name: "source_url" })
   sourceUrl: string;
 
   @Field()
