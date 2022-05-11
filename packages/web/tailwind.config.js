@@ -11,6 +11,8 @@ module.exports = {
     container: {
       center: true,
       padding: "2rem",
+      // para remover adição de media query para xs de container
+      screens: defaultTheme.screens,
     },
     screens: {
       xs: "425px",
