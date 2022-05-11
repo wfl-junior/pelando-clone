@@ -10,4 +10,8 @@
   *::after {
     font-family: "Nunito Sans", sans-serif;
   }
+
+  input {
+    @apply placeholder:text-default-placeholder;
+  }
 }

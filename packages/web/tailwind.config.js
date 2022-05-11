@@ -1,12 +1,17 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
+  mode: "jit",
   darkMode: "class",
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+    },
     screens: {
       xs: "425px",
       ...defaultTheme.screens,
@@ -47,6 +52,7 @@ module.exports = {
         "dark-input-background": "#262a2b",
         "dark-red": "#bf133c",
         "dark-blue": "#6699ff",
+        "default-placeholder": "#757575",
       },
     },
   },

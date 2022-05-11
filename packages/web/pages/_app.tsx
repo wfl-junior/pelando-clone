@@ -1,5 +1,6 @@
+import { Header } from "@/components/Header";
 import "@/styles/globals.css";
-import { NextPage } from "next";
+import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { Fragment } from "react";
@@ -18,7 +19,10 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => (
     </Head>
 
     <div className="flex min-h-screen flex-col text-default-foreground dark:text-dark-default-foreground bg-default-background dark:bg-dark-default-background">
-      <Component {...pageProps} />
+      <Header />
+      <main className="container my-8">
+        <Component {...pageProps} />
+      </main>
 
       <noscript>
         É necessário ter{" "}
