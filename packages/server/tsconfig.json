@@ -21,6 +21,7 @@
     "noUnusedParameters": true,
     "paths": { "@/*": ["./*"] },
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "strictPropertyInitialization": false
   }
 }
