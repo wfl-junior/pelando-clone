@@ -9,9 +9,9 @@ export class Product extends EntityNode {
   @Column("text")
   body: string;
 
-  @Field()
-  @Column({ name: "coupon_code" })
-  couponCode: string;
+  @Field(() => String, { nullable: true })
+  @Column({ name: "coupon_code", nullable: true, type: "varchar" })
+  couponCode: string | null;
 
   @Field()
   @Column("float")

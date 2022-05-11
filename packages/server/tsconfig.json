@@ -22,6 +22,7 @@
     "paths": { "@/*": ["./*"] },
     "strict": true,
     "esModuleInterop": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "resolveJsonModule": true
   }
 }
