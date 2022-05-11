@@ -18,7 +18,7 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => (
       <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     </Head>
 
-    <div className="flex min-h-screen flex-col text-default-foreground dark:text-dark-default-foreground bg-default-background dark:bg-dark-default-background">
+    <div className="text-default-foreground dark:text-dark-default-foreground bg-secondary-background dark:bg-dark-secondary-background flex min-h-screen flex-col">
       <Header />
       <main className="container my-8">
         <Component {...pageProps} />

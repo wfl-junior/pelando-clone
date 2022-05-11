@@ -1,14 +1,14 @@
-import { MenuIcon } from "@heroicons/react/outline";
-import { SearchIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import React from "react";
-import { Logo } from "./Logo";
+import { HamburguerIcon } from "../icons/HamburguerIcon";
+import { SearchIcon } from "../icons/SearchIcon";
+import { Logo } from "../Logo";
 
-export const Header: React.FC = () => (
-  <header className="container sticky top-0 flex justify-between gap-14 py-3">
+export const TopSection: React.FC = () => (
+  <div className="flex justify-between gap-14 pt-3">
     <div className="flex items-center gap-4">
-      <button>
-        <MenuIcon className="w-6" />
+      <button className="cursor-pointer">
+        <HamburguerIcon className="w-6" />
       </button>
 
       <Link href="/">
@@ -26,8 +26,8 @@ export const Header: React.FC = () => (
         autoComplete="off"
       />
 
-      <button className="absolute top-1/2 right-2 -translate-y-1/2 transform rounded-full">
-        <SearchIcon className="w-5" />
+      <button className="absolute inset-y-0 right-1.5 cursor-pointer rounded-full">
+        <SearchIcon className="w-6" />
       </button>
     </div>
 
@@ -36,5 +36,5 @@ export const Header: React.FC = () => (
         Cadastrar
       </button>
     </div>
-  </header>
+  </div>
 );
