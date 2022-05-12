@@ -1,5 +1,10 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 
+const screens = {
+  xs: "425px",
+  ...defaultTheme.screens,
+};
+
 module.exports = {
   mode: "jit",
   darkMode: "class",
@@ -7,17 +12,11 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
+  corePlugins: {
+    container: false,
+  },
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      // para remover adição de media query para xs de container
-      screens: defaultTheme.screens,
-    },
-    screens: {
-      xs: "425px",
-      ...defaultTheme.screens,
-    },
+    screens,
     extend: {
       colors: {
         primary: "#f27a0d",
@@ -59,8 +58,23 @@ module.exports = {
     },
   },
   plugins: [
-    function ({ addComponents }) {
-      addComponents({
+    function ({ addUtilities }) {
+      addUtilities({
+        ".container": {
+          width: "100%",
+          paddingInline: "0.5rem",
+          [`@media (min-width: ${screens.md})`]: {
+            paddingInline: "1rem",
+          },
+          [`@media (min-width: ${screens.lg})`]: {
+            paddingInline: "1.5rem",
+          },
+          [`@media (min-width: ${screens.xl})`]: {
+            paddingInline: "2rem",
+            maxWidth: "1424px",
+            marginInline: "auto",
+          },
+        },
         ".no-scrollbar": {
           scrollbarWidth: "none",
           msOverflowStyle: "none",
