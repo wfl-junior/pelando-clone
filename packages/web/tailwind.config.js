@@ -62,10 +62,7 @@ module.exports = {
       addUtilities({
         ".container": {
           width: "100%",
-          paddingInline: "0.5rem",
-          [`@media (min-width: ${screens.md})`]: {
-            paddingInline: "1rem",
-          },
+          paddingInline: "1rem",
           [`@media (min-width: ${screens.lg})`]: {
             paddingInline: "1.5rem",
           },
