@@ -20,7 +20,7 @@ export const ScrollButton: React.FC<ScrollButtonProps> = ({
   return (
     <button
       className={classNames(
-        "bg-default-background dark:bg-dark-default-background before:from-default-background before:to-default-background/0 dark:before:from-dark-default-background dark:before:to-dark-default-background/0 absolute z-10 flex h-full w-10 items-center justify-center before:absolute before:inset-y-0 before:w-full",
+        "bg-default-background dark:bg-dark-default-background before:from-default-background before:to-default-background/0 dark:before:from-dark-default-background dark:before:to-dark-default-background/0 absolute z-10 flex h-full w-7 items-center justify-center before:absolute before:inset-y-0 before:w-full sm:w-8 md:w-10",
         isLeft
           ? "left-0 before:left-full before:bg-gradient-to-r"
           : "right-0 before:right-full before:bg-gradient-to-l",
@@ -38,7 +38,7 @@ export const ScrollButton: React.FC<ScrollButtonProps> = ({
         updateButtonsVisibility();
       }}
     >
-      <Chevron className="w-8" />
+      <Chevron className="w-6 sm:w-7 md:w-8" />
     </button>
   );
 };

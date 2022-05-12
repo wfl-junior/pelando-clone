@@ -69,7 +69,7 @@ export const NavigationSection: React.FC = () => {
               <Link href={route}>
                 <a
                   className={classNames(
-                    "hover:text-primary-hover dark:hover:text-dark-primary-hover flex flex-col items-center gap-0.5 p-2 transition-colors",
+                    "hover:text-primary-hover dark:hover:text-dark-primary-hover flex flex-col items-center gap-0.5 p-3 transition-colors md:p-2",
                     {
                       "text-primary dark:text-dark-primary before:bg-primary dark:before:bg-dark-primary relative before:absolute before:inset-x-0 before:bottom-0 before:h-1":
                         isActive,
@@ -80,7 +80,7 @@ export const NavigationSection: React.FC = () => {
                   )}
                 >
                   <Icon className="w-6" />
-                  <span className="whitespace-nowrap text-sm font-bold">
+                  <span className="hidden whitespace-nowrap text-sm font-bold md:inline-block">
                     {label}
                   </span>
                 </a>
