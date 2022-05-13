@@ -1,3 +1,4 @@
+import { ArrowLeftIcon } from "@/components/icons/ArrowLeftIcon";
 import { SearchIcon } from "@/components/icons/SearchIcon";
 import { SearchOptionIcon } from "@/components/icons/SearchOptionIcon";
 import { Combobox } from "@headlessui/react";
@@ -20,33 +21,62 @@ const mostSearchedTerms = [
 
 export const SearchBar: React.FC = () => {
   const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
 
   return (
     <Combobox
       as="div"
       value=""
       onChange={value => setQuery(value)}
-      className="relative md:flex-grow"
+      className={classNames("md:relative md:flex-grow", {
+        "bg-default-background dark:bg-dark-default-background absolute inset-x-0 z-40":
+          open,
+      })}
     >
-      <Combobox.Input
-        type="text"
-        className="bg-input-background dark:bg-dark-input-background hidden w-full rounded-full py-1.5 pr-9 pl-4 focus:outline-none md:block"
-        placeholder="Procure por promoções ou lojas"
-        autoComplete="off"
-        value={query}
-        onChange={e => setQuery(e.target.value)}
-        displayValue={() => query}
-      />
+      <div className="flex items-center gap-2 md:contents">
+        {open && (
+          <button
+            className="aspect-square w-6 rounded-full md:hidden"
+            onClick={() => setOpen(false)}
+          >
+            <ArrowLeftIcon className="w-6" />
+          </button>
+        )}
 
-      <Combobox.Button className="bg-input-background dark:bg-dark-input-background flex aspect-square w-9 cursor-pointer items-center justify-center rounded-full md:absolute md:inset-y-0 md:right-1">
-        <SearchIcon className="w-6" />
-      </Combobox.Button>
+        {/* before para border bottom com overflow */}
+        <div
+          className={classNames(
+            "before:border-default-foreground bg-input-background dark:bg-dark-input-background relative w-full overflow-hidden rounded-full before:absolute before:inset-x-0 before:bottom-0 before:z-10 focus-within:before:border-b md:block",
+            { hidden: !open },
+          )}
+        >
+          {/* TODO: adicionar animação para <md */}
+          <Combobox.Input
+            type="text"
+            className="text-default-foreground dark:text-dark-default-foreground w-full rounded-full bg-inherit py-1.5 pr-9 pl-4 focus:outline-none"
+            placeholder="Procure por promoções ou lojas"
+            autoComplete="off"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            displayValue={() => query}
+          />
+        </div>
+
+        <Combobox.Button
+          className={classNames(
+            "bg-input-background dark:bg-dark-input-background flex aspect-square w-9 cursor-pointer items-center justify-center rounded-full md:absolute md:inset-y-0 md:right-1",
+            { "absolute inset-y-0 right-1": open },
+          )}
+          onClick={() => setOpen(true)}
+        >
+          <SearchIcon className="w-6" />
+        </Combobox.Button>
+      </div>
 
       {/* TODO: Adicionar parte de recentes e aparecer com input focus */}
-      {/* before para border top com overflow */}
-      <Combobox.Options className="bg-default-background dark:bg-dark-default-background border-secondary-button before:border-default-foreground absolute top-full z-10 w-full overflow-hidden rounded-xl border py-3 px-2 shadow-md before:absolute before:inset-x-0 before:top-0 before:border-t">
+      <Combobox.Options className="md:bg-default-background md:dark:bg-dark-default-background bg-default-background/95 dark:bg-dark-default-background/95 md:border-secondary-button fixed inset-0 top-12 z-50 overflow-hidden rounded-xl py-3 px-2 md:absolute md:inset-auto md:top-full md:w-full md:border md:shadow-md">
         <div className="before:bg-inactive-background dark:before:bg-dark-inactive-background relative my-1.5 text-center before:absolute before:inset-x-0 before:top-[55%] before:-z-10 before:h-[1px]">
-          <span className="text-secondary-foreground bg-default-background dark:bg-dark-default-background z-10 px-6 text-xs font-bold uppercase">
+          <span className="text-secondary-foreground bg-default-background dark:bg-dark-default-background z-10 px-6 text-[10px] font-bold uppercase md:text-xs">
             Mais Buscados
           </span>
         </div>
