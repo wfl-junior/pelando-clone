@@ -38,14 +38,13 @@ export const SearchBar: React.FC = () => {
         displayValue={() => query}
       />
 
-      <Combobox.Button className="bg-input-background dark:bg-dark-input-background absolute right-1 flex aspect-square w-9 cursor-pointer items-center justify-center rounded-full md:inset-y-0">
+      <Combobox.Button className="bg-input-background dark:bg-dark-input-background flex aspect-square w-9 cursor-pointer items-center justify-center rounded-full md:absolute md:inset-y-0 md:right-1">
         <SearchIcon className="w-6" />
       </Combobox.Button>
 
       {/* TODO: Adicionar parte de recentes e aparecer com input focus */}
       {/* before para border top com overflow */}
       <Combobox.Options className="bg-default-background dark:bg-dark-default-background border-secondary-button before:border-default-foreground absolute top-full z-10 w-full overflow-hidden rounded-xl border py-3 px-2 shadow-md before:absolute before:inset-x-0 before:top-0 before:border-t">
-        {/* before é a linha que cruza de um lado ao outro */}
         <div className="before:bg-inactive-background dark:before:bg-dark-inactive-background relative my-1.5 text-center before:absolute before:inset-x-0 before:top-[55%] before:-z-10 before:h-[1px]">
           <span className="text-secondary-foreground bg-default-background dark:bg-dark-default-background z-10 px-6 text-xs font-bold uppercase">
             Mais Buscados
