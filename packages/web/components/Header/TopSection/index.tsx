@@ -5,7 +5,7 @@ import React from "react";
 import { SearchBar } from "./SearchBar";
 
 export const TopSection: React.FC = () => (
-  <div className="xs:gap-2 relative flex items-center gap-1 pt-2 sm:pt-3 md:justify-between md:gap-14">
+  <div className="xs:gap-2 relative flex items-center gap-1 md:justify-between md:gap-14">
     <div className="flex flex-grow items-center gap-4 md:flex-grow-0">
       <button className="hidden cursor-pointer md:block">
         <HamburguerIcon className="w-6" />
