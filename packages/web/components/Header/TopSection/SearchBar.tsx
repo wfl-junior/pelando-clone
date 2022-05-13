@@ -1,6 +1,6 @@
-import { ArrowLeftIcon } from "@/components/icons/ArrowLeftIcon";
-import { SearchIcon } from "@/components/icons/SearchIcon";
-import { SearchOptionIcon } from "@/components/icons/SearchOptionIcon";
+import { ArrowLeftIcon } from "@/components/icons/header/top/ArrowLeftIcon";
+import { SearchIcon } from "@/components/icons/header/top/SearchIcon";
+import { SearchOptionIcon } from "@/components/icons/header/top/SearchOptionIcon";
 import { Combobox } from "@headlessui/react";
 import classNames from "classnames";
 import React, { useState } from "react";

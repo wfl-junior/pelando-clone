@@ -1,5 +1,5 @@
-import { ChevronLeftIcon } from "@/components/icons/nav/ChevronLeft";
-import { ChevronRightIcon } from "@/components/icons/nav/ChevronRight";
+import { ChevronLeftIcon } from "@/components/icons/header/nav/ChevronLeft";
+import { ChevronRightIcon } from "@/components/icons/header/nav/ChevronRight";
 import classNames from "classnames";
 import React from "react";
 
