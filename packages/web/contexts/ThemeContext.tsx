@@ -1,4 +1,5 @@
 import { useLocalStorageState } from "@/hooks/useLocalStorageState";
+import { isBrowser } from "@/utils/isBrowser";
 import React, {
   createContext,
   Dispatch,
@@ -20,7 +21,7 @@ const ThemeContext = createContext({} as IThemeContext);
 export const useThemeContext = () => useContext(ThemeContext);
 
 function getOSPrefersDark() {
-  return window.matchMedia("prefers-color-schema: dark").matches;
+  return isBrowser() && window.matchMedia("prefers-color-schema: dark").matches;
 }
 
 export const ThemeContextProvider: React.FC<{
