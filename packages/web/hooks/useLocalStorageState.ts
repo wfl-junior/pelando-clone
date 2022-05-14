@@ -1,3 +1,4 @@
+import { isBrowser } from "@/utils/isBrowser";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useUpdateEffect } from "./useUpdateEffect";
 
@@ -6,8 +7,8 @@ export const useLocalStorageState = <T>(
   initialState: T,
 ): [T, Dispatch<SetStateAction<T>>] => {
   const [state, setState] = useState<T>(() => {
-    // se tiver no servidor não vai ter localStorage
-    if (typeof window === "undefined") {
+    // se não tiver no browser não vai ter localStorage
+    if (!isBrowser()) {
       return initialState;
     }
 
