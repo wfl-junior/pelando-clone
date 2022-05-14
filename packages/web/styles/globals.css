@@ -5,10 +5,8 @@
 @tailwind utilities;
 
 @layer base {
-  *,
-  *::before,
-  *::after {
-    font-family: "Nunito Sans", sans-serif;
+  body {
+    @apply font-sans;
   }
 
   input {

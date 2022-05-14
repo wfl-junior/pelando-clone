@@ -5,6 +5,8 @@ const screens = {
   ...defaultTheme.screens,
 };
 
+const fontSansSerif = [`"Nunito Sans"`, ...defaultTheme.fontFamily.sans];
+
 module.exports = {
   mode: "jit",
   darkMode: "class",
@@ -54,6 +56,19 @@ module.exports = {
         "dark-red": "#bf133c",
         "dark-blue": "#6699ff",
         "default-placeholder": "#757575",
+      },
+      fontFamily: {
+        sans: fontSansSerif,
+        arial: ["Arial", ...fontSansSerif],
+      },
+      animation: {
+        "slide-left-in": "slide-left-in 300ms ease-out forwards",
+      },
+      keyframes: {
+        "slide-left-in": {
+          from: { transform: "translateX(-100%)" },
+          to: { transform: "translateX(0)" },
+        },
       },
     },
   },

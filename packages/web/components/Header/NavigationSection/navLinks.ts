@@ -1,4 +1,4 @@
-import { Icon } from "@/@types/app";
+import { Icon, ILink } from "@/@types/app";
 import { CarrosIcon } from "@/components/icons/header/nav/CarrosIcon";
 import { CasaIcon } from "@/components/icons/header/nav/CasaIcon";
 import { ComentadasIcon } from "@/components/icons/header/nav/ComentadasIcon";
@@ -21,9 +21,7 @@ import { SaudeIcon } from "@/components/icons/header/nav/SaudeIcon";
 import { SupermercadoIcon } from "@/components/icons/header/nav/SupermercadoIcon";
 import { ViagensIcon } from "@/components/icons/header/nav/ViagensIcon";
 
-interface NavLink {
-  label: string;
-  route: string;
+interface NavLink extends ILink {
   Icon: Icon;
 }
 

@@ -1,12 +1,13 @@
 import { Header } from "@/components/Header";
+import { Sidebar } from "@/components/Sidebar";
+import { SidebarContextProvider } from "@/contexts/SidebarContext";
 import "@/styles/globals.css";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { Fragment } from "react";
 
 const App: NextPage<AppProps> = ({ Component, pageProps }) => (
-  <Fragment>
+  <SidebarContextProvider>
     <Head>
       <title>Pelando Clone</title>
 
@@ -20,6 +21,7 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => (
 
     <div className="text-default-foreground dark:text-dark-default-foreground bg-secondary-background dark:bg-dark-secondary-background flex min-h-screen flex-col">
       <Header />
+      <Sidebar />
       <main className="container my-8">
         <Component {...pageProps} />
       </main>
@@ -35,7 +37,7 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => (
         ativado para interagir com esta página.
       </noscript>
     </div>
-  </Fragment>
+  </SidebarContextProvider>
 );
 
 export default App;
