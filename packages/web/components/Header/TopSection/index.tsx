@@ -1,4 +1,4 @@
-import { HamburguerIcon } from "@/components/icons/header/top/HamburguerIcon";
+import { HamburguerIcon } from "@/components/icons/HamburguerIcon";
 import { Logo } from "@/components/Logo";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import Link from "next/link";

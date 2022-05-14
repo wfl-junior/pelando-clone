@@ -1,4 +1,5 @@
 import { useSidebarContext } from "@/contexts/SidebarContext";
+import { useIsBreakpoint } from "@/hooks/useIsBreakpoint";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { ArrowRightIcon } from "../icons/sidebar/ArrowRightIcon";
@@ -11,9 +12,10 @@ import { navLinks } from "./navLinks";
 import { storeLinks } from "./storeLinks";
 
 export const Sidebar: React.FC = () => {
-  const { open, setOpen } = useSidebarContext();
+  const { open, setOpen, appBarRef } = useSidebarContext();
+  const isMediumBreakpoint = useIsBreakpoint("md");
 
-  // para fechar com esc
+  // para fechar com keydown esc
   useEffect(() => {
     if (open) {
       const handleKeyDown = (e: KeyboardEvent) => {
@@ -38,13 +40,24 @@ export const Sidebar: React.FC = () => {
     <div
       className="fixed inset-0 z-50 bg-black/75"
       onClick={e => {
-        // fecha se clicar na overlay
+        // para fechar se clicar na overlay
         if (e.target === e.currentTarget) {
           setOpen(false);
         }
       }}
     >
-      <aside className="bg-default-background dark:bg-dark-default-background animate-slide-left-in absolute left-0 top-0 flex h-screen w-screen flex-col md:w-72">
+      <aside
+        className="bg-default-background dark:bg-dark-default-background animate-slide-left-in absolute left-0 top-0 flex h-screen w-screen flex-col md:w-72"
+        style={
+          isMediumBreakpoint
+            ? undefined
+            : {
+                height: `calc(100vh - ${
+                  appBarRef.current?.offsetHeight || 0
+                }px)`,
+              }
+        }
+      >
         <div className="text-default-foreground dark:text-dark-default-foreground flex h-full flex-col gap-3 p-4">
           <div className="flex items-center gap-2.5">
             <div className="bg-inactive-background dark:bg-dark-inactive-background flex aspect-square w-12 items-center justify-center rounded-full">

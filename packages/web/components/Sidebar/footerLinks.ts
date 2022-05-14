@@ -6,7 +6,7 @@ export const footerLinks: ILink[] = [
     route: "#",
   },
   {
-    label: "Código de conduta",
+    label: "Código de Conduta",
     route: "#",
   },
   {
