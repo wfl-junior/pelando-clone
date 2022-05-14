@@ -10,7 +10,7 @@ export const AppBar: React.FC = () => {
   return (
     <nav
       ref={appBarRef}
-      className="border-default-border dark:border-dark-default-border bg-default-background dark:bg-dark-default-background fixed inset-x-0 bottom-0 z-50 border-t px-4 py-1 md:hidden"
+      className="border-default-border dark:border-dark-default-border bg-default-background dark:bg-dark-default-background fixed inset-x-0 bottom-0 z-40 border-t px-4 py-1 md:hidden"
     >
       <ul className="flex items-center">
         {navLinks.map(({ label, route, Icon }, index) => {

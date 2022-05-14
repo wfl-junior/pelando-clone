@@ -3,13 +3,13 @@ import { useIsBreakpoint } from "@/hooks/useIsBreakpoint";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { ArrowRightIcon } from "../icons/sidebar/ArrowRightIcon";
-import { MoonIcon } from "../icons/sidebar/MoonIcon";
 import { SignOutIcon } from "../icons/sidebar/SignOutIcon";
 import { UserIcon } from "../icons/sidebar/UserIcon";
 import { footerLinks } from "./footerLinks";
 import { navBottomLinks } from "./navBottomLinks";
 import { navLinks } from "./navLinks";
 import { storeLinks } from "./storeLinks";
+import { ThemeTogglerButton } from "./ThemeTogglerButton";
 
 export const Sidebar: React.FC = () => {
   const { open, setOpen, appBarRef } = useSidebarContext();
@@ -38,7 +38,7 @@ export const Sidebar: React.FC = () => {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/75"
+      className="fixed inset-0 z-40 bg-black/75"
       onClick={e => {
         // para fechar se clicar na overlay
         if (e.target === e.currentTarget) {
@@ -119,11 +119,7 @@ export const Sidebar: React.FC = () => {
             ))}
 
             <li className="border-default-border dark:border-dark-default-border flex items-center justify-between border-t pt-3.5">
-              <button className="flex items-center gap-2 font-bold">
-                <MoonIcon className="w-4" />
-
-                <span className="font-arial">Tema escuro</span>
-              </button>
+              <ThemeTogglerButton />
 
               <button className="flex items-center gap-2 font-bold">
                 <span className="font-arial">Cadastrar</span>
