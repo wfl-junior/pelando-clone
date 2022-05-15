@@ -63,11 +63,16 @@ module.exports = {
       },
       animation: {
         "slide-left-in": "slide-left-in 300ms ease-out forwards",
+        "grow-search-bar": "grow-search-bar 300ms ease-out forwards",
       },
       keyframes: {
         "slide-left-in": {
           from: { transform: "translateX(-100%)" },
           to: { transform: "translateX(0)" },
+        },
+        "grow-search-bar": {
+          from: { width: "20%", marginLeft: "auto" },
+          to: { transform: "100%", marginLeft: "auto" },
         },
       },
     },

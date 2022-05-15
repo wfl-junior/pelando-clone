@@ -46,8 +46,8 @@ export const SearchBar: React.FC = () => {
         {/* before para border bottom com overflow */}
         <div
           className={classNames(
-            "before:border-default-foreground bg-input-background dark:bg-dark-input-background relative w-full overflow-hidden rounded-full before:absolute before:inset-x-0 before:bottom-0 before:z-10 focus-within:before:border-b md:block",
-            { hidden: !open },
+            "before:border-default-foreground bg-input-background dark:bg-dark-input-background relative w-full overflow-hidden rounded-full before:absolute before:inset-x-0 before:bottom-0 before:z-10 focus-within:before:border-b md:block md:animate-none",
+            open ? "animate-grow-search-bar" : "hidden",
           )}
         >
           {/* TODO: adicionar animação para <md */}
