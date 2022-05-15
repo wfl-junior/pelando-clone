@@ -1,17 +1,18 @@
+import { useModalContext } from "@/contexts/ModalContext";
 import { useThemeContext } from "@/contexts/ThemeContext";
-import { useThemeTogglerContext } from "@/contexts/ThemeTogglerContext";
 import React from "react";
 import { MoonIcon } from "../icons/sidebar/MoonIcon";
 import { SunIcon } from "../icons/sidebar/SunIcon";
+import { ThemeToggler } from "../ThemeToggler";
 
 export const ThemeTogglerButton: React.FC = () => {
   const { theme } = useThemeContext();
-  const { setOpen } = useThemeTogglerContext();
+  const { toggleModal } = useModalContext();
 
   return (
     <button
       className="flex items-center gap-2 font-bold"
-      onClick={() => setOpen(true)}
+      onClick={() => toggleModal(true, <ThemeToggler />)}
     >
       {theme === "dark" ? (
         <SunIcon className="w-4" />

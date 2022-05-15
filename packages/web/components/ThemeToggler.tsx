@@ -1,5 +1,4 @@
 import { Theme, useThemeContext } from "@/contexts/ThemeContext";
-import { useThemeTogglerContext } from "@/contexts/ThemeTogglerContext";
 import { RadioGroup } from "@headlessui/react";
 import classNames from "classnames";
 import React, { Fragment } from "react";
@@ -27,29 +26,18 @@ const options: Option[] = [
 
 // TODO: transferir para Modal component
 export const ThemeToggler: React.FC = () => {
-  const { open, setOpen } = useThemeTogglerContext();
   const { setTheme, _theme } = useThemeContext();
-
-  if (!open) {
-    return null;
-  }
 
   return (
     <RadioGroup
       as="div"
       value={_theme}
       onChange={setTheme}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75"
-      onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        // para fechar se clicar na overlay
-        if (e.target === e.currentTarget) {
-          setOpen(false);
-        }
-      }}
+      className="bg-default-background dark:bg-dark-default-background flex w-[calc(100%-36px)] max-w-md items-center justify-center rounded-lg py-1"
     >
       <RadioGroup.Label className="sr-only">Alterar tema</RadioGroup.Label>
 
-      <ul className="bg-default-background dark:bg-dark-default-background divide-default-border dark:divide-dark-default-border flex w-[calc(100%-36px)] max-w-md flex-col divide-y rounded-lg py-1">
+      <ul className="divide-default-border dark:divide-dark-default-border flex w-full flex-col divide-y">
         {options.map(({ label, value }) => (
           <RadioGroup.Option
             as="li"
