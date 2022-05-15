@@ -3,6 +3,7 @@ import { Product } from "../entities";
 import { ProductsQueryInput } from "../graphql-types/Input/products/ProductsQueryInput";
 import { ProductsQueryResponse } from "../graphql-types/Object/products/ProductsQueryResponse";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
+import { getPageInfo } from "../utils/getPageInfo";
 
 @Resolver(() => Product)
 export class ProductResolver {
@@ -25,19 +26,11 @@ export class ProductResolver {
         ok: true,
         products: {
           edges: result,
-          info: {
-            total: count,
-            perPage,
-            from: offset + 1,
-            to: Math.min(offset + perPage, count),
-            hasNextPage: perPage + offset < count,
-            hasPreviousPage: offset > 0,
-          },
+          info: getPageInfo({ count, perPage, offset }),
         },
       };
-    } catch (err) {
-      console.log({ err });
-
+    } catch (error) {
+      console.log({ time: new Date(), where: "query products", error });
       return defaultErrorResponse();
     }
   }
