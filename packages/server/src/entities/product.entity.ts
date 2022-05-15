@@ -1,6 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, JoinTable, ManyToOne } from "typeorm";
 import { EntityNode } from "./node.entity";
+import { Store } from "./store.entity";
 
 @ObjectType()
 @Entity("products", { orderBy: { createdAt: "ASC" } })
@@ -28,4 +29,15 @@ export class Product extends EntityNode {
   @Field()
   @Column()
   image: string;
+
+  @Column("uuid")
+  storeId: string;
+
+  @Field()
+  @JoinTable()
+  @ManyToOne(() => Store, store => store.products, {
+    eager: true,
+    onDelete: "CASCADE",
+  })
+  store: Store;
 }
