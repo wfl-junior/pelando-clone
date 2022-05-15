@@ -13,7 +13,8 @@ export class ProductResolver {
   ): Promise<ProductsQueryResponse> {
     try {
       const perPage = input?.perPage || 20;
-      const offset = input?.offset || 0;
+      const page = input?.page || 1;
+      const offset = perPage * page - perPage;
 
       const [result, count] = await Product.findAndCount({
         take: perPage,
