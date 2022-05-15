@@ -8,12 +8,12 @@ import * as Resolvers from "./resolvers";
 @Module({
   imports: [
     TypeOrmModule.forRoot(ormconfig),
+    ...Object.values(Resolvers),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       playground: true,
       autoSchemaFile: "schema.gql",
     }),
-    ...Object.values(Resolvers),
   ],
 })
 export class AppModule {}
