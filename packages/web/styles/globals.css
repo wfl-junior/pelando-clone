@@ -5,11 +5,51 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --color-primary: 242 122 13;
+    --color-primary-hover: 230 109 0;
+    --color-primary-shadow: 204 97 0;
+    --color-hotness-primary: 242 122 13;
+    --color-default-background: 255 255 255;
+    --color-default-foreground: 77 77 77;
+    --color-default-shadow: 0 0 0;
+    --color-default-fade: 255 255 255;
+    --color-default-border: 233 233 233;
+    --color-secondary-background: 240 240 240;
+    --color-secondary-foreground: 153 153 153;
+    --color-secondary-button: 233 233 233;
+    --color-tertiary-foreground: 0 0 0;
+    --color-inactive-background: 233 233 233;
+    --color-input-background: 233 233 233;
+    --color-red: 210 45 58;
+    --color-blue: 18 98 178;
+  }
+
+  .dark {
+    --color-primary: 229 121 25;
+    --color-primary-hover: 184 78 25;
+    --color-primary-shadow: 229 121 25;
+    --color-hotness-primary: 229 121 25;
+    --color-default-background: 27 30 31;
+    --color-default-foreground: 245 245 245;
+    --color-default-shadow: 0 0 0;
+    --color-default-fade: 0 0 0;
+    --color-default-border: 38 42 43;
+    --color-secondary-background: 16 17 18;
+    --color-secondary-foreground: 184 178 169;
+    --color-secondary-button: 38 42 43;
+    --color-tertiary-foreground: 245 245 245;
+    --color-inactive-background: 38 42 43;
+    --color-input-background: 38 42 43;
+    --color-red: 191 19 60;
+    --color-blue: 102 153 255;
+  }
+
   body {
     @apply font-sans;
   }
 
-  input {
-    @apply placeholder:text-default-placeholder;
+  input::placeholder {
+    color: rgb(117 117 117);
   }
 }

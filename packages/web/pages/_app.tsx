@@ -32,7 +32,7 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => (
           />
         </Head>
 
-        <div className="text-default-foreground dark:text-dark-default-foreground bg-secondary-background dark:bg-dark-secondary-background flex min-h-screen flex-col">
+        <div className="text-default-foreground bg-secondary-background flex min-h-screen flex-col">
           <Header />
           <Sidebar />
           <main className="container my-4">

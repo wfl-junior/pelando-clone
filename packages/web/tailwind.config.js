@@ -7,6 +7,26 @@ const screens = {
 
 const fontSansSerif = [`"Nunito Sans"`, ...defaultTheme.fontFamily.sans];
 
+const colors = [
+  "primary",
+  "primary-hover",
+  "primary-shadow",
+  "hotness-primary",
+  "default-background",
+  "default-foreground",
+  "default-shadow",
+  "default-fade",
+  "default-border",
+  "secondary-background",
+  "secondary-foreground",
+  "secondary-button",
+  "tertiary-foreground",
+  "inactive-background",
+  "input-background",
+  "red",
+  "blue",
+];
+
 module.exports = {
   mode: "jit",
   darkMode: "class",
@@ -20,43 +40,13 @@ module.exports = {
   theme: {
     screens,
     extend: {
-      colors: {
-        primary: "#f27a0d",
-        "primary-hover": "#e66d00",
-        "primary-shadow": "#cc6100",
-        "hotness-primary": "#f27a0d",
-        "default-background": "#ffffff",
-        "default-foreground": "#4d4d4d",
-        "default-shadow": "#000000",
-        "default-fade": "#ffffff",
-        "default-border": "#e9e9e9",
-        "secondary-background": "#f0f0f0",
-        "secondary-foreground": "#999999",
-        "secondary-button": "#e9e9e9",
-        "tertiary-foreground": "#000000",
-        "inactive-background": "#e9e9e9",
-        "input-background": "#e9e9e9",
-        red: "#d22d3a",
-        blue: "#1262b2",
-        "dark-primary": "#e57919",
-        "dark-primary-hover": "#b84e19",
-        "dark-primary-shadow": "#e57919",
-        "dark-hotness-primary": "#e57919",
-        "dark-default-background": "#1b1e1f",
-        "dark-default-foreground": "#f5f5f5",
-        "dark-default-shadow": "#000000",
-        "dark-default-fade": "#000000",
-        "dark-default-border": "#262a2b",
-        "dark-secondary-background": "#101112",
-        "dark-secondary-foreground": "#b8b2a9",
-        "dark-secondary-button": "#262a2b",
-        "dark-tertiary-foreground": "#f5f5f5",
-        "dark-inactive-background": "#262a2b",
-        "dark-input-background": "#262a2b",
-        "dark-red": "#bf133c",
-        "dark-blue": "#6699ff",
-        "default-placeholder": "#757575",
-      },
+      colors: colors.reduce(
+        (object, key) => ({
+          ...object,
+          [key]: colorWithOpacityValue(key),
+        }),
+        {},
+      ),
       fontFamily: {
         sans: fontSansSerif,
         arial: ["Arial", ...fontSansSerif],
@@ -103,3 +93,13 @@ module.exports = {
     },
   ],
 };
+
+function colorWithOpacityValue(variable) {
+  return ({ opacityValue }) => {
+    if (opacityValue === undefined) {
+      return `rgb(var(--color-${variable}))`;
+    }
+
+    return `rgb(var(--color-${variable}) / ${opacityValue})`;
+  };
+}

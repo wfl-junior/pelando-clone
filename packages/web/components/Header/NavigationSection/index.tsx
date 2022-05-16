@@ -69,12 +69,12 @@ export const NavigationSection: React.FC = () => {
               <Link href={route}>
                 <a
                   className={classNames(
-                    "hover:text-primary-hover dark:hover:text-dark-primary-hover flex flex-col items-center gap-0.5 p-3 transition-colors md:p-2",
+                    "hover:text-primary-hover flex flex-col items-center gap-0.5 p-3 transition-colors md:p-2",
                     {
-                      "text-primary dark:text-dark-primary before:bg-primary dark:before:bg-dark-primary relative before:absolute before:inset-x-0 before:bottom-0 before:h-1":
+                      "text-primary before:bg-primary relative before:absolute before:inset-x-0 before:bottom-0 before:h-1":
                         isActive,
                       // adicionar separador se for a primeira iteração
-                      "before:bg-default-border dark:before:bg-dark-default-border relative before:absolute before:right-0 before:h-[70%] before:w-[1px]":
+                      "before:bg-default-border relative before:absolute before:right-0 before:h-[70%] before:w-[1px]":
                         isFirstIteration,
                     },
                   )}

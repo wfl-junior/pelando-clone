@@ -16,7 +16,7 @@ export const MainPage: React.FC<MainPageProps> = ({ children, stores }) => {
   return (
     <Fragment>
       <section
-        className="bg-default-background dark:bg-dark-default-background border-default-border dark:border-dark-default-border mb-8 grid grid-cols-[auto_1fr] gap-x-2 gap-y-2 rounded-sm border p-2 shadow-md lg:gap-x-8 lg:gap-y-4 lg:rounded-lg lg:p-4"
+        className="bg-default-background border-default-border mb-8 grid grid-cols-[auto_1fr] gap-x-2 gap-y-2 rounded-sm border p-2 shadow-md lg:gap-x-8 lg:gap-y-4 lg:rounded-lg lg:p-4"
         style={{
           gridTemplateAreas: isLargeBreakpoing
             ? `"image heading" "image stores"`
@@ -49,7 +49,7 @@ export const MainPage: React.FC<MainPageProps> = ({ children, stores }) => {
             {stores.map(({ id, name }) => (
               <li key={id}>
                 <Link href="#">
-                  <a className="bg-default-background dark:bg-dark-default-background border-default-border dark:border-dark-default-border hover:text-tertiary-foreground dark:hover:text-dark-tertiary-foreground block whitespace-nowrap rounded border py-1.5 px-2 font-bold shadow transition-colors">
+                  <a className="bg-default-background border-default-border hover:text-tertiary-foreground block whitespace-nowrap rounded border py-1.5 px-2 font-bold shadow transition-colors">
                     {name}
                   </a>
                 </Link>

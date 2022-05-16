@@ -33,11 +33,11 @@ export const ThemeToggler: React.FC = () => {
       as="div"
       value={_theme}
       onChange={setTheme}
-      className="bg-default-background dark:bg-dark-default-background flex w-[calc(100%-36px)] max-w-md items-center justify-center rounded-lg py-1"
+      className="bg-default-background flex w-[calc(100%-36px)] max-w-md items-center justify-center rounded-lg py-1"
     >
       <RadioGroup.Label className="sr-only">Alterar tema</RadioGroup.Label>
 
-      <ul className="divide-default-border dark:divide-dark-default-border flex w-full flex-col divide-y">
+      <ul className="divide-default-border flex w-full flex-col divide-y">
         {options.map(({ label, value }) => (
           <RadioGroup.Option
             as="li"
@@ -55,12 +55,12 @@ export const ThemeToggler: React.FC = () => {
                   className={classNames(
                     "flex aspect-square w-5 items-center justify-center rounded-full border-2",
                     checked
-                      ? "bg-default-foreground dark:bg-dark-default-foreground border-default-foreground dark:border-dark-default-foreground"
-                      : "bg-default-background dark:bg-dark-default-background border-secondary-foreground dark:border-dark-secondary-foreground",
+                      ? "bg-default-foreground border-default-foreground"
+                      : "bg-default-background border-secondary-foreground",
                   )}
                 >
                   {checked && (
-                    <CheckIcon className="text-default-background dark:text-dark-default-background w-4" />
+                    <CheckIcon className="text-default-background w-4" />
                   )}
                 </div>
               </Fragment>

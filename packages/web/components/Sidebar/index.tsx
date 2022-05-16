@@ -47,7 +47,7 @@ export const Sidebar: React.FC = () => {
       }}
     >
       <aside
-        className="bg-default-background dark:bg-dark-default-background animate-slide-left-in absolute left-0 top-0 flex h-screen w-screen flex-col md:w-72"
+        className="bg-default-background animate-slide-left-in absolute left-0 top-0 flex h-screen w-screen flex-col md:w-72"
         style={
           isMediumBreakpoint
             ? undefined
@@ -58,9 +58,9 @@ export const Sidebar: React.FC = () => {
               }
         }
       >
-        <div className="text-default-foreground dark:text-dark-default-foreground flex h-full flex-col gap-3 p-4">
+        <div className="text-default-foreground flex h-full flex-col gap-3 p-4">
           <div className="flex items-center gap-2.5">
-            <div className="bg-inactive-background dark:bg-dark-inactive-background flex aspect-square w-12 items-center justify-center rounded-full">
+            <div className="bg-inactive-background flex aspect-square w-12 items-center justify-center rounded-full">
               <UserIcon className="w-8" />
             </div>
 
@@ -75,7 +75,7 @@ export const Sidebar: React.FC = () => {
               {navLinks.map(({ label, route }) => (
                 <li key={label + route}>
                   <Link href={route}>
-                    <a className="border-default-border dark:border-dark-default-border block border-b py-3.5 font-bold">
+                    <a className="border-default-border block border-b py-3.5 font-bold">
                       {label}
                     </a>
                   </Link>
@@ -111,14 +111,14 @@ export const Sidebar: React.FC = () => {
             {navBottomLinks.map(({ label, route }) => (
               <li key={label + route}>
                 <Link href={route}>
-                  <a className="border-default-border dark:border-dark-default-border block border-t py-3.5 font-bold">
+                  <a className="border-default-border block border-t py-3.5 font-bold">
                     {label}
                   </a>
                 </Link>
               </li>
             ))}
 
-            <li className="border-default-border dark:border-dark-default-border flex items-center justify-between border-t pt-3.5">
+            <li className="border-default-border flex items-center justify-between border-t pt-3.5">
               <ThemeTogglerButton />
 
               <button className="flex items-center gap-2 font-bold">
@@ -130,12 +130,12 @@ export const Sidebar: React.FC = () => {
           </ul>
         </div>
 
-        <footer className="bg-secondary-background dark:bg-dark-secondary-background mt-auto py-1.5">
+        <footer className="bg-secondary-background mt-auto py-1.5">
           <ul className="flex flex-wrap items-center justify-center text-xs">
             {footerLinks.map(({ label, route }) => (
               <li
                 key={label + route}
-                className="text-default-foreground dark:text-dark-default-foreground my-1 mx-1.5"
+                className="text-default-foreground my-1 mx-1.5"
               >
                 <Link href={route}>
                   <a>{label}</a>
@@ -143,7 +143,7 @@ export const Sidebar: React.FC = () => {
               </li>
             ))}
 
-            <li className="text-secondary-foreground dark:text-dark-secondary-foreground">
+            <li className="text-secondary-foreground">
               &copy; Copyright Pelando
             </li>
           </ul>

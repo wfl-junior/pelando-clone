@@ -23,7 +23,7 @@ export const BasicLink: React.FC<BasicLinkProps> = ({
   <Link href={href}>
     <a
       className={classNames(
-        "text-primary dark:text-dark-primary hover:text-primary-hover dark:hover:text-dark-primary-hover underline transition-colors",
+        "text-primary hover:text-primary-hover underline transition-colors",
         className,
       )}
       {...props}

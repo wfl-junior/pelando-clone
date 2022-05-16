@@ -27,7 +27,7 @@ export const TopSection: React.FC = () => {
 
       <SearchBar />
 
-      <button className="bg-primary dark:bg-dark-primary hover:bg-primary-hover dark:hover:bg-dark-primary-hover flex cursor-pointer items-center justify-center rounded-full px-4 py-1.5 font-bold text-white transition-colors">
+      <button className="bg-primary hover:bg-primary-hover flex cursor-pointer items-center justify-center rounded-full px-4 py-1.5 font-bold text-white transition-colors">
         Cadastrar
       </button>
     </div>
