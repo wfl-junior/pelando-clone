@@ -1,50 +1,61 @@
 import {
-  PaginatedData,
   PaginatedQueryVariables,
-  Product,
   ProductsQueryResponse,
-  Store,
   StoresQueryResponse,
 } from "@/@types/api";
 import { MainPage } from "@/components/MainPage";
 import { ProductCard } from "@/components/ProductCard";
-import { apolloClient } from "@/graphql/client";
+import { addApolloState, initializeApollo } from "@/graphql/client";
 import { productsQuery } from "@/graphql/queries/productsQuery";
 import { storesQuery } from "@/graphql/queries/storesQuery";
+import { useQuery } from "@apollo/client";
 import type { GetServerSideProps, NextPage } from "next";
 
-interface HomeProps {
-  stores: PaginatedData<Store>;
-  products: PaginatedData<Product>;
+function getVariables(page = 1): PaginatedQueryVariables {
+  return {
+    input: {
+      page,
+      perPage: 8,
+    },
+  };
 }
 
-export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
+  const apolloClient = initializeApollo();
+
   const [stores, products] = await Promise.all([
     apolloClient.query<StoresQueryResponse, PaginatedQueryVariables>({
       query: storesQuery,
     }),
     apolloClient.query<ProductsQueryResponse, PaginatedQueryVariables>({
       query: productsQuery,
-      variables: { input: { perPage: 8 } },
+      variables: getVariables(),
     }),
   ]);
 
-  return {
+  return addApolloState(apolloClient, {
     props: {
-      stores: stores.data.stores.stores,
-      products: products.data.products.products,
+      stores: stores,
+      products: products,
     },
-  };
+  });
 };
 
-const Home: NextPage<HomeProps> = ({ stores, products }) => (
-  <MainPage stores={stores.edges}>
-    <div className="flex flex-col gap-1">
-      {products.edges.map(product => (
-        <ProductCard key={product.id} product={product} />
-      ))}
-    </div>
-  </MainPage>
-);
+const Home: NextPage = () => {
+  const { data } = useQuery<ProductsQueryResponse, PaginatedQueryVariables>(
+    productsQuery,
+    { variables: getVariables() },
+  );
+
+  return (
+    <MainPage>
+      <div className="flex flex-col gap-1">
+        {data!.products.products.edges.map(product => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+    </MainPage>
+  );
+};
 
 export default Home;

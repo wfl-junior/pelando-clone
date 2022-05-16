@@ -1,5 +1,7 @@
-import { Store } from "@/@types/api";
+import { PaginatedQueryVariables, StoresQueryResponse } from "@/@types/api";
+import { storesQuery } from "@/graphql/queries/storesQuery";
 import { useIsBreakpoint } from "@/hooks/useIsBreakpoint";
+import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import React, { Fragment } from "react";
 import { BasicLink } from "../BasicLink";
@@ -7,11 +9,14 @@ import { MainPageHeroImage } from "./MainPageHeroImage";
 
 interface MainPageProps {
   children?: React.ReactNode;
-  stores: Store[];
 }
 
-export const MainPage: React.FC<MainPageProps> = ({ children, stores }) => {
+export const MainPage: React.FC<MainPageProps> = ({ children }) => {
   const isLargeBreakpoint = useIsBreakpoint("lg");
+
+  const { data } = useQuery<StoresQueryResponse, PaginatedQueryVariables>(
+    storesQuery,
+  );
 
   return (
     <Fragment>
@@ -46,7 +51,7 @@ export const MainPage: React.FC<MainPageProps> = ({ children, stores }) => {
           <h3 className="font-bold">Compre no site de suas lojas favoritas:</h3>
 
           <ul className="flex gap-1.5 overflow-x-auto lg:flex-wrap">
-            {stores.map(({ id, name }) => (
+            {data!.stores.stores.edges.map(({ id, name }) => (
               <li key={id}>
                 <Link href="#">
                   <a className="bg-default-background border-default-border hover:text-tertiary-foreground block whitespace-nowrap rounded border py-1.5 px-2 font-bold shadow transition-colors">
