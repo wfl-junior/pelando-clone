@@ -11,19 +11,19 @@ interface MainPageProps {
 }
 
 export const MainPage: React.FC<MainPageProps> = ({ children, stores }) => {
-  const isLargeBreakpoing = useIsBreakpoint("lg");
+  const isLargeBreakpoint = useIsBreakpoint("lg");
 
   return (
     <Fragment>
       <section
-        className="bg-default-background border-default-border mb-8 grid grid-cols-[auto_1fr] gap-x-2 gap-y-2 rounded-sm border p-2 shadow-md lg:gap-x-8 lg:gap-y-4 lg:rounded-lg lg:p-4"
+        className="bg-default-background border-default-border mb-6 grid grid-cols-[auto_1fr] gap-x-2 gap-y-2 rounded-sm border p-2 shadow-md lg:mb-8 lg:gap-x-8 lg:gap-y-4 lg:rounded-lg lg:p-4"
         style={{
-          gridTemplateAreas: isLargeBreakpoing
+          gridTemplateAreas: isLargeBreakpoint
             ? `"image heading" "image stores"`
             : `"image heading" "stores stores"`,
         }}
       >
-        <div className="w-28 lg:w-72" style={{ gridArea: "image" }}>
+        <div className="w-28 lg:my-auto lg:w-72" style={{ gridArea: "image" }}>
           <MainPageHeroImage className="w-full" />
         </div>
 

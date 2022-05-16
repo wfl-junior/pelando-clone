@@ -65,6 +65,12 @@ module.exports = {
           to: { transform: "100%", marginLeft: "auto" },
         },
       },
+      spacing: {
+        4.5: "1.125rem",
+      },
+      fontSize: {
+        "2.5xl": ["1.75rem", "2.125rem"],
+      },
     },
   },
   plugins: [

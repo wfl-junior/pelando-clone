@@ -19,7 +19,7 @@ export interface PaginatedQueryVariables {
 
 export interface Model {
   id: string;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export interface PageInfo {
@@ -43,6 +43,20 @@ export interface Store extends Model {
   image: string;
 }
 
+export interface Product extends Model {
+  body: string;
+  couponCode: string | null;
+  price: number;
+  sourceUrl: string;
+  title: string;
+  image: string;
+  store: Store;
+}
+
 export interface StoresQueryResponse {
   stores: GraphQLResponse & { stores: PaginatedData<Store> };
+}
+
+export interface ProductsQueryResponse {
+  products: GraphQLResponse & { products: PaginatedData<Product> };
 }

@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-}
+  images: {
+    domains: ["api.pelando.com.br"],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

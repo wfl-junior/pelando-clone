@@ -2,21 +2,27 @@ import { gql } from "@apollo/client";
 import { errorFieldsFragment } from "../fragments/errorFieldsFragment";
 import { pageInfoFieldsFragment } from "../fragments/pageInfoFieldsFragment";
 
-export const storesQuery = gql`
-  query StoresQuery($input: PaginatedQueryInput) {
-    stores(input: $input) {
+export const productsQuery = gql`
+  query ProductsQuery($input: PaginatedQueryInput) {
+    products(input: $input) {
       ok
       errors {
         ...ErrorFieldsFragment
       }
-      stores {
+      products {
         info {
           ...PageInfoFieldsFragment
         }
         edges {
           id
-          name
-          slug
+          price
+          sourceUrl
+          title
+          image
+          createdAt
+          store {
+            name
+          }
         }
       }
     }
