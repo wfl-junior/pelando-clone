@@ -1,2 +1,2 @@
-export * from "./hello.resolver";
 export * from "./product.resolver";
+export * from "./store.resolver";

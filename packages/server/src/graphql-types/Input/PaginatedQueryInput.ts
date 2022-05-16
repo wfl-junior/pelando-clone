@@ -1,7 +1,7 @@
 import { Field, InputType, Int } from "@nestjs/graphql";
 
 @InputType()
-export class ProductsQueryInput {
+export class PaginatedQueryInput {
   @Field(() => Int, { nullable: true })
   page?: number | null;
 
