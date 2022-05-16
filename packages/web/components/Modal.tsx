@@ -1,8 +1,25 @@
 import { useModalContext } from "@/contexts/ModalContext";
-import React from "react";
+import React, { useEffect } from "react";
 
 export const Modal: React.FC = () => {
   const { open, content, toggleModal } = useModalContext();
+
+  // para fechar com keydown esc
+  useEffect(() => {
+    if (open) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key.toLowerCase() === "escape") {
+          toggleModal(false);
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [open]);
 
   if (!open) {
     return null;
