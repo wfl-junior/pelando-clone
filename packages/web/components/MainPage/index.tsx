@@ -35,9 +35,7 @@ export const MainPage: React.FC<MainPageProps> = ({ children, stores }) => {
 
           <p>
             Uma plataforma para encontrar promoções e tirar dúvidas.{" "}
-            <Link href="#" passHref>
-              <BasicLink>Faça parte!</BasicLink>
-            </Link>
+            <BasicLink href="#">Faça parte!</BasicLink>
           </p>
         </div>
 
