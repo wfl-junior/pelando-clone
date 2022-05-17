@@ -11,6 +11,7 @@ import { ApolloProvider } from "@apollo/client";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import NextNProgress from "nextjs-progressbar";
 
 const App: NextPage<AppProps> = ({ Component, pageProps }) => {
   const apolloClient = useApolloClient(pageProps);
@@ -39,6 +40,12 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => {
             </Head>
 
             <div className="text-default-foreground bg-secondary-background flex min-h-screen flex-col">
+              <NextNProgress
+                height={2}
+                color="#F27A0D"
+                options={{ showSpinner: false }}
+              />
+
               <Header />
               <Sidebar />
               <main className="container my-4">
