@@ -9,9 +9,10 @@ import { useMemo } from "react";
 // https://developers.wpengine.com/blog/apollo-client-cache-rehydration-in-next-js
 // merge server and client apollo client
 
-export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
+export type Client = ApolloClient<NormalizedCacheObject>;
+const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
-let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
+let apolloClient: Client | undefined;
 
 export function createApolloClient() {
   return new ApolloClient({
@@ -54,10 +55,7 @@ export function initializeApollo(
   return _apolloClient;
 }
 
-export function addApolloState(
-  client: ApolloClient<NormalizedCacheObject>,
-  pageProps: any,
-) {
+export function addApolloState(client: Client, pageProps: any) {
   if (pageProps?.props) {
     pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
   }

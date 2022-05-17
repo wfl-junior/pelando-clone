@@ -1,14 +1,9 @@
-import {
-  PaginatedQueryVariables,
-  ProductsQueryResponse,
-  StoresQueryResponse,
-} from "@/@types/api";
+import { PaginatedQueryVariables } from "@/@types/api";
 import { MainPage } from "@/components/MainPage";
 import { ProductCard } from "@/components/ProductCard";
 import { ProductCardSkeleton } from "@/components/ProductCardSkeleton";
 import { addApolloState, initializeApollo } from "@/graphql/client";
-import { productsQuery } from "@/graphql/queries/productsQuery";
-import { storesQuery } from "@/graphql/queries/storesQuery";
+import { getSdk } from "@/graphql/sdk";
 import { useProductsQuery } from "@/hooks/apollo/useProductsQuery";
 import type { GetServerSideProps, NextPage } from "next";
 
@@ -23,15 +18,11 @@ const getVariables = (page = 1): PaginatedQueryVariables => ({
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const apolloClient = initializeApollo();
+  const sdk = getSdk(apolloClient);
 
   const [stores, products] = await Promise.all([
-    apolloClient.query<StoresQueryResponse, PaginatedQueryVariables>({
-      query: storesQuery,
-    }),
-    apolloClient.query<ProductsQueryResponse, PaginatedQueryVariables>({
-      query: productsQuery,
-      variables: getVariables(),
-    }),
+    sdk.query.stores(),
+    sdk.query.products({ variables: getVariables() }),
   ]);
 
   return addApolloState(apolloClient, {
