@@ -73,7 +73,7 @@ export const navLinks: NavLink[] = [
   },
   {
     label: "Livros, Filmes e Música",
-    route: "/livros-files-e-musica",
+    route: "/livros-filmes-e-musica",
     Icon: LivrosIcon,
   },
   {
