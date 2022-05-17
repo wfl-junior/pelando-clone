@@ -8,9 +8,9 @@ import { Client } from "./client";
 import { productsQuery } from "./queries/productsQuery";
 import { storesQuery } from "./queries/storesQuery";
 
-type ClientQuery<R, V> = (
-  options?: Omit<QueryOptions<V, R>, "query">,
-) => Promise<ApolloQueryResult<R>>;
+type ClientQuery<Response, Variables = undefined> = (
+  options?: Omit<QueryOptions<Variables, Response>, "query">,
+) => Promise<ApolloQueryResult<Response>>;
 
 interface Sdk {
   query: {

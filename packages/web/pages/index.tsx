@@ -2,14 +2,17 @@ import { PaginatedQueryVariables } from "@/@types/api";
 import { MainPage } from "@/components/MainPage";
 import { ProductCard } from "@/components/ProductCard";
 import { ProductCardSkeleton } from "@/components/ProductCardSkeleton";
+import { ProductsFetchMoreDummy } from "@/components/ProductsFetchMoreDummy";
 import { addApolloState, initializeApollo } from "@/graphql/client";
 import { getSdk } from "@/graphql/sdk";
 import { useProductsQuery } from "@/hooks/apollo/useProductsQuery";
 import type { GetServerSideProps, NextPage } from "next";
+import { useRef } from "react";
 
+const firstPage = 1;
 const perPage = 8;
 
-const getVariables = (page = 1): PaginatedQueryVariables => ({
+export const getVariables = (page = firstPage): PaginatedQueryVariables => ({
   input: {
     page,
     perPage,
@@ -31,15 +34,42 @@ export const getServerSideProps: GetServerSideProps = async () => {
 };
 
 const Home: NextPage = () => {
-  const { data, loading } = useProductsQuery({ variables: getVariables() });
+  const currentPageRef = useRef(firstPage);
+  const { data, loading, fetchMore } = useProductsQuery({
+    variables: getVariables(),
+    notifyOnNetworkStatusChange: true,
+  });
+
+  // data já vai estar disponível, pois está no cache, porque foi feito prefetch no servidor
+  const {
+    products: {
+      products: {
+        edges: products,
+        info: { hasNextPage },
+      },
+    },
+  } = data!;
 
   return (
     <MainPage>
       <div className="flex flex-col gap-1">
-        {/* data já vai estar disponível, pois está no cache, porque foi feito prefetch no servidor */}
-        {data!.products.products.edges.map(product => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+        {products.map((product, index, arr) => {
+          const isLast = index + 1 === arr.length;
+
+          if (isLast && hasNextPage) {
+            return (
+              <ProductsFetchMoreDummy
+                key={product.id}
+                currentPageRef={currentPageRef}
+                fetchMore={fetchMore}
+              >
+                <ProductCard product={product} />
+              </ProductsFetchMoreDummy>
+            );
+          }
+
+          return <ProductCard key={product.id} product={product} />;
+        })}
 
         {loading &&
           Array.from({ length: perPage }, (_, i) => i + 1).map(number => (
