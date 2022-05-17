@@ -1,7 +1,7 @@
 import { Args, Query, Resolver } from "@nestjs/graphql";
 import { defaultPerPage } from "../constants";
 import { Product } from "../entities";
-import { PaginatedQueryInput } from "../graphql-types/Input/PaginatedQueryInput";
+import { ProductsQueryInput } from "../graphql-types/Input/ProductsQueryInput";
 import { ProductsQueryResponse } from "../graphql-types/Object/products/ProductsQueryResponse";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
 import { getPageInfo } from "../utils/getPageInfo";
@@ -10,8 +10,8 @@ import { getPageInfo } from "../utils/getPageInfo";
 export class ProductResolver {
   @Query(() => ProductsQueryResponse)
   async products(
-    @Args("input", { type: () => PaginatedQueryInput, nullable: true })
-    input?: PaginatedQueryInput | null,
+    @Args("input", { type: () => ProductsQueryInput, nullable: true })
+    input?: ProductsQueryInput | null,
   ): Promise<ProductsQueryResponse> {
     try {
       const perPage = input?.perPage || defaultPerPage;
@@ -21,7 +21,8 @@ export class ProductResolver {
       const [result, count] = await Product.findAndCount({
         take: perPage,
         skip: offset,
-        relations: ["store"],
+        relations: ["store", "category"],
+        where: input?.where as any, //! ts não gosta do null
       });
 
       return {
