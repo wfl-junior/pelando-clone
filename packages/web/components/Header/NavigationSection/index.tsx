@@ -1,10 +1,12 @@
 import classNames from "classnames";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { navLinks } from "./navLinks";
 import { ScrollButton } from "./ScrollButton";
 
 export const NavigationSection: React.FC = () => {
+  const router = useRouter();
   const listElementRef = useRef<HTMLUListElement>(null);
   const [shouldShowLeftScrollButton, setShouldShowLeftScrollButton] =
     useState(false);
@@ -60,8 +62,7 @@ export const NavigationSection: React.FC = () => {
         onScroll={() => updateButtonsVisibility()}
       >
         {navLinks.map(({ label, route, Icon }, index) => {
-          // TODO: trocar isActive para comparação de rotas depois que adicionar as outras páginas
-          const isActive = index === 1;
+          const isActive = router.asPath === route;
           const isFirstIteration = index === 0;
 
           return (
