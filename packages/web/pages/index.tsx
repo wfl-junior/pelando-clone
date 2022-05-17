@@ -9,19 +9,17 @@ import { ProductCardSkeleton } from "@/components/ProductCardSkeleton";
 import { addApolloState, initializeApollo } from "@/graphql/client";
 import { productsQuery } from "@/graphql/queries/productsQuery";
 import { storesQuery } from "@/graphql/queries/storesQuery";
-import { useQuery } from "@apollo/client";
+import { useProductsQuery } from "@/hooks/apollo/useProductsQuery";
 import type { GetServerSideProps, NextPage } from "next";
 
 const perPage = 8;
 
-function getVariables(page = 1): PaginatedQueryVariables {
-  return {
-    input: {
-      page,
-      perPage,
-    },
-  };
-}
+const getVariables = (page = 1): PaginatedQueryVariables => ({
+  input: {
+    page,
+    perPage,
+  },
+});
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const apolloClient = initializeApollo();
@@ -45,10 +43,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 };
 
 const Home: NextPage = () => {
-  const { data, loading } = useQuery<
-    ProductsQueryResponse,
-    PaginatedQueryVariables
-  >(productsQuery, { variables: getVariables() });
+  const { data, loading } = useProductsQuery({ variables: getVariables() });
 
   return (
     <MainPage>

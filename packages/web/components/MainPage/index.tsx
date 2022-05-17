@@ -1,7 +1,5 @@
-import { PaginatedQueryVariables, StoresQueryResponse } from "@/@types/api";
-import { storesQuery } from "@/graphql/queries/storesQuery";
+import { useStoresQuery } from "@/hooks/apollo/useStoresQuery";
 import { useIsBreakpoint } from "@/hooks/useIsBreakpoint";
-import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import React, { Fragment } from "react";
 import { BasicLink } from "../BasicLink";
@@ -12,11 +10,8 @@ interface MainPageProps {
 }
 
 export const MainPage: React.FC<MainPageProps> = ({ children }) => {
+  const { data } = useStoresQuery();
   const isLargeBreakpoint = useIsBreakpoint("lg");
-
-  const { data } = useQuery<StoresQueryResponse, PaginatedQueryVariables>(
-    storesQuery,
-  );
 
   return (
     <Fragment>
