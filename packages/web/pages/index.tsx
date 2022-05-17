@@ -5,17 +5,20 @@ import {
 } from "@/@types/api";
 import { MainPage } from "@/components/MainPage";
 import { ProductCard } from "@/components/ProductCard";
+import { ProductCardSkeleton } from "@/components/ProductCardSkeleton";
 import { addApolloState, initializeApollo } from "@/graphql/client";
 import { productsQuery } from "@/graphql/queries/productsQuery";
 import { storesQuery } from "@/graphql/queries/storesQuery";
 import { useQuery } from "@apollo/client";
 import type { GetServerSideProps, NextPage } from "next";
 
+const perPage = 8;
+
 function getVariables(page = 1): PaginatedQueryVariables {
   return {
     input: {
       page,
-      perPage: 8,
+      perPage,
     },
   };
 }
@@ -42,10 +45,10 @@ export const getServerSideProps: GetServerSideProps = async () => {
 };
 
 const Home: NextPage = () => {
-  const { data } = useQuery<ProductsQueryResponse, PaginatedQueryVariables>(
-    productsQuery,
-    { variables: getVariables() },
-  );
+  const { data, loading } = useQuery<
+    ProductsQueryResponse,
+    PaginatedQueryVariables
+  >(productsQuery, { variables: getVariables() });
 
   return (
     <MainPage>
@@ -53,6 +56,11 @@ const Home: NextPage = () => {
         {data!.products.products.edges.map(product => (
           <ProductCard key={product.id} product={product} />
         ))}
+
+        {loading &&
+          Array.from({ length: perPage }, (_, i) => i + 1).map(number => (
+            <ProductCardSkeleton key={number} />
+          ))}
       </div>
     </MainPage>
   );
