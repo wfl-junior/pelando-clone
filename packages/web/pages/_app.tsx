@@ -42,8 +42,9 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => {
             <div className="text-default-foreground bg-secondary-background flex min-h-screen flex-col">
               <NextNProgress
                 height={2}
-                color="#F27A0D"
+                color="rgb(var(--color-primary))"
                 options={{ showSpinner: false }}
+                stopDelayMs={50}
               />
 
               <Header />
