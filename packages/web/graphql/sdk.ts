@@ -3,32 +3,33 @@ import {
   ProductsQueryResponse,
   StoresQueryResponse,
 } from "@/@types/api";
-import { QueryOptions } from "@apollo/client";
+import { ApolloQueryResult, QueryOptions } from "@apollo/client";
 import { Client } from "./client";
 import { productsQuery } from "./queries/productsQuery";
 import { storesQuery } from "./queries/storesQuery";
 
-export function getSdk(client: Client) {
+type ClientQuery<R, V> = (
+  options?: Omit<QueryOptions<V, R>, "query">,
+) => Promise<ApolloQueryResult<R>>;
+
+interface Sdk {
+  query: {
+    stores: ClientQuery<StoresQueryResponse, PaginatedQueryVariables>;
+    products: ClientQuery<ProductsQueryResponse, PaginatedQueryVariables>;
+  };
+}
+
+export function getSdk(client: Client): Sdk {
   return {
     query: {
-      stores: (
-        options?: Omit<
-          QueryOptions<PaginatedQueryVariables, StoresQueryResponse>,
-          "query"
-        >,
-      ) => {
-        return client.query<StoresQueryResponse, PaginatedQueryVariables>({
+      stores: options => {
+        return client.query({
           ...options,
           query: storesQuery,
         });
       },
-      products: (
-        options?: Omit<
-          QueryOptions<PaginatedQueryVariables, ProductsQueryResponse>,
-          "query"
-        >,
-      ) => {
-        return client.query<ProductsQueryResponse, PaginatedQueryVariables>({
+      products: options => {
+        return client.query({
           ...options,
           query: productsQuery,
         });
