@@ -1,7 +1,7 @@
 import { ChevronLeftIcon } from "@/components/icons/header/nav/ChevronLeft";
 import { ChevronRightIcon } from "@/components/icons/header/nav/ChevronRight";
 import classNames from "classnames";
-import React from "react";
+import React, { useRef } from "react";
 
 interface ScrollButtonProps {
   type: "left" | "right";
@@ -14,11 +14,13 @@ export const ScrollButton: React.FC<ScrollButtonProps> = ({
   listElementRef,
   updateButtonsVisibility,
 }) => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const isLeft = type === "left";
   const Chevron = isLeft ? ChevronLeftIcon : ChevronRightIcon;
 
   return (
     <button
+      ref={buttonRef}
       className={classNames(
         "bg-default-background before:from-default-background before:to-default-background/0 absolute z-10 flex h-full w-7 items-center justify-center before:absolute before:inset-y-0 before:w-full sm:w-8 md:w-10",
         isLeft
@@ -27,14 +29,19 @@ export const ScrollButton: React.FC<ScrollButtonProps> = ({
       )}
       onClick={() => {
         // Aqui a ref já vai ter inicializado
-        const el = listElementRef.current!;
+        const container = listElementRef.current!;
+        const button = buttonRef.current!;
+
+        // (button + before) * 2 para que todos os links sejam acessíveis ao rolar, para não pular links por trás do button
+        const widthToMove = container.offsetWidth - button.offsetWidth * 4;
+
         const newPosition = isLeft
           ? // Math.max para left para impedir que seja menor que 0
-            Math.max(el.scrollLeft - el.offsetWidth, 0)
+            Math.max(container.scrollLeft - widthToMove, 0)
           : // Math.min para right para impedir que seja maior que scrollWidth
-            Math.min(el.scrollLeft + el.offsetWidth, el.scrollWidth);
+            Math.min(container.scrollLeft + widthToMove, container.scrollWidth);
 
-        el.scrollTo({ left: newPosition, behavior: "smooth" });
+        container.scrollTo({ left: newPosition, behavior: "smooth" });
         updateButtonsVisibility();
       }}
     >
