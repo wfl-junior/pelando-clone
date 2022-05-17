@@ -33,37 +33,35 @@ export const ProductsFetchMoreDummy: React.FC<ProductsFetchMoreDummyProps> = ({
     const el = observerElementRef.current!;
 
     const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            // quando der trigger, lembrar de dar unobserve para não triggar denovo
-            observer.unobserve(el);
-            const nextPage = ++currentPageRef.current;
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // quando der trigger, lembrar de dar unobserve para não triggar denovo
+          observer.unobserve(el);
+          const nextPage = ++currentPageRef.current;
 
-            fetchMore({
-              variables: getVariables(nextPage),
-              updateQuery: (previousResult, { fetchMoreResult }) => ({
-                ...fetchMoreResult,
+          fetchMore({
+            variables: getVariables(nextPage),
+            updateQuery: (previousResult, { fetchMoreResult }) => ({
+              ...fetchMoreResult,
+              products: {
+                ...fetchMoreResult.products,
                 products: {
-                  ...fetchMoreResult.products,
-                  products: {
-                    ...fetchMoreResult.products.products,
-                    info: {
-                      ...fetchMoreResult.products.products.info,
-                      // manter o from inicial
-                      from: previousResult.products.products.info.from,
-                    },
-                    // merge nas edges
-                    edges: [
-                      ...previousResult.products.products.edges,
-                      ...fetchMoreResult.products.products.edges,
-                    ],
+                  ...fetchMoreResult.products.products,
+                  info: {
+                    ...fetchMoreResult.products.products.info,
+                    // manter o from inicial
+                    from: previousResult.products.products.info.from,
                   },
+                  // merge nas edges
+                  edges: [
+                    ...previousResult.products.products.edges,
+                    ...fetchMoreResult.products.products.edges,
+                  ],
                 },
-              }),
-            });
-          }
-        });
+              },
+            }),
+          });
+        }
       },
       // quando o product card anterior estiver visível
       { rootMargin: "20%" },
