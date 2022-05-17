@@ -1,6 +1,7 @@
 import {
   PaginatedQueryVariables,
   ProductsQueryResponse,
+  ProductsQueryVariables,
   StoresQueryResponse,
 } from "@/@types/api";
 import { ApolloQueryResult, QueryOptions } from "@apollo/client";
@@ -15,7 +16,7 @@ type ClientQuery<Response, Variables = undefined> = (
 interface Sdk {
   query: {
     stores: ClientQuery<StoresQueryResponse, PaginatedQueryVariables>;
-    products: ClientQuery<ProductsQueryResponse, PaginatedQueryVariables>;
+    products: ClientQuery<ProductsQueryResponse, ProductsQueryVariables>;
   };
 }
 

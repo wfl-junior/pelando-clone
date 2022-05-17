@@ -13,8 +13,24 @@ export interface PaginatedQueryInput {
   perPage?: number | null;
 }
 
+export interface CategoryWhereInput {
+  slug?: string | null;
+}
+
+export interface ProductWhereInput {
+  category?: CategoryWhereInput | null;
+}
+
+export interface ProductsQueryInput extends PaginatedQueryInput {
+  where?: ProductWhereInput | null;
+}
+
 export interface PaginatedQueryVariables {
   input?: PaginatedQueryInput | null;
+}
+
+export interface ProductsQueryVariables {
+  input?: ProductsQueryInput | null;
 }
 
 export interface Model {
@@ -51,6 +67,11 @@ export interface Product extends Model {
   title: string;
   image: string;
   store: Store;
+}
+
+export interface Category extends Model {
+  slug: string;
+  title: string;
 }
 
 export interface StoresQueryResponse {

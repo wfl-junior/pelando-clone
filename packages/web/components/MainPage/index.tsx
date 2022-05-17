@@ -4,13 +4,14 @@ import { ProductsSection } from "./ProductsSection";
 
 interface MainPageProps {
   highlight?: boolean;
+  category?: string;
 }
 
-export const MainPage: React.FC<MainPageProps> = ({ highlight }) => {
+export const MainPage: React.FC<MainPageProps> = ({ highlight, category }) => {
   return (
     <Fragment>
       <HeroSection />
-      <ProductsSection highlight={highlight} />
+      <ProductsSection highlight={highlight} category={category} />
     </Fragment>
   );
 };

@@ -1,11 +1,15 @@
-import { PaginatedQueryVariables, ProductsQueryResponse } from "@/@types/api";
+import {
+  PaginatedQueryVariables,
+  ProductsQueryResponse,
+  ProductsQueryVariables,
+} from "@/@types/api";
 import { ApolloQueryResult, FetchMoreQueryOptions } from "@apollo/client";
 import React, { MutableRefObject, useEffect, useRef } from "react";
-import { getVariables } from "./ProductsSection";
 
 interface ProductsFetchMoreDummyProps {
   children?: React.ReactNode;
   currentPageRef: MutableRefObject<number>;
+  variables: ProductsQueryVariables;
   fetchMore(
     fetchMoreOptions: FetchMoreQueryOptions<
       PaginatedQueryVariables,
@@ -25,6 +29,7 @@ interface ProductsFetchMoreDummyProps {
 export const ProductsFetchMoreDummy: React.FC<ProductsFetchMoreDummyProps> = ({
   currentPageRef,
   fetchMore,
+  variables,
   children,
 }) => {
   const observerElementRef = useRef<HTMLDivElement>(null);
@@ -40,7 +45,13 @@ export const ProductsFetchMoreDummy: React.FC<ProductsFetchMoreDummyProps> = ({
           const nextPage = ++currentPageRef.current;
 
           fetchMore({
-            variables: getVariables(nextPage),
+            variables: {
+              ...variables,
+              input: {
+                ...variables.input,
+                page: nextPage,
+              },
+            },
             updateQuery: (previousResult, { fetchMoreResult }) => ({
               ...fetchMoreResult,
               products: {

@@ -1,4 +1,4 @@
-import { PaginatedQueryVariables } from "@/@types/api";
+import { ProductsQueryVariables } from "@/@types/api";
 import { useProductsQuery } from "@/hooks/apollo/useProductsQuery";
 import React, { useRef } from "react";
 import { ProductCard } from "./ProductCard";
@@ -8,47 +8,41 @@ import { ProductsFetchMoreDummy } from "./ProductsFetchMoreDummy";
 const firstPage = 1;
 const perPage = 8;
 
-export const getVariables = (page = firstPage): PaginatedQueryVariables => ({
+export const getVariables = (category?: string): ProductsQueryVariables => ({
   input: {
-    page,
+    page: firstPage,
     perPage: 8,
+    where: category ? { category: { slug: category } } : undefined,
   },
 });
 
 interface ProductsSectionProps {
   highlight?: boolean;
+  category?: string;
 }
 
 export const ProductsSection: React.FC<ProductsSectionProps> = ({
   highlight,
+  category,
 }) => {
   const currentPageRef = useRef(firstPage);
-  const { data, loading, fetchMore } = useProductsQuery({
-    variables: getVariables(),
+  const { data, loading, fetchMore, variables } = useProductsQuery({
+    variables: getVariables(category),
     notifyOnNetworkStatusChange: true,
   });
 
-  // data já vai estar disponível, pois está no cache, porque foi feito prefetch no servidor
-  const {
-    products: {
-      products: {
-        edges: products,
-        info: { hasNextPage },
-      },
-    },
-  } = data!;
-
   return (
     <section className="flex flex-col gap-1">
-      {products.map((product, index, arr) => {
+      {data?.products.products.edges.map((product, index, arr) => {
         const isLast = index + 1 === arr.length;
 
-        if (isLast && hasNextPage) {
+        if (isLast && data.products.products.info.hasNextPage) {
           return (
             <ProductsFetchMoreDummy
               key={product.id}
               currentPageRef={currentPageRef}
               fetchMore={fetchMore}
+              variables={variables!}
             >
               <ProductCard product={product} highlight={highlight} />
             </ProductsFetchMoreDummy>

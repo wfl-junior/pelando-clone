@@ -38,8 +38,7 @@ export const HeroSection: React.FC = () => {
         <h3 className="font-bold">Compre no site de suas lojas favoritas:</h3>
 
         <ul className="flex gap-1.5 overflow-x-auto lg:flex-wrap">
-          {/* data já vai estar disponível, pois está no cache, porque foi feito prefetch no servidor */}
-          {data!.stores.stores.edges.map(({ id, name }) => (
+          {data?.stores.stores.edges.map(({ id, name }) => (
             <li key={id}>
               <Link href="#">
                 <a className="bg-default-background border-default-border hover:text-tertiary-foreground block whitespace-nowrap rounded border py-1.5 px-2 font-bold shadow transition-colors">
