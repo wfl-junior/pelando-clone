@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity, Index, OneToMany } from "typeorm";
 import { EntityNode } from "./node.entity";
 import { Product } from "./product.entity";
 
@@ -8,6 +8,7 @@ import { Product } from "./product.entity";
 export class Category extends EntityNode {
   @Field()
   @Column()
+  @Index({ unique: true })
   slug: string;
 
   @Field()
