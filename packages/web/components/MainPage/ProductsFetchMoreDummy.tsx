@@ -1,7 +1,7 @@
 import { PaginatedQueryVariables, ProductsQueryResponse } from "@/@types/api";
-import { getVariables } from "@/pages";
 import { ApolloQueryResult, FetchMoreQueryOptions } from "@apollo/client";
 import React, { MutableRefObject, useEffect, useRef } from "react";
+import { getVariables } from "./ProductsSection";
 
 interface ProductsFetchMoreDummyProps {
   children?: React.ReactNode;
