@@ -21,6 +21,7 @@ export class ProductResolver {
       const [result, count] = await Product.findAndCount({
         take: perPage,
         skip: offset,
+        relations: ["store"],
       });
 
       return {

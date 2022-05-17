@@ -37,10 +37,7 @@ export class Product extends EntityNode {
   @Field(() => Store)
   @JoinTable()
   @JoinColumn({ name: "store_id" })
-  @ManyToOne(() => Store, store => store.products, {
-    onDelete: "CASCADE",
-    eager: true,
-  })
+  @ManyToOne(() => Store, store => store.products, { onDelete: "CASCADE" })
   store: Store;
 
   @Column("uuid", { name: "category_id" })
@@ -51,7 +48,6 @@ export class Product extends EntityNode {
   @JoinColumn({ name: "category_id" })
   @ManyToOne(() => Category, category => category.products, {
     onDelete: "CASCADE",
-    eager: true,
   })
   category: Category;
 }
