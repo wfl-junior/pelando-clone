@@ -4,17 +4,22 @@ import { getReadableDate } from "@/utils/getReadableDate";
 import Image from "next/image";
 import Link from "next/link";
 import React, { Fragment } from "react";
-import { CartIcon } from "./icons/product-card/CartIcon";
-import { ClockWithStarIcon } from "./icons/product-card/ClockWithStarIcon";
-import { CommentIcon } from "./icons/product-card/CommentIcon";
-import { EsfriarIcon } from "./icons/product-card/EsfriarIcon";
-import { EsquentarIcon } from "./icons/product-card/EsquentarIcon";
+import { CartIcon } from "../icons/product-card/CartIcon";
+import { ClockIcon } from "../icons/product-card/ClockIcon";
+import { ClockWithStarIcon } from "../icons/product-card/ClockWithStarIcon";
+import { CommentIcon } from "../icons/product-card/CommentIcon";
+import { EsfriarIcon } from "../icons/product-card/EsfriarIcon";
+import { EsquentarIcon } from "../icons/product-card/EsquentarIcon";
 
 interface ProductCardProps {
   product: Product;
+  highlight?: boolean;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  highlight,
+}) => {
   const isLargeBreakpoint = useIsBreakpoint("lg");
 
   return (
@@ -59,7 +64,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             className="flex items-center gap-1"
             title="Hora da publicação"
           >
-            <ClockWithStarIcon className="w-3.5" />
+            {highlight ? (
+              <ClockWithStarIcon className="w-3.5" />
+            ) : (
+              <ClockIcon className="w-3.5" />
+            )}
             <span>{getReadableDate(product.createdAt)}</span>
           </time>
         </div>

@@ -1,6 +1,6 @@
 import { useIsBreakpoint } from "@/hooks/useIsBreakpoint";
 import React from "react";
-import { Skeleton } from "./Skeleton";
+import { Skeleton } from "../Skeleton";
 
 export const ProductCardSkeleton: React.FC = () => {
   const isLargeBreakpoint = useIsBreakpoint("lg");

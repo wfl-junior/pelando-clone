@@ -1,8 +1,8 @@
 import { PaginatedQueryVariables } from "@/@types/api";
 import { MainPage } from "@/components/MainPage";
-import { ProductCard } from "@/components/ProductCard";
-import { ProductCardSkeleton } from "@/components/ProductCardSkeleton";
-import { ProductsFetchMoreDummy } from "@/components/ProductsFetchMoreDummy";
+import { ProductCard } from "@/components/MainPage/ProductCard";
+import { ProductCardSkeleton } from "@/components/MainPage/ProductCardSkeleton";
+import { ProductsFetchMoreDummy } from "@/components/MainPage/ProductsFetchMoreDummy";
 import { addApolloState, initializeApollo } from "@/graphql/client";
 import { getSdk } from "@/graphql/sdk";
 import { useProductsQuery } from "@/hooks/apollo/useProductsQuery";
@@ -63,12 +63,12 @@ const Home: NextPage = () => {
                 currentPageRef={currentPageRef}
                 fetchMore={fetchMore}
               >
-                <ProductCard product={product} />
+                <ProductCard product={product} highlight />
               </ProductsFetchMoreDummy>
             );
           }
 
-          return <ProductCard key={product.id} product={product} />;
+          return <ProductCard key={product.id} product={product} highlight />;
         })}
 
         {loading &&
