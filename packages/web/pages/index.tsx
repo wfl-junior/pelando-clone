@@ -26,10 +26,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   ]);
 
   return addApolloState(apolloClient, {
-    props: {
-      stores: stores,
-      products: products,
-    },
+    props: { stores, products },
   });
 };
 
@@ -39,6 +36,7 @@ const Home: NextPage = () => {
   return (
     <MainPage>
       <div className="flex flex-col gap-1">
+        {/* data já vai estar disponível, pois está no cache, porque foi feito prefetch no servidor */}
         {data!.products.products.edges.map(product => (
           <ProductCard key={product.id} product={product} />
         ))}
