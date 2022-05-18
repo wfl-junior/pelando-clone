@@ -31,32 +31,48 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({
     notifyOnNetworkStatusChange: true,
   });
 
+  // data já vai estar disponível por causa do prefetch no servidor
+  const {
+    products: {
+      products: {
+        edges: products,
+        info: { hasNextPage },
+      },
+    },
+  } = data!;
+
   return (
     <section className="flex flex-col gap-1">
-      {data?.products.products.edges.map((product, index, arr) => {
-        const isLast = index + 1 === arr.length;
+      {products.length ? (
+        products.map((product, index, arr) => {
+          const isLast = index + 1 === arr.length;
 
-        if (isLast && data.products.products.info.hasNextPage) {
+          if (isLast && hasNextPage) {
+            return (
+              <ProductsFetchMoreDummy
+                key={product.id}
+                currentPageRef={currentPageRef}
+                fetchMore={fetchMore}
+                variables={variables!}
+              >
+                <ProductCard product={product} highlight={highlight} />
+              </ProductsFetchMoreDummy>
+            );
+          }
+
           return (
-            <ProductsFetchMoreDummy
+            <ProductCard
               key={product.id}
-              currentPageRef={currentPageRef}
-              fetchMore={fetchMore}
-              variables={variables!}
-            >
-              <ProductCard product={product} highlight={highlight} />
-            </ProductsFetchMoreDummy>
+              product={product}
+              highlight={highlight}
+            />
           );
-        }
-
-        return (
-          <ProductCard
-            key={product.id}
-            product={product}
-            highlight={highlight}
-          />
-        );
-      })}
+        })
+      ) : (
+        <p className="text-center font-bold sm:text-lg lg:text-xl">
+          Não encontramos nenhum resultado 😭
+        </p>
+      )}
 
       {loading &&
         Array.from({ length: productsPerPage }, (_, i) => i + 1).map(number => (
