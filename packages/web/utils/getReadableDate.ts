@@ -7,7 +7,6 @@ export function getReadableDate(date: string | Date): string {
 
   const differenceInSeconds = Math.ceil((+now - +date) / 1000);
 
-  const seconds = Math.floor(differenceInSeconds % 60);
   const minutes = Math.floor((differenceInSeconds / 60) % 60);
   const hours = Math.floor((differenceInSeconds / (60 * 60)) % 24);
   const days = Math.floor(differenceInSeconds / (60 * 60 * 24));
@@ -43,5 +42,5 @@ export function getReadableDate(date: string | Date): string {
     return `${minutes} min`;
   }
 
-  return `${seconds} seg`;
+  return "agora";
 }

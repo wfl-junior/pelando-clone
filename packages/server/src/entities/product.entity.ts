@@ -12,7 +12,7 @@ export class Product extends EntityNode {
   body: string;
 
   @Field(() => String, { nullable: true })
-  @Column({ name: "coupon_code", nullable: true, type: "varchar" })
+  @Column("varchar", { name: "coupon_code", nullable: true })
   couponCode: string | null;
 
   @Field()

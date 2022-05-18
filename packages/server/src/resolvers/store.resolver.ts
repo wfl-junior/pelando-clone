@@ -1,5 +1,5 @@
 import { Args, Query, Resolver } from "@nestjs/graphql";
-import { defaultPerPage } from "../constants";
+import { DEFAULT_PER_PAGE } from "../constants";
 import { Store } from "../entities/store.entity";
 import { PaginatedQueryInput } from "../graphql-types/Input/PaginatedQueryInput";
 import { StoresQueryResponse } from "../graphql-types/Object/stores/StoresQueryResponse";
@@ -14,7 +14,7 @@ export class StoreResolver {
     input?: PaginatedQueryInput | null,
   ): Promise<StoresQueryResponse> {
     try {
-      const perPage = input?.perPage || defaultPerPage;
+      const perPage = input?.perPage || DEFAULT_PER_PAGE;
       const page = input?.page || 1;
       const offset = perPage * page - perPage;
 

@@ -1,5 +1,5 @@
 import { Args, Query, Resolver } from "@nestjs/graphql";
-import { defaultPerPage } from "../constants";
+import { DEFAULT_PER_PAGE } from "../constants";
 import { Product } from "../entities";
 import { ProductsQueryInput } from "../graphql-types/Input/ProductsQueryInput";
 import { ProductsQueryResponse } from "../graphql-types/Object/products/ProductsQueryResponse";
@@ -14,7 +14,7 @@ export class ProductResolver {
     input?: ProductsQueryInput | null,
   ): Promise<ProductsQueryResponse> {
     try {
-      const perPage = input?.perPage || defaultPerPage;
+      const perPage = input?.perPage || DEFAULT_PER_PAGE;
       const page = input?.page || 1;
       const offset = perPage * page - perPage;
 

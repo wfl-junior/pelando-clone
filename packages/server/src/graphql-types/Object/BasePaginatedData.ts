@@ -4,7 +4,7 @@ import { PageInfo } from "./PageInfo";
 
 export function BasePaginatedData<T>(ClassRef: Class<T>) {
   @ObjectType({ isAbstract: true })
-  class PaginatedData {
+  abstract class PaginatedData {
     @Field(() => [ClassRef])
     edges: T[];
 
