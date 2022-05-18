@@ -1,14 +1,17 @@
-import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
+import { UseGuards } from "@nestjs/common";
+import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import bcrypt from "bcrypt";
 import { QueryFailedError } from "typeorm";
 import { ValidationError } from "yup";
-import { IContext } from "../@types/app";
+import { IContext, IContextWithUser } from "../@types/app";
 import { UNIQUE_EMAIL_INDEX, UNIQUE_USERNAME_INDEX } from "../constants";
 import { User } from "../entities/user.entity";
 import { LoginInput } from "../graphql-types/Input/LoginInput";
 import { RegisterInput } from "../graphql-types/Input/RegisterInput";
 import { LoginResponse } from "../graphql-types/Object/users/LoginResponse";
+import { MeResponse } from "../graphql-types/Object/users/MeResponse";
 import { RegisterResponse } from "../graphql-types/Object/users/RegisterResponse";
+import { AuthGuard } from "../guards/auth.guard";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
 import { getRandomNumberBetween } from "../utils/getRandomNumberBetween";
 import { createAccessToken, sendRefreshToken } from "../utils/jwt";
@@ -117,6 +120,12 @@ export class UserResolver {
     }
   }
 
-  // @Query()
-  // async me() {}
+  @Query(() => MeResponse)
+  @UseGuards(new AuthGuard())
+  async me(@Context() { user }: IContextWithUser): Promise<MeResponse> {
+    return {
+      ok: true,
+      user,
+    };
+  }
 }

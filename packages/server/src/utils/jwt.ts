@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { sign } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 import { REFRESH_ACCESS_TOKEN_ENDPOINT } from "../constants";
 import { User } from "../entities/user.entity";
 
@@ -41,4 +41,8 @@ export const sendRefreshToken = (response: Response, user: User): void => {
     path: REFRESH_ACCESS_TOKEN_ENDPOINT,
     secure: process.env.NODE_ENV === "production",
   });
+};
+
+export const getTokenPayload = (token: string) => {
+  return verify(token, process.env.JWT_ACCESS_TOKEN_SECRET) as TokenPayload;
 };
