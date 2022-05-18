@@ -132,12 +132,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             </a>
           </Link>
 
-          <Link href="#">
-            <a className="hover:text-tertiary-foreground flex items-center gap-1 p-2 transition-colors">
-              <CartIcon className="w-4" />
-              <span>ver na loja</span>
-            </a>
-          </Link>
+          <a
+            href={product.sourceUrl}
+            target="_blank"
+            className="hover:text-tertiary-foreground flex items-center gap-1 p-2 transition-colors"
+          >
+            <CartIcon className="w-4" />
+            <span>ver na loja</span>
+          </a>
         </div>
       </div>
     </div>
