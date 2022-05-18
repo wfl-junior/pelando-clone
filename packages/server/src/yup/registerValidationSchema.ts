@@ -1,6 +1,7 @@
 import * as yup from "yup";
 
 export const registerValidationSchema = yup.object({
+  password: yup.string().required().min(8),
   email: yup.string().required().email(),
   username: yup
     .string()
@@ -10,5 +11,4 @@ export const registerValidationSchema = yup.object({
       "${label} must be only alpha numeric, - and _ characters",
     )
     .label("username"),
-  password: yup.string().required().min(8),
 });

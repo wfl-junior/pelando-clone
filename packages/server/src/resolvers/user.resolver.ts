@@ -1,15 +1,19 @@
 import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
+import bcrypt from "bcrypt";
 import { QueryFailedError } from "typeorm";
 import { ValidationError } from "yup";
 import { IContext } from "../@types/app";
 import { UNIQUE_EMAIL_INDEX, UNIQUE_USERNAME_INDEX } from "../constants";
 import { User } from "../entities/user.entity";
+import { LoginInput } from "../graphql-types/Input/LoginInput";
 import { RegisterInput } from "../graphql-types/Input/RegisterInput";
+import { LoginResponse } from "../graphql-types/Object/users/LoginResponse";
 import { RegisterResponse } from "../graphql-types/Object/users/RegisterResponse";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
 import { getRandomNumberBetween } from "../utils/getRandomNumberBetween";
 import { createAccessToken, sendRefreshToken } from "../utils/jwt";
 import { yupErrorResponse } from "../utils/yupErrorResponse";
+import { loginValidationSchema } from "../yup/loginValidationSchema";
 import { registerValidationSchema } from "../yup/registerValidationSchema";
 
 @Resolver(() => User)
@@ -66,8 +70,52 @@ export class UserResolver {
     }
   }
 
-  // @Mutation(() => LoginResponse)
-  // async login() {}
+  @Mutation(() => LoginResponse)
+  async login(
+    @Args("input", { type: () => LoginInput })
+    { password, ...input }: LoginInput,
+    @Context() { response }: IContext,
+  ): Promise<LoginResponse> {
+    try {
+      await loginValidationSchema.validate(
+        { ...input, password },
+        {
+          abortEarly: false,
+          strict: true,
+        },
+      );
+
+      const user = await User.findOne({
+        where: input as any, //! ts não gosta do null, mas TypeORM converte null para undefined
+        select: ["id", "email", "username", "password"],
+      });
+
+      if (user && (await bcrypt.compare(password, user.password))) {
+        sendRefreshToken(response, user);
+
+        return {
+          ok: true,
+          accessToken: createAccessToken(user),
+        };
+      }
+
+      return {
+        ok: false,
+        errors: [
+          {
+            message: "Invalid credentials",
+          },
+        ],
+      };
+    } catch (error) {
+      if (error instanceof ValidationError) {
+        return yupErrorResponse(error);
+      }
+
+      console.log({ time: new Date(), where: "mutation register", error });
+      return defaultErrorResponse();
+    }
+  }
 
   // @Query()
   // async me() {}

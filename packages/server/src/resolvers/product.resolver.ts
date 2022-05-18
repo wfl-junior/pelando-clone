@@ -22,7 +22,7 @@ export class ProductResolver {
         take: perPage,
         skip: offset,
         relations: ["store", "category"],
-        where: input?.where as any, //! ts não gosta do null
+        where: input?.where as any, //! ts não gosta do null, mas TypeORM converte null para undefined
       });
 
       return {

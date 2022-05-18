@@ -1,4 +1,4 @@
-import { Class } from "@/@types/app";
+import { Class } from "@/src/@types/app";
 import { Field, ObjectType } from "@nestjs/graphql";
 import { PageInfo } from "./PageInfo";
 
