@@ -43,6 +43,11 @@ export const sendRefreshToken = (response: Response, user: User): void => {
   });
 };
 
-export const getTokenPayload = (token: string) => {
-  return verify(token, process.env.JWT_ACCESS_TOKEN_SECRET) as TokenPayload;
+export const getTokenPayload = (token: string, isRefresh?: boolean) => {
+  return verify(
+    token,
+    isRefresh
+      ? process.env.JWT_REFRESH_TOKEN_SECRET
+      : process.env.JWT_ACCESS_TOKEN_SECRET,
+  ) as TokenPayload;
 };

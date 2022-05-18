@@ -5,6 +5,7 @@ import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { IContext } from "./@types/app";
+import { RefreshAccessTokenController } from "./controllers/refresh-access-token.controller";
 import * as Resolvers from "./resolvers";
 
 @Module({
@@ -19,5 +20,6 @@ import * as Resolvers from "./resolvers";
       context: ({ req, res }): IContext => ({ request: req, response: res }),
     }),
   ],
+  controllers: [RefreshAccessTokenController],
 })
 export class AppModule {}
