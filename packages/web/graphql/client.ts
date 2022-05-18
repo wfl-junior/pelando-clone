@@ -1,9 +1,12 @@
+import { isBrowser } from "@/utils/isBrowser";
+import { isEqual } from "@/utils/isEqual";
 import {
   ApolloClient,
   HttpLink,
   InMemoryCache,
   NormalizedCacheObject,
 } from "@apollo/client";
+import merge from "deepmerge";
 import { useMemo } from "react";
 
 // https://developers.wpengine.com/blog/apollo-client-cache-rehydration-in-next-js
@@ -16,7 +19,7 @@ let apolloClient: Client | undefined;
 
 export function createApolloClient() {
   return new ApolloClient({
-    ssrMode: typeof window === "undefined",
+    ssrMode: !isBrowser(),
     link: new HttpLink({
       uri: "http://localhost:4000/graphql",
       credentials: "same-origin",
@@ -25,25 +28,29 @@ export function createApolloClient() {
   });
 }
 
-export function initializeApollo(
-  initialState: NormalizedCacheObject | null = null,
-) {
+export function initializeApollo(initialState?: NormalizedCacheObject) {
   const _apolloClient = apolloClient ?? createApolloClient();
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state gets hydrated here
   if (initialState) {
     // Get existing cache, loaded during client side data fetching
-    const existingCache = _apolloClient.extract();
+    const existingCache = _apolloClient.cache.extract();
 
     // Merge the existing cache into data passed from getStaticProps/getServerSideProps
-    const data = Object.assign(initialState, existingCache);
+    const data = merge(initialState, existingCache, {
+      // combine arrays using object equality (like in sets)
+      arrayMerge: (destinationArray, sourceArray) => [
+        ...sourceArray,
+        ...destinationArray.filter(d => sourceArray.every(s => !isEqual(d, s))),
+      ],
+    });
 
     // Restore the cache with the merged data
     _apolloClient.cache.restore(data);
   }
 
   // For SSG and SSR always create a new Apollo Client
-  if (typeof window === "undefined") {
+  if (!isBrowser()) {
     return _apolloClient;
   }
 
@@ -55,7 +62,7 @@ export function initializeApollo(
   return _apolloClient;
 }
 
-export function addApolloState(client: Client, pageProps: any) {
+export function addApolloState(client: Client, pageProps: any = { props: {} }) {
   if (pageProps?.props) {
     pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
   }

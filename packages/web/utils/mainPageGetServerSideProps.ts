@@ -10,13 +10,11 @@ export const mainPageGetServerSideProps = (
     const apolloClient = initializeApollo();
     const sdk = getSdk(apolloClient);
 
-    const [stores, products] = await Promise.all([
+    await Promise.all([
       sdk.query.stores(),
       sdk.query.products({ variables: getVariables(category) }),
     ]);
 
-    return addApolloState(apolloClient, {
-      props: { stores, products },
-    });
+    return addApolloState(apolloClient);
   };
 };

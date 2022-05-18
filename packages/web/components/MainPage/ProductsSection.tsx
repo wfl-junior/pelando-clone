@@ -6,12 +6,12 @@ import { ProductCardSkeleton } from "./ProductCardSkeleton";
 import { ProductsFetchMoreDummy } from "./ProductsFetchMoreDummy";
 
 const firstPage = 1;
-const perPage = 8;
+const productsPerPage = 8;
 
 export const getVariables = (category?: string): ProductsQueryVariables => ({
   input: {
     page: firstPage,
-    perPage: 8,
+    perPage: productsPerPage,
     where: category ? { category: { slug: category } } : undefined,
   },
 });
@@ -59,7 +59,7 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({
       })}
 
       {loading &&
-        Array.from({ length: perPage }, (_, i) => i + 1).map(number => (
+        Array.from({ length: productsPerPage }, (_, i) => i + 1).map(number => (
           <ProductCardSkeleton key={number} />
         ))}
     </section>
