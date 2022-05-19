@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { sign, verify } from "jsonwebtoken";
 import { REFRESH_ACCESS_TOKEN_ENDPOINT } from "../constants";
-import { User } from "../entities/user.entity";
+import { User } from "../entities";
 
 export interface TokenPayload {
   id: string;

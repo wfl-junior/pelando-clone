@@ -10,25 +10,25 @@ export class User extends EntityNode {
   @Field()
   @Column()
   @Index(UNIQUE_EMAIL_INDEX, { unique: true })
-  email: string;
+  public email: string;
 
   @Field()
   @Column()
   @Index(UNIQUE_USERNAME_INDEX, { unique: true })
-  username: string;
+  public username: string;
 
   @Field(() => String, { nullable: true })
   @Column("varchar", { nullable: true })
-  image: string | null;
+  public image: string | null;
 
   @Column("float")
-  offerVoteValue: number;
+  public offerVoteValue: number;
 
   @Column({ select: false })
-  password: string;
+  public password: string;
 
   @BeforeInsert()
-  async hashPassword() {
+  protected async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
   }
 }

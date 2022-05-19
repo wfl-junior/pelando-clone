@@ -1,6 +1,4 @@
-import { Product } from "@/src/entities";
-import { Category } from "@/src/entities/category.entity";
-import { Store } from "@/src/entities/store.entity";
+import { Category, Product, Store } from "@/src/entities";
 import products from "./product.data.json";
 
 export async function seedProducts() {

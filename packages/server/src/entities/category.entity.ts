@@ -1,7 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { Column, Entity, Index, OneToMany } from "typeorm";
+import { Product } from ".";
 import { EntityNode } from "./node.entity";
-import { Product } from "./product.entity";
 
 @ObjectType()
 @Entity("categories", { orderBy: { createdAt: "ASC" } })
@@ -9,12 +9,12 @@ export class Category extends EntityNode {
   @Field()
   @Column()
   @Index({ unique: true })
-  slug: string;
+  public slug: string;
 
   @Field()
   @Column()
-  title: string;
+  public title: string;
 
   @OneToMany(() => Product, product => product.store, { onDelete: "CASCADE" })
-  products: Product[];
+  public products: Product[];
 }

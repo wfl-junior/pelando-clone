@@ -6,7 +6,7 @@ import {
 } from "@nestjs/common";
 import { GqlExecutionContext } from "@nestjs/graphql";
 import { IContext } from "../@types/app";
-import { User } from "../entities/user.entity";
+import { User } from "../entities";
 import { getTokenPayload } from "../utils/jwt";
 
 @Injectable()

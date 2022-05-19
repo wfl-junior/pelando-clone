@@ -5,7 +5,7 @@ import { QueryFailedError } from "typeorm";
 import { ValidationError } from "yup";
 import { IContext, IContextWithUser, IResolverResponse } from "../@types/app";
 import { UNIQUE_EMAIL_INDEX, UNIQUE_USERNAME_INDEX } from "../constants";
-import { User } from "../entities/user.entity";
+import { User } from "../entities";
 import { LoginInput } from "../graphql-types/Input/LoginInput";
 import { RegisterInput } from "../graphql-types/Input/RegisterInput";
 import { LoginResponse } from "../graphql-types/Object/users/LoginResponse";

@@ -1,4 +1,4 @@
-import { User } from "@/src/entities/user.entity";
+import { User } from "@/src/entities";
 import { Field, ObjectType } from "@nestjs/graphql";
 import { ResolverResponse } from "../ResolverResponse";
 

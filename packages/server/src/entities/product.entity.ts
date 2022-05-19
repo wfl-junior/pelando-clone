@@ -1,47 +1,46 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { Column, Entity, JoinColumn, JoinTable, ManyToOne } from "typeorm";
-import { Category } from "./category.entity";
+import { Category, Store } from ".";
 import { EntityNode } from "./node.entity";
-import { Store } from "./store.entity";
 
 @ObjectType()
 @Entity("products", { orderBy: { createdAt: "ASC" } })
 export class Product extends EntityNode {
   @Field()
   @Column("text")
-  body: string;
+  public body: string;
 
   @Field(() => String, { nullable: true })
   @Column("varchar", { name: "coupon_code", nullable: true })
-  couponCode: string | null;
+  public couponCode: string | null;
 
   @Field()
   @Column("float")
-  price: number;
+  public price: number;
 
   @Field()
   @Column({ name: "source_url" })
-  sourceUrl: string;
+  public sourceUrl: string;
 
   @Field()
   @Column()
-  title: string;
+  public title: string;
 
   @Field()
   @Column()
-  image: string;
+  public image: string;
 
   @Column("uuid", { name: "store_id" })
-  storeId: string;
+  public storeId: string;
 
   @Field(() => Store)
   @JoinTable()
   @JoinColumn({ name: "store_id" })
   @ManyToOne(() => Store, store => store.products, { onDelete: "CASCADE" })
-  store: Store;
+  public store: Store;
 
   @Column("uuid", { name: "category_id" })
-  categoryId: string;
+  public categoryId: string;
 
   @Field(() => Category)
   @JoinTable()
@@ -49,5 +48,5 @@ export class Product extends EntityNode {
   @ManyToOne(() => Category, category => category.products, {
     onDelete: "CASCADE",
   })
-  category: Category;
+  public category: Category;
 }

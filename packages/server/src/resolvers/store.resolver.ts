@@ -1,7 +1,7 @@
 import { Args, Query, Resolver } from "@nestjs/graphql";
 import { IResolverResponse } from "../@types/app";
 import { DEFAULT_PER_PAGE } from "../constants";
-import { Store } from "../entities/store.entity";
+import { Store } from "../entities";
 import { PaginatedQueryInput } from "../graphql-types/Input/PaginatedQueryInput";
 import { StoresQueryResponse } from "../graphql-types/Object/stores/StoresQueryResponse";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";

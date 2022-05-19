@@ -1,4 +1,4 @@
-import { Category } from "@/src/entities/category.entity";
+import { Category } from "@/src/entities";
 import categories from "./category.data.json";
 
 export async function seedCategories() {

@@ -1,4 +1,4 @@
-import { Store } from "@/src/entities/store.entity";
+import { Store } from "@/src/entities";
 import { ObjectType } from "@nestjs/graphql";
 import { BasePaginatedData } from "../BasePaginatedData";
 

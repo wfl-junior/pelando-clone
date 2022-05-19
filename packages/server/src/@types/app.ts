@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { User } from "../entities/user.entity";
+import { User } from "../entities";
 import { FieldError } from "../graphql-types/Object/FieldError";
 import { ResolverResponse } from "../graphql-types/Object/ResolverResponse";
 
