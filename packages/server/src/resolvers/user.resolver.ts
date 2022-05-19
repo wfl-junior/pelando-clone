@@ -3,7 +3,7 @@ import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import bcrypt from "bcrypt";
 import { QueryFailedError } from "typeorm";
 import { ValidationError } from "yup";
-import { IContext, IContextWithUser } from "../@types/app";
+import { IContext, IContextWithUser, IResolverResponse } from "../@types/app";
 import { UNIQUE_EMAIL_INDEX, UNIQUE_USERNAME_INDEX } from "../constants";
 import { User } from "../entities/user.entity";
 import { LoginInput } from "../graphql-types/Input/LoginInput";
@@ -25,7 +25,7 @@ export class UserResolver {
   async register(
     @Args("input", { type: () => RegisterInput }) input: RegisterInput,
     @Context() { response }: IContext,
-  ): Promise<RegisterResponse> {
+  ): Promise<IResolverResponse<RegisterResponse>> {
     try {
       await registerValidationSchema.validate(input, {
         abortEarly: false,
@@ -78,7 +78,7 @@ export class UserResolver {
     @Args("input", { type: () => LoginInput })
     { password, ...input }: LoginInput,
     @Context() { response }: IContext,
-  ): Promise<LoginResponse> {
+  ): Promise<IResolverResponse<LoginResponse>> {
     try {
       await loginValidationSchema.validate(
         { ...input, password },
@@ -122,7 +122,9 @@ export class UserResolver {
 
   @Query(() => MeResponse)
   @UseGuards(new AuthGuard())
-  async me(@Context() { user }: IContextWithUser): Promise<MeResponse> {
+  async me(
+    @Context() { user }: IContextWithUser,
+  ): Promise<IResolverResponse<MeResponse>> {
     return {
       ok: true,
       user,

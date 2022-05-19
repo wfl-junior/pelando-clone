@@ -1,4 +1,5 @@
 import { Args, Query, Resolver } from "@nestjs/graphql";
+import { IResolverResponse } from "../@types/app";
 import { DEFAULT_PER_PAGE } from "../constants";
 import { Product } from "../entities";
 import { ProductsQueryInput } from "../graphql-types/Input/ProductsQueryInput";
@@ -12,7 +13,7 @@ export class ProductResolver {
   async products(
     @Args("input", { type: () => ProductsQueryInput, nullable: true })
     input?: ProductsQueryInput | null,
-  ): Promise<ProductsQueryResponse> {
+  ): Promise<IResolverResponse<ProductsQueryResponse>> {
     try {
       const perPage = input?.perPage || DEFAULT_PER_PAGE;
       const page = input?.page || 1;

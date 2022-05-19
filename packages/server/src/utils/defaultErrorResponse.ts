@@ -1,6 +1,6 @@
-import { ResolverResponse } from "../graphql-types/Object/ResolverResponse";
+import { IResolverBadResponse } from "../@types/app";
 
-export const defaultErrorResponse = (): ResolverResponse => ({
+export const defaultErrorResponse = (): IResolverBadResponse => ({
   ok: false,
   errors: [
     {
