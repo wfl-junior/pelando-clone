@@ -4,7 +4,7 @@ import { FacebookIcon } from "@/components/icons/register-or-login-modal/Faceboo
 import { GoogleIcon } from "@/components/icons/register-or-login-modal/GoogleIcon";
 import { Tab } from "@headlessui/react";
 import classNames from "classnames";
-import React, { useRef } from "react";
+import React, { Fragment, useRef } from "react";
 import { Button } from "./Button";
 import { CloseButton } from "./CloseButton";
 
@@ -18,36 +18,35 @@ export const Panel: React.FC<PanelProps> = ({ type }) => {
 
   return (
     <Tab.Panel className="contents">
-      <CloseButton />
-
-      <header className="flex items-center justify-center p-4">
+      <header className="border-default-border relative flex items-center justify-center border-b p-4">
         <h2 className="font-bold md:text-xl">
           {type === "register" ? "Cadastrar" : "Entrar"}
         </h2>
+
+        <CloseButton />
       </header>
 
       <div className="my-auto flex flex-col items-center gap-6 rounded-full py-4 px-2">
         <Tab.List className="bg-inactive-background font-arial flex items-center rounded-full p-1">
-          <Tab
-            ref={registerRef}
-            className={({ selected }) =>
-              classNames("rounded-full py-1 px-5 font-bold", {
+          {() => {
+            function className({ selected }: { selected: boolean }): string {
+              return classNames("rounded-full py-1 px-5 font-bold", {
                 "bg-primary text-white": selected,
-              })
+              });
             }
-          >
-            Cadastrar
-          </Tab>
-          <Tab
-            ref={loginRef}
-            className={({ selected }) =>
-              classNames("rounded-full py-1 px-5 font-bold", {
-                "bg-primary text-white": selected,
-              })
-            }
-          >
-            Entrar
-          </Tab>
+
+            return (
+              <Fragment>
+                <Tab ref={registerRef} className={className}>
+                  Cadastrar
+                </Tab>
+
+                <Tab ref={loginRef} className={className}>
+                  Entrar
+                </Tab>
+              </Fragment>
+            );
+          }}
         </Tab.List>
 
         <div className="flex w-full flex-col gap-1.5">
@@ -74,7 +73,7 @@ export const Panel: React.FC<PanelProps> = ({ type }) => {
         </div>
 
         <Button
-          className="bg-primary hover:bg-primary-hover border-primary text-white"
+          className="bg-primary hover:bg-primary-hover border-primary hover:border-primary-hover text-white"
           iconPosition="right"
           Icon={ArrowRightIcon}
         >

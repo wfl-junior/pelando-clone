@@ -6,7 +6,7 @@ export const CloseButton: React.FC = () => {
 
   return (
     <button
-      className="absolute top-2.5 right-3.5 text-3xl font-semibold"
+      className="absolute top-1/2 right-4 -translate-y-1/2 transform text-3xl font-semibold"
       onClick={() => toggleModal(false)}
     >
       &times;
