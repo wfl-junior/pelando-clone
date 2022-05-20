@@ -15,7 +15,7 @@ export class Product extends EntityNode {
   public couponCode: string | null;
 
   @Field()
-  @Column("float")
+  @Column("double", { precision: 10, scale: 2 })
   public price: number;
 
   @Field()
