@@ -2,8 +2,8 @@ import { useStoresQuery } from "@/hooks/apollo/useStoresQuery";
 import { useIsBreakpoint } from "@/hooks/useIsBreakpoint";
 import Link from "next/link";
 import React from "react";
-import { BasicLink } from "../BasicLink";
-import { MainPageHeroImage } from "./MainPageHeroImage";
+import { MainPageHeroImage } from "../MainPageHeroImage";
+import { RegisterOrLoginButton } from "./RegisterOrLoginButton";
 
 export const HeroSection: React.FC = () => {
   const { data } = useStoresQuery();
@@ -27,7 +27,7 @@ export const HeroSection: React.FC = () => {
 
         <p>
           Uma plataforma para encontrar promoções e tirar dúvidas.{" "}
-          <BasicLink href="#">Faça parte!</BasicLink>
+          <RegisterOrLoginButton>Faça parte!</RegisterOrLoginButton>
         </p>
       </div>
 

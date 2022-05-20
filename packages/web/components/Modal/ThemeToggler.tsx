@@ -2,7 +2,7 @@ import { Theme, useThemeContext } from "@/contexts/ThemeContext";
 import { RadioGroup } from "@headlessui/react";
 import classNames from "classnames";
 import React, { Fragment } from "react";
-import { CheckIcon } from "./icons/CheckIcon";
+import { CheckIcon } from "../icons/CheckIcon";
 
 interface Option {
   label: string;

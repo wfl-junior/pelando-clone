@@ -71,6 +71,10 @@ module.exports = {
       fontSize: {
         "2.5xl": ["1.75rem", "2.125rem"],
       },
+      opacity: {
+        85: "0.85",
+        97: "0.97",
+      },
     },
   },
   plugins: [

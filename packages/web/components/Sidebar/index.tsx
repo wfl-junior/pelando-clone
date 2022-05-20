@@ -3,11 +3,12 @@ import { useIsBreakpoint } from "@/hooks/useIsBreakpoint";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { ArrowRightIcon } from "../icons/sidebar/ArrowRightIcon";
-import { SignOutIcon } from "../icons/sidebar/SignOutIcon";
 import { UserIcon } from "../icons/sidebar/UserIcon";
 import { footerLinks } from "./footerLinks";
 import { navBottomLinks } from "./navBottomLinks";
 import { navLinks } from "./navLinks";
+import { RegisterLoginTogglerButton } from "./RegisterLoginTogglerButton";
+import { RegisterOrLoginButton } from "./RegisterOrLoginButton";
 import { storeLinks } from "./storeLinks";
 import { ThemeTogglerButton } from "./ThemeTogglerButton";
 
@@ -65,8 +66,8 @@ export const Sidebar: React.FC = () => {
             </div>
 
             <div className="self-end">
-              <button className="font-bold">Entrar</button> ou{" "}
-              <button className="font-bold">Cadastrar</button>
+              <RegisterOrLoginButton>Entrar</RegisterOrLoginButton> ou{" "}
+              <RegisterOrLoginButton>Cadastrar</RegisterOrLoginButton>
             </div>
           </div>
 
@@ -120,12 +121,7 @@ export const Sidebar: React.FC = () => {
 
             <li className="border-default-border flex items-center justify-between border-t pt-3.5">
               <ThemeTogglerButton />
-
-              <button className="flex items-center gap-2 font-bold">
-                <span className="font-arial">Cadastrar</span>
-
-                <SignOutIcon className="w-4" />
-              </button>
+              <RegisterLoginTogglerButton />
             </li>
           </ul>
         </div>

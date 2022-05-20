@@ -73,7 +73,7 @@ export const SearchBar: React.FC = () => {
       </div>
 
       {/* TODO: Adicionar parte de recentes e aparecer com input focus */}
-      <Combobox.Options className="md:bg-default-background bg-default-background/95 md:border-secondary-button fixed inset-0 top-12 z-50 overflow-hidden rounded-xl py-3 px-2 md:absolute md:inset-auto md:top-full md:w-full md:border md:shadow-md">
+      <Combobox.Options className="md:bg-default-background bg-default-background/97 md:border-secondary-button fixed inset-0 top-12 z-50 overflow-hidden rounded-xl py-3 px-2 md:absolute md:inset-auto md:top-full md:w-full md:border md:shadow-md">
         <div className="before:bg-inactive-background relative my-1.5 text-center before:absolute before:inset-x-0 before:top-[55%] before:-z-10 before:h-[1px]">
           <span className="text-secondary-foreground bg-default-background z-10 px-6 text-[10px] font-bold uppercase md:text-xs">
             Mais Buscados
