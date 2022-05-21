@@ -1,6 +1,11 @@
 import { useModalContext } from "@/contexts/ModalContext";
 import { useRegisterOrLoginContext } from "@/contexts/RegisterOrLoginContext";
+import { meQuery } from "@/graphql/queries/meQuery";
 import { useLoginMutation } from "@/hooks/apollo/useLoginMutation";
+import {
+  authorizationHeaderWithToken,
+  setAccessToken,
+} from "@/utils/accessToken";
 import { loginValidationSchemas } from "@/yup/loginValidationSchema";
 import { ApolloError } from "@apollo/client";
 import { Formik, FormikErrors } from "formik";
@@ -28,8 +33,25 @@ const type = "login";
 
 export const Login: React.FC = () => {
   const { step, setStep } = useRegisterOrLoginContext();
-  const [loginMutation] = useLoginMutation();
   const { toggleModal } = useModalContext();
+  const [loginMutation] = useLoginMutation({
+    refetchQueries: result => {
+      if (result.data?.login.accessToken) {
+        setAccessToken(result.data.login.accessToken);
+
+        return [
+          {
+            query: meQuery,
+            context: {
+              headers: { authorization: authorizationHeaderWithToken() },
+            },
+          },
+        ];
+      }
+
+      return [];
+    },
+  });
 
   const steps: Array<ReturnType<React.FC>> = [<StepOne />, <StepTwo />];
 

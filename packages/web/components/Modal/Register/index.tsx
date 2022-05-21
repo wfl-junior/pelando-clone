@@ -1,6 +1,11 @@
 import { useModalContext } from "@/contexts/ModalContext";
 import { useRegisterOrLoginContext } from "@/contexts/RegisterOrLoginContext";
+import { meQuery } from "@/graphql/queries/meQuery";
 import { useRegisterMutation } from "@/hooks/apollo/useRegisterMutation";
+import {
+  authorizationHeaderWithToken,
+  setAccessToken,
+} from "@/utils/accessToken";
 import { registerValidationSchemas } from "@/yup/registerValidationSchema";
 import { ApolloError } from "@apollo/client";
 import { Formik, FormikErrors } from "formik";
@@ -29,8 +34,25 @@ const type = "register";
 
 export const Register: React.FC = () => {
   const { step, setStep } = useRegisterOrLoginContext();
-  const [registerMutation] = useRegisterMutation();
   const { toggleModal } = useModalContext();
+  const [registerMutation] = useRegisterMutation({
+    refetchQueries: result => {
+      if (result.data?.register.accessToken) {
+        setAccessToken(result.data.register.accessToken);
+
+        return [
+          {
+            query: meQuery,
+            context: {
+              headers: { authorization: authorizationHeaderWithToken() },
+            },
+          },
+        ];
+      }
+
+      return [];
+    },
+  });
 
   const steps: Array<ReturnType<React.FC>> = [
     <StepOne />,

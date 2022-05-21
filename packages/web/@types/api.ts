@@ -52,6 +52,12 @@ export interface PaginatedData<T extends Model> {
   edges: T[];
 }
 
+export interface User extends Model {
+  email: string;
+  username: string;
+  image: string | null;
+}
+
 export interface Store extends Model {
   slug: string;
   name: string;
@@ -113,4 +119,8 @@ export type LoginInput = { password: string } & (
 
 export interface LoginMutationVariables {
   input: LoginInput;
+}
+
+export interface MeQueryResponse {
+  me: GraphQLResponse & { user: User | null };
 }

@@ -1,3 +1,4 @@
+import { API_URL } from "@/constants";
 import { isBrowser } from "@/utils/isBrowser";
 import { isEqual } from "@/utils/isEqual";
 import {
@@ -20,10 +21,7 @@ let apolloClient: Client | undefined;
 export function createApolloClient() {
   return new ApolloClient({
     ssrMode: !isBrowser(),
-    link: new HttpLink({
-      uri: "http://localhost:4000/graphql",
-      credentials: "same-origin",
-    }),
+    link: new HttpLink({ uri: `${API_URL}/graphql` }),
     cache: new InMemoryCache(),
   });
 }

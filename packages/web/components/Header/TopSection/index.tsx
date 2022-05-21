@@ -1,15 +1,13 @@
-import { Button } from "@/components/Button";
 import { HamburguerIcon } from "@/components/icons/HamburguerIcon";
 import { Logo } from "@/components/Logo";
-import { useModalContext } from "@/contexts/ModalContext";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import Link from "next/link";
 import React from "react";
 import { SearchBar } from "./SearchBar";
+import { UserSection } from "./UserSection";
 
 export const TopSection: React.FC = () => {
   const { setOpen } = useSidebarContext();
-  const { toggleModal } = useModalContext();
 
   return (
     <div className="xs:gap-2 relative flex items-center gap-1 md:justify-between md:gap-14">
@@ -29,10 +27,7 @@ export const TopSection: React.FC = () => {
       </div>
 
       <SearchBar />
-
-      <Button onClick={() => toggleModal(true, "register-login")}>
-        Cadastrar
-      </Button>
+      <UserSection />
     </div>
   );
 };
