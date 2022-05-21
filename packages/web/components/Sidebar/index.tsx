@@ -3,7 +3,7 @@ import { useIsBreakpoint } from "@/hooks/useIsBreakpoint";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { ArrowRightIcon } from "../icons/sidebar/ArrowRightIcon";
-import { UserIcon } from "../icons/sidebar/UserIcon";
+import { UserImagePlaceholder } from "../UserImagePlaceholder";
 import { footerLinks } from "./footerLinks";
 import { navBottomLinks } from "./navBottomLinks";
 import { navLinks } from "./navLinks";
@@ -61,9 +61,7 @@ export const Sidebar: React.FC = () => {
       >
         <div className="text-default-foreground flex h-full flex-col gap-3 p-4">
           <div className="flex items-center gap-2.5">
-            <div className="bg-inactive-background flex aspect-square w-12 items-center justify-center rounded-full">
-              <UserIcon className="w-8" />
-            </div>
+            <UserImagePlaceholder className="w-12" />
 
             <div className="self-end">
               <RegisterOrLoginButton>Entrar</RegisterOrLoginButton> ou{" "}
