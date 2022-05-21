@@ -1,7 +1,7 @@
 import { useModalContext } from "@/contexts/ModalContext";
 import { useRegisterOrLoginContext } from "@/contexts/RegisterOrLoginContext";
-import { useRegisterMutation } from "@/hooks/apollo/useRegisterMutation";
-import { registerValidationSchemas } from "@/yup/registerValidationSchema";
+import { useLoginMutation } from "@/hooks/apollo/useLoginMutation";
+import { loginValidationSchemas } from "@/yup/loginValidationSchema";
 import { ApolloError } from "@apollo/client";
 import { Formik, FormikErrors } from "formik";
 import React, { Fragment } from "react";
@@ -10,33 +10,28 @@ import { PanelFooter } from "../RegisterOrLogin/PanelFooter";
 import { PanelHeader } from "../RegisterOrLogin/PanelHeader";
 import { StepOne } from "./steps/StepOne";
 import { StepSubmitting } from "./steps/StepSubmitting";
-import { StepThree } from "./steps/StepThree";
 import { StepTwo } from "./steps/StepTwo";
 
-export interface RegisterFields {
+export interface LoginFields {
   email: string;
   username: string;
   password: string;
 }
 
-const initialValues: RegisterFields = {
+const initialValues: LoginFields = {
   email: "",
   username: "",
   password: "",
 };
 
-const type = "register";
+const type = "login";
 
-export const Register: React.FC = () => {
+export const Login: React.FC = () => {
   const { step, setStep } = useRegisterOrLoginContext();
-  const [registerMutation] = useRegisterMutation();
+  const [loginMutation] = useLoginMutation();
   const { toggleModal } = useModalContext();
 
-  const steps: Array<ReturnType<React.FC>> = [
-    <StepOne />,
-    <StepTwo />,
-    <StepThree />,
-  ];
+  const steps: Array<ReturnType<React.FC>> = [<StepOne />, <StepTwo />];
 
   const lastStep = steps.length - 1;
   const isLastStep = step === lastStep;
@@ -52,19 +47,30 @@ export const Register: React.FC = () => {
           validateOnBlur
           validateOnChange
           initialValues={initialValues}
-          validationSchema={registerValidationSchemas[step]}
+          validationSchema={loginValidationSchemas[step]}
           onSubmit={async (values, { setErrors }) => {
             if (!isLastStep) {
               return setStep(step => step + 1);
             }
 
             try {
-              const response = await registerMutation({
-                variables: { input: values },
+              const response = await loginMutation({
+                variables: {
+                  // enviar email sem username se tiver email, ou se tiver username enviar username sem email
+                  input: values.email
+                    ? {
+                        ...values,
+                        username: undefined,
+                      }
+                    : {
+                        ...values,
+                        email: undefined,
+                      },
+                },
               });
 
-              if (response.data?.register.errors) {
-                const { errors } = response.data.register;
+              if (response.data?.login.errors) {
+                const { errors } = response.data.login;
 
                 setErrors(
                   errors.reduce((formikErrors, { path, message }) => {
@@ -73,7 +79,7 @@ export const Register: React.FC = () => {
                     }
 
                     return formikErrors;
-                  }, {} as FormikErrors<RegisterFields>),
+                  }, {} as FormikErrors<LoginFields>),
                 );
 
                 const valuesKeys = Object.keys(values);

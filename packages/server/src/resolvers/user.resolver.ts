@@ -8,6 +8,7 @@ import { UNIQUE_EMAIL_INDEX, UNIQUE_USERNAME_INDEX } from "../constants";
 import { User } from "../entities";
 import { LoginInput } from "../graphql-types/Input/LoginInput";
 import { RegisterInput } from "../graphql-types/Input/RegisterInput";
+import { FieldError } from "../graphql-types/Object/FieldError";
 import { LoginResponse } from "../graphql-types/Object/users/LoginResponse";
 import { MeResponse } from "../graphql-types/Object/users/MeResponse";
 import { RegisterResponse } from "../graphql-types/Object/users/RegisterResponse";
@@ -102,13 +103,20 @@ export class UserResolver {
         };
       }
 
+      const errorMessage = "Credenciais inválidas";
+
       return {
         ok: false,
-        errors: [
-          {
-            message: "Invalid credentials",
+        errors: Object.entries({ ...input, password }).reduce<FieldError[]>(
+          (errors, [key, value]) => {
+            if (value) {
+              errors.push({ path: key, message: errorMessage });
+            }
+
+            return errors;
           },
-        ],
+          [],
+        ),
       };
     } catch (error) {
       if (error instanceof ValidationError) {

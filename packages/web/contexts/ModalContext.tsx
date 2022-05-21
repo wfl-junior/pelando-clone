@@ -1,3 +1,4 @@
+import { Login } from "@/components/Modal/Login";
 import { Register } from "@/components/Modal/Register";
 import { RegisterOrLogin } from "@/components/Modal/RegisterOrLogin";
 import { ThemeToggler } from "@/components/Modal/ThemeToggler";
@@ -33,7 +34,7 @@ export const ModalContextProvider: React.FC<{
 
       switch (type) {
         case "theme-toggler": {
-          setContent(<ThemeToggler {...props} />);
+          setContent(<ThemeToggler />);
           break;
         }
         case "register-login": {
@@ -43,7 +44,15 @@ export const ModalContextProvider: React.FC<{
         case "register": {
           setContent(
             <RegisterOrLoginContextProvider>
-              <Register {...props} />
+              <Register />
+            </RegisterOrLoginContextProvider>,
+          );
+          break;
+        }
+        case "login": {
+          setContent(
+            <RegisterOrLoginContextProvider>
+              <Login />
             </RegisterOrLoginContextProvider>,
           );
           break;

@@ -2,13 +2,13 @@ import { Button } from "@/components/Button";
 import { ArrowRightIcon } from "@/components/icons/register-or-login-modal/ArrowRight";
 import { Form, useFormikContext } from "formik";
 import React, { useEffect, useRef } from "react";
-import { RegisterFields } from "..";
+import { LoginFields } from "..";
 
 interface StepProps {
   heading: string;
   children: React.ReactNode;
   submitText?: string;
-  field: keyof RegisterFields;
+  field: keyof LoginFields;
 }
 
 export const Step: React.FC<StepProps> = ({
@@ -18,7 +18,7 @@ export const Step: React.FC<StepProps> = ({
   field,
 }) => {
   const isFirstRenderRef = useRef(true);
-  const { errors, isSubmitting, values } = useFormikContext<RegisterFields>();
+  const { errors, isSubmitting, values } = useFormikContext<LoginFields>();
 
   useEffect(() => {
     isFirstRenderRef.current = false;
@@ -33,7 +33,7 @@ export const Step: React.FC<StepProps> = ({
       className="flex flex-col items-center gap-4 rounded-full p-4"
       noValidate
     >
-      <h2 className="text-2xl font-bold">{heading}</h2>
+      <h2 className="text-center text-2xl font-bold">{heading}</h2>
 
       {children}
 

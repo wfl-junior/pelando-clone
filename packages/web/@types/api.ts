@@ -95,3 +95,22 @@ export interface RegisterInput {
 export interface RegisterMutationVariables {
   input: RegisterInput;
 }
+
+export interface LoginMutationResponse {
+  login: GraphQLResponse & { accessToken: string };
+}
+
+export type LoginInput = { password: string } & (
+  | {
+      email: string;
+      username?: string | null;
+    }
+  | {
+      email?: string | null;
+      username: string;
+    }
+);
+
+export interface LoginMutationVariables {
+  input: LoginInput;
+}
