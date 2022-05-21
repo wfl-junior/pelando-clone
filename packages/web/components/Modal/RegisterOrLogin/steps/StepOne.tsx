@@ -1,10 +1,9 @@
 import { Input } from "@/components/Input";
 import React from "react";
 import { Step } from ".";
-import { PanelProps } from "../Panel";
 
-export const StepOne: React.FC<PanelProps> = () => (
-  <Step heading="Qual é o seu e-mail?">
+export const StepOne: React.FC = () => (
+  <Step heading="Qual é o seu e-mail?" field="email">
     <Input
       type="email"
       name="email"

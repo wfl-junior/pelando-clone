@@ -1,10 +1,9 @@
 import { Input } from "@/components/Input";
 import React from "react";
 import { Step } from ".";
-import { PanelProps } from "../Panel";
 
-export const StepTwo: React.FC<PanelProps> = () => (
-  <Step heading="Escolha um nome de usuário.">
+export const StepTwo: React.FC = () => (
+  <Step heading="Escolha um nome de usuário." field="username">
     <Input
       type="text"
       name="username"

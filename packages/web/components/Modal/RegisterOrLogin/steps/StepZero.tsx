@@ -14,7 +14,7 @@ export const StepZero: React.FC<PanelProps> = ({ type }) => {
     useRegisterOrLoginContext();
 
   return (
-    <div className="my-auto flex flex-col items-center gap-6 rounded-full py-4 px-2">
+    <div className="flex flex-col items-center gap-6 rounded-full py-4 px-2">
       <Tab.List className="bg-inactive-background font-arial flex items-center rounded-full p-1">
         {() => {
           function className({ selected }: { selected: boolean }): string {

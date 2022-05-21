@@ -7,6 +7,7 @@ export const StepThree: React.FC<PanelProps> = ({ type }) => (
   <Step
     heading="Crie uma senha."
     submitText={type === "register" ? "cadastrar" : "entrar"}
+    field="password"
   >
     <Input
       type="password"

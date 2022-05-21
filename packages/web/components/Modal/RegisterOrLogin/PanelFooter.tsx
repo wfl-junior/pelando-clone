@@ -7,7 +7,7 @@ export const PanelFooter: React.FC<PanelProps> = ({ type }) => {
     useRegisterOrLoginContext();
 
   return (
-    <div className="border-default-border mt-auto flex items-center justify-center border-t p-4">
+    <div className="border-default-border flex items-center justify-center border-t p-4">
       <p className="text-sm">
         {type === "register" ? "Já tem uma conta?" : "Não tem uma conta?"}
         &nbsp;
