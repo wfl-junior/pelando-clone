@@ -3,16 +3,9 @@ import { BackButton } from "./BackButton";
 import { CloseButton } from "./CloseButton";
 import { PanelProps } from "./Panel";
 
-interface PanelHeaderProps extends PanelProps {
-  isLastStep: boolean;
-}
-
-export const PanelHeader: React.FC<PanelHeaderProps> = ({
-  type,
-  isLastStep,
-}) => (
+export const PanelHeader: React.FC<PanelProps> = ({ type }) => (
   <div className="border-default-border relative flex items-center justify-center border-b p-4">
-    {!isLastStep && <BackButton />}
+    <BackButton />
 
     <h2 className="font-bold md:text-xl">
       {type === "register" ? "Cadastrar" : "Entrar"}

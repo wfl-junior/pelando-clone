@@ -1,8 +1,11 @@
+import { useModalContext } from "@/contexts/ModalContext";
 import { useRegisterOrLoginContext } from "@/contexts/RegisterOrLoginContext";
+import { useRegisterMutation } from "@/hooks/apollo/useRegisterMutation";
 import { registerValidationSchemas } from "@/yup/registerValidationSchema";
+import { ApolloError } from "@apollo/client";
 import { Tab } from "@headlessui/react";
-import { Formik } from "formik";
-import React from "react";
+import { Formik, FormikErrors } from "formik";
+import React, { Fragment } from "react";
 import { PanelFooter } from "./PanelFooter";
 import { PanelHeader } from "./PanelHeader";
 import { StepOne } from "./steps/StepOne";
@@ -29,20 +32,22 @@ const initialValues: RegisterOrLoginFields = {
 
 export const Panel: React.FC<PanelProps> = ({ type }) => {
   const { step, setStep } = useRegisterOrLoginContext();
+  const [registerMutation] = useRegisterMutation();
+  const { toggleModal } = useModalContext();
 
   const steps: Array<ReturnType<React.FC>> = [
     <StepZero type={type} />,
     <StepOne />,
     <StepTwo />,
     <StepThree type={type} />,
-    <StepSubmitting />,
   ];
 
-  const isLastStep = step === steps.length - 1;
+  const lastStep = steps.length - 1;
+  const isLastStep = step === lastStep;
 
   return (
     <Tab.Panel className="contents">
-      <PanelHeader type={type} isLastStep={isLastStep} />
+      <PanelHeader type={type} />
       <div className="my-auto">
         {step > 0 ? (
           <Formik
@@ -50,15 +55,60 @@ export const Panel: React.FC<PanelProps> = ({ type }) => {
             validateOnChange
             initialValues={initialValues}
             validationSchema={registerValidationSchemas[step - 1]}
-            onSubmit={async () => {
+            onSubmit={async (values, { setErrors }) => {
               if (!isLastStep) {
                 return setStep(step => step + 1);
               }
 
-              // register or login mutation
+              try {
+                const response = await registerMutation({
+                  variables: { input: values },
+                });
+
+                if (response.data?.register.errors) {
+                  const { errors } = response.data.register;
+
+                  setErrors(
+                    errors.reduce((formikErrors, { path, message }) => {
+                      if (path) {
+                        Object.assign(formikErrors, { [path]: message });
+                      }
+
+                      return formikErrors;
+                    }, {} as FormikErrors<RegisterOrLoginFields>),
+                  );
+
+                  const valuesKeys = Object.keys(values);
+
+                  for (let index = 0; index < valuesKeys.length; index++) {
+                    const key = valuesKeys[index];
+
+                    if (errors.some(error => error.path === key)) {
+                      // vai para o step do primeiro input com erro
+                      return setStep(index + 1);
+                    }
+                  }
+                }
+
+                // fecha modal se tiver sucesso
+                toggleModal(false);
+              } catch (error) {
+                if (error instanceof ApolloError) {
+                  setStep(lastStep);
+
+                  // trocar por toast?
+                  setErrors({ password: error.message });
+                }
+              }
             }}
           >
-            {steps[step]}
+            {({ isSubmitting }) =>
+              isLastStep && isSubmitting ? (
+                <StepSubmitting />
+              ) : (
+                <Fragment>{steps[step]}</Fragment>
+              )
+            }
           </Formik>
         ) : (
           steps[step]

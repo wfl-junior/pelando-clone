@@ -81,3 +81,17 @@ export interface StoresQueryResponse {
 export interface ProductsQueryResponse {
   products: GraphQLResponse & { products: PaginatedData<Product> };
 }
+
+export interface RegisterMutationResponse {
+  register: GraphQLResponse & { accessToken: string };
+}
+
+export interface RegisterInput {
+  email: string;
+  username: string;
+  password: string;
+}
+
+export interface RegisterMutationVariables {
+  input: RegisterInput;
+}

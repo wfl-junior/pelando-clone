@@ -5,8 +5,5 @@ import { QueryHookOptions, useQuery } from "@apollo/client";
 export function useProductsQuery(
   options?: QueryHookOptions<ProductsQueryResponse, ProductsQueryVariables>,
 ) {
-  return useQuery<ProductsQueryResponse, ProductsQueryVariables>(
-    productsQuery,
-    options,
-  );
+  return useQuery(productsQuery, options);
 }

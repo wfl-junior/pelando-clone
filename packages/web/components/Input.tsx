@@ -27,6 +27,7 @@ export const Input: React.FC<FieldAttributes<{}>> = ({
 
         {isPassword && (
           <button
+            type="button"
             className="absolute top-1/2 right-2 -translate-y-1/2 transform"
             onClick={() => setHidden(!hidden)}
           >

@@ -1,7 +1,7 @@
 import { Button } from "@/components/Button";
 import { ArrowRightIcon } from "@/components/icons/register-or-login-modal/ArrowRight";
 import { Form, useFormikContext } from "formik";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { RegisterOrLoginFields } from "../Panel";
 
 interface StepProps {
@@ -17,11 +17,13 @@ export const Step: React.FC<StepProps> = ({
   submitText,
   field,
 }) => {
-  const { errors, validateForm, isSubmitting } =
+  const isFirstRenderRef = useRef(true);
+  const { errors, isSubmitting, values } =
     useFormikContext<RegisterOrLoginFields>();
 
   useEffect(() => {
-    validateForm();
+    isFirstRenderRef.current = false;
+    // TODO: ver o por quê de step de username estar renderizando 2 vezes inicialmente
   }, []);
 
   // isValid do Formik pode ter errors de outros steps
@@ -39,7 +41,11 @@ export const Step: React.FC<StepProps> = ({
       <Button
         type="submit"
         className="flex items-center gap-4 self-end transition-none"
-        disabled={isInvalid || isSubmitting}
+        disabled={
+          isInvalid ||
+          isSubmitting ||
+          (isFirstRenderRef.current && !!!values[field])
+        }
       >
         <span>{submitText || "continuar"}</span>
         <ArrowRightIcon className="w-5" />

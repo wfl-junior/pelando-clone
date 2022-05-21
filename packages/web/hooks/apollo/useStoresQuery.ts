@@ -5,8 +5,5 @@ import { QueryHookOptions, useQuery } from "@apollo/client";
 export function useStoresQuery(
   options?: QueryHookOptions<StoresQueryResponse, PaginatedQueryVariables>,
 ) {
-  return useQuery<StoresQueryResponse, PaginatedQueryVariables>(
-    storesQuery,
-    options,
-  );
+  return useQuery(storesQuery, options);
 }

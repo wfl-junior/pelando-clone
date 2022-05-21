@@ -12,7 +12,11 @@ export const StepThree: React.FC<PanelProps> = ({ type }) => (
     <Input
       type="password"
       name="password"
-      placeholder="Uma senha para entrar no Pelando Clone"
+      placeholder={
+        type === "register"
+          ? "Uma senha para entrar no Pelando Clone"
+          : "A mesma senha do cadastro"
+      }
       autoFocus
     />
   </Step>
