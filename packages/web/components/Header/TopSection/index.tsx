@@ -1,3 +1,4 @@
+import { Button } from "@/components/Button";
 import { HamburguerIcon } from "@/components/icons/HamburguerIcon";
 import { Logo } from "@/components/Logo";
 import { useModalContext } from "@/contexts/ModalContext";
@@ -29,12 +30,9 @@ export const TopSection: React.FC = () => {
 
       <SearchBar />
 
-      <button
-        className="bg-primary hover:bg-primary-hover flex cursor-pointer items-center justify-center rounded-full px-4 py-1.5 font-bold text-white transition-colors"
-        onClick={() => toggleModal(true, "register-login")}
-      >
+      <Button onClick={() => toggleModal(true, "register-login")}>
         Cadastrar
-      </button>
+      </Button>
     </div>
   );
 };

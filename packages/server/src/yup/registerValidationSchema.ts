@@ -7,8 +7,8 @@ export const registerValidationSchema = yup.object({
     .string()
     .required()
     .matches(
-      /^[a-z0-9-_]+$/i,
-      "${label} must be only alpha numeric, - and _ characters",
+      /^[a-zA-Z-_]+$/i,
+      "${label} must be only alpha, - and _ characters",
     )
     .label("username"),
 });

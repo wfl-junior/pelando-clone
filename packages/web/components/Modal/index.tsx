@@ -8,7 +8,8 @@ export const Modal: React.FC = () => {
   useEffect(() => {
     if (open) {
       const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key.toLowerCase() === "escape") {
+        // optional chaining por causa que está quebrando no autocomplete de inputs por algum motivo é undefined e da trigger
+        if (e.key?.toLowerCase() === "escape") {
           toggleModal(false);
         }
       };

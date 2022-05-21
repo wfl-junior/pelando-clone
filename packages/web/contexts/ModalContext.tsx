@@ -1,6 +1,7 @@
 import { RegisterOrLogin } from "@/components/Modal/RegisterOrLogin";
 import { ThemeToggler } from "@/components/Modal/ThemeToggler";
 import React, { createContext, useCallback, useContext, useState } from "react";
+import { RegisterOrLoginContextProvider } from "./RegisterOrLoginContext";
 
 type Open = boolean;
 type Content = JSX.Element | null;
@@ -31,7 +32,11 @@ export const ModalContextProvider: React.FC<{
           break;
         }
         case "register-login": {
-          setContent(<RegisterOrLogin />);
+          setContent(
+            <RegisterOrLoginContextProvider>
+              <RegisterOrLogin />
+            </RegisterOrLoginContextProvider>,
+          );
           break;
         }
       }

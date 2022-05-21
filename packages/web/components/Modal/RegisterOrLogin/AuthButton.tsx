@@ -11,7 +11,7 @@ interface ButtonProps
   Icon: Icon;
 }
 
-export const Button: React.FC<ButtonProps> = ({
+export const AuthButton: React.FC<ButtonProps> = ({
   className,
   children,
   iconPosition = "left",
