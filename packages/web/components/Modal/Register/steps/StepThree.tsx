@@ -1,7 +1,7 @@
 import { Input } from "@/components/Input";
 import React from "react";
 import { Step } from ".";
-import { PanelProps } from "../Panel";
+import { PanelProps } from "../../RegisterOrLogin/Panel";
 
 export const StepThree: React.FC<PanelProps> = ({ type }) => (
   <Step

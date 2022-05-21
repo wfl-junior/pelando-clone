@@ -1,9 +1,7 @@
 import { SetStateCallback, useStateCallback } from "@/hooks/useStateCallback";
-import React, { createContext, useContext, useRef } from "react";
+import React, { createContext, useContext } from "react";
 
 interface IRegisterOrLoginContext {
-  registerTabButtonRef: React.RefObject<HTMLButtonElement>;
-  loginTabButtonRef: React.RefObject<HTMLButtonElement>;
   step: number;
   setStep: SetStateCallback<number>;
 }
@@ -16,19 +14,10 @@ export const useRegisterOrLoginContext = () =>
 export const RegisterOrLoginContextProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const registerTabButtonRef = useRef<HTMLButtonElement>(null);
-  const loginTabButtonRef = useRef<HTMLButtonElement>(null);
   const [step, setStep] = useStateCallback(0);
 
   return (
-    <RegisterOrLoginContext.Provider
-      value={{
-        registerTabButtonRef,
-        loginTabButtonRef,
-        step,
-        setStep,
-      }}
-    >
+    <RegisterOrLoginContext.Provider value={{ step, setStep }}>
       {children}
     </RegisterOrLoginContext.Provider>
   );

@@ -1,3 +1,4 @@
+import { Register } from "@/components/Modal/Register";
 import { RegisterOrLogin } from "@/components/Modal/RegisterOrLogin";
 import { ThemeToggler } from "@/components/Modal/ThemeToggler";
 import React, { createContext, useCallback, useContext, useState } from "react";
@@ -9,7 +10,11 @@ type Content = JSX.Element | null;
 interface IModalContext {
   open: Open;
   content: Content;
-  toggleModal: (open?: Open, type?: "theme-toggler" | "register-login") => void;
+  toggleModal: (
+    open?: Open,
+    type?: "theme-toggler" | "register-login" | "register" | "login",
+    props?: Record<string, any>,
+  ) => void;
 }
 
 const ModalContext = createContext({} as IModalContext);
@@ -23,18 +28,22 @@ export const ModalContextProvider: React.FC<{
   const [content, setContent] = useState<Content>(null);
 
   const toggleModal: IModalContext["toggleModal"] = useCallback(
-    (_open, type) => {
+    (_open, type, props = {}) => {
       setOpen(open => (typeof _open === "undefined" ? open : _open));
 
       switch (type) {
         case "theme-toggler": {
-          setContent(<ThemeToggler />);
+          setContent(<ThemeToggler {...props} />);
           break;
         }
         case "register-login": {
+          setContent(<RegisterOrLogin {...props} />);
+          break;
+        }
+        case "register": {
           setContent(
             <RegisterOrLoginContextProvider>
-              <RegisterOrLogin />
+              <Register {...props} />
             </RegisterOrLoginContextProvider>,
           );
           break;
