@@ -15,12 +15,17 @@ export type RefreshAccessTokenResponse = {
 
 export async function refreshAccessToken(
   options?: Omit<RequestInit, "method" | "credentials">,
-): Promise<RefreshAccessTokenResponse> {
+): Promise<RefreshAccessTokenResponse & { headers: Headers }> {
   const response = await fetch(`${API_URL}/refresh-access-token`, {
     ...options,
     method: "POST",
     credentials: "include",
   });
 
-  return response.json();
+  const data: RefreshAccessTokenResponse = await response.json();
+
+  return {
+    ...data,
+    headers: response.headers,
+  };
 }

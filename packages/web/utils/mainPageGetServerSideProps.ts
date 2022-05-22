@@ -27,7 +27,7 @@ export const mainPageGetServerSideProps = (
         );
       }
 
-      const { accessToken } = await refreshAccessToken({
+      const { accessToken, headers } = await refreshAccessToken({
         headers: { cookie },
       });
 
@@ -35,6 +35,14 @@ export const mainPageGetServerSideProps = (
         throw new Error(
           "no need to fetch me query if there is no access token",
         );
+      }
+
+      const setCookieHeaderName = "set-cookie";
+      const setCookieHeader = headers.get(setCookieHeaderName);
+
+      if (setCookieHeader) {
+        // encaminha o set-cookie de refresh access token do server pro client
+        context.res.setHeader(setCookieHeaderName, setCookieHeader);
       }
 
       // põe em cache estas queries
