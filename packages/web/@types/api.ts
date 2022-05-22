@@ -72,6 +72,7 @@ export interface Product extends Model {
   sourceUrl: string;
   title: string;
   image: string;
+  temperature: number;
   store: Store;
 }
 

@@ -30,6 +30,10 @@ export class Product extends EntityNode {
   @Column()
   public image: string;
 
+  @Field()
+  @Column("float", { default: 0 })
+  public temperature: number;
+
   @Column("uuid", { name: "store_id" })
   public storeId: string;
 

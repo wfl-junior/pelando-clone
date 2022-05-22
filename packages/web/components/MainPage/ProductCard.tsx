@@ -1,5 +1,6 @@
 import { Product } from "@/@types/api";
 import { getReadableDate } from "@/utils/getReadableDate";
+import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
 import React, { Fragment } from "react";
@@ -99,9 +100,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <EsfriarIcon className="w-4.5" />
         </button>
 
-        {/* se temperatura for >350 por text-primary */}
-        {/* TODO: adicionar temperature */}
-        <span className="font-bold">100º</span>
+        <span
+          className={classNames("font-bold", {
+            "text-primary":
+              product.temperature >= 350 && product.temperature < 1000,
+            "text-red": product.temperature >= 1000,
+          })}
+        >
+          {Math.floor(product.temperature)}º
+        </span>
 
         <button
           title="Esquentar"

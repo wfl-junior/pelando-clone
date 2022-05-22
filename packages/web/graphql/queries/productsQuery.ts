@@ -9,11 +9,12 @@ export const productsQuery = gql`
         }
         edges {
           id
+          createdAt
           price
           sourceUrl
           title
           image
-          createdAt
+          temperature
           store {
             name
           }
