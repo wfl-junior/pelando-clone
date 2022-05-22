@@ -26,53 +26,50 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({
   category,
 }) => {
   const currentPageRef = useRef(firstPage);
-  const { data, loading, fetchMore, variables } = useProductsQuery({
+  const { data, loading, fetchMore, variables, error } = useProductsQuery({
     variables: getVariables(category),
     notifyOnNetworkStatusChange: true,
   });
 
-  // data já vai estar disponível por causa do prefetch no servidor
   const {
-    products: {
-      products: {
-        edges: products,
-        info: { hasNextPage },
-      },
-    },
-  } = data!;
+    edges: products,
+    info: { hasNextPage },
+  } = data?.products.products || { info: {} };
 
   return (
     <section className="flex flex-col gap-1">
-      {products.length ? (
-        products.map((product, index, arr) => {
-          const isLast = index + 1 === arr.length;
+      {products && products.length
+        ? products.map((product, index, arr) => {
+            const isLast = index + 1 === arr.length;
 
-          if (isLast && hasNextPage) {
+            if (isLast && hasNextPage) {
+              return (
+                <ProductsFetchMoreDummy
+                  key={product.id}
+                  currentPageRef={currentPageRef}
+                  fetchMore={fetchMore}
+                  variables={variables!}
+                >
+                  <ProductCard product={product} highlight={highlight} />
+                </ProductsFetchMoreDummy>
+              );
+            }
+
             return (
-              <ProductsFetchMoreDummy
+              <ProductCard
                 key={product.id}
-                currentPageRef={currentPageRef}
-                fetchMore={fetchMore}
-                variables={variables!}
-              >
-                <ProductCard product={product} highlight={highlight} />
-              </ProductsFetchMoreDummy>
+                product={product}
+                highlight={highlight}
+              />
             );
-          }
-
-          return (
-            <ProductCard
-              key={product.id}
-              product={product}
-              highlight={highlight}
-            />
-          );
-        })
-      ) : (
-        <p className="text-center font-bold sm:text-lg lg:text-xl">
-          Não encontramos nenhum resultado 😭
-        </p>
-      )}
+          })
+        : !loading && (
+            <p className="text-center font-bold sm:text-lg lg:text-xl">
+              {error
+                ? "Ocorreu algum erro inesperado, tente novamente. 😰"
+                : "Não encontramos nenhum resultado. 😭"}
+            </p>
+          )}
 
       {loading &&
         Array.from({ length: productsPerPage }, (_, i) => i + 1).map(number => (
