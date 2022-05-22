@@ -105,6 +105,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             "text-primary":
               product.temperature >= 350 && product.temperature < 1000,
             "text-red": product.temperature >= 1000,
+            "text-blue": product.temperature < 0,
           })}
         >
           {Math.floor(product.temperature)}º
