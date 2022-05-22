@@ -3,14 +3,13 @@ import { useIsBreakpoint } from "@/hooks/useIsBreakpoint";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { ArrowRightIcon } from "../icons/sidebar/ArrowRightIcon";
-import { UserImagePlaceholder } from "../UserImagePlaceholder";
 import { footerLinks } from "./footerLinks";
 import { navBottomLinks } from "./navBottomLinks";
 import { navLinks } from "./navLinks";
-import { RegisterLoginTogglerButton } from "./RegisterLoginTogglerButton";
-import { RegisterOrLoginButton } from "./RegisterOrLoginButton";
+import { RegisterOrLogoutButton } from "./RegisterOrLogoutButton";
 import { storeLinks } from "./storeLinks";
 import { ThemeTogglerButton } from "./ThemeTogglerButton";
+import { UserSection } from "./UserSection";
 
 export const Sidebar: React.FC = () => {
   const { open, setOpen, appBarRef } = useSidebarContext();
@@ -60,14 +59,7 @@ export const Sidebar: React.FC = () => {
         }
       >
         <div className="text-default-foreground flex h-full flex-col gap-3 p-4">
-          <div className="flex items-center gap-2.5">
-            <UserImagePlaceholder className="w-12" />
-
-            <div className="self-end">
-              <RegisterOrLoginButton>Entrar</RegisterOrLoginButton> ou{" "}
-              <RegisterOrLoginButton>Cadastrar</RegisterOrLoginButton>
-            </div>
-          </div>
+          <UserSection />
 
           <nav>
             <ul className="flex flex-col">
@@ -119,7 +111,7 @@ export const Sidebar: React.FC = () => {
 
             <li className="border-default-border flex items-center justify-between border-t pt-3.5">
               <ThemeTogglerButton />
-              <RegisterLoginTogglerButton />
+              <RegisterOrLogoutButton />
             </li>
           </ul>
         </div>

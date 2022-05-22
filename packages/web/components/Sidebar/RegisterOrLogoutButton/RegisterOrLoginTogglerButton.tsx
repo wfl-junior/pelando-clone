@@ -1,9 +1,9 @@
+import { SignInIcon } from "@/components/icons/sidebar/SignInIcon";
 import { useModalContext } from "@/contexts/ModalContext";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import React from "react";
-import { SignInIcon } from "../icons/sidebar/SignInIcon";
 
-export const RegisterLoginTogglerButton: React.FC = () => {
+export const RegisterOrLoginTogglerButton: React.FC = () => {
   const { setOpen } = useSidebarContext();
   const { toggleModal } = useModalContext();
 
