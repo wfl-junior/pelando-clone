@@ -18,6 +18,7 @@ import * as Resolvers from "./resolvers";
       playground: true,
       autoSchemaFile: "schema.gql",
       context: ({ req, res }): IContext => ({ request: req, response: res }),
+      cors: false,
     }),
   ],
   controllers: [RefreshAccessTokenController],
