@@ -1,4 +1,5 @@
 import { ProductsQueryVariables } from "@/@types/api";
+import { defaultErrorMessage } from "@/constants";
 import { useProductsQuery } from "@/hooks/apollo/useProductsQuery";
 import React, { useRef } from "react";
 import { ProductCard } from "./ProductCard";
@@ -66,7 +67,7 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({
         : !loading && (
             <p className="text-center font-bold sm:text-lg lg:text-xl">
               {error
-                ? "Ocorreu algum erro inesperado, tente novamente. 😰"
+                ? defaultErrorMessage
                 : "Não encontramos nenhum resultado. 😭"}
             </p>
           )}

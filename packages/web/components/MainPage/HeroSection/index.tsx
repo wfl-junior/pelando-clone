@@ -1,12 +1,10 @@
-import { useStoresQuery } from "@/hooks/apollo/useStoresQuery";
 import { useIsBreakpoint } from "@/hooks/useIsBreakpoint";
-import Link from "next/link";
 import React from "react";
 import { MainPageHeroImage } from "../MainPageHeroImage";
 import { RegisterOrLoginButton } from "./RegisterOrLoginButton";
+import { StoresSection } from "./StoresSection";
 
 export const HeroSection: React.FC = () => {
-  const { data } = useStoresQuery();
   const isLargeBreakpoint = useIsBreakpoint("lg");
 
   return (
@@ -35,19 +33,7 @@ export const HeroSection: React.FC = () => {
         className="flex flex-col gap-1 overflow-x-hidden"
         style={{ gridArea: "stores" }}
       >
-        <h3 className="font-bold">Compre no site de suas lojas favoritas:</h3>
-
-        <ul className="flex gap-1.5 overflow-x-auto lg:flex-wrap">
-          {data?.stores.stores.edges.map(({ id, name }) => (
-            <li key={id}>
-              <Link href="#">
-                <a className="bg-default-background border-default-border hover:text-tertiary-foreground block whitespace-nowrap rounded border py-1.5 px-2 font-bold shadow transition-colors">
-                  {name}
-                </a>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <StoresSection />
       </div>
     </section>
   );
