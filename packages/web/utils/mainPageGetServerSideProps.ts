@@ -12,25 +12,44 @@ export const mainPageGetServerSideProps = (
     const apolloClient = initializeApollo();
     const sdk = getSdk(apolloClient);
 
-    const { accessToken } = await refreshAccessToken({
-      headers: { cookie: context.req.headers.cookie } as any,
-    });
-
-    // põe em cache estas queries
-    await Promise.all([
+    const queries = [
       sdk.query.stores(),
       sdk.query.products({ variables: getVariables(category) }),
-      sdk.query.me({
-        context: {
-          headers: {
-            authorization: authorizationHeaderWithToken(accessToken),
-          },
-        },
-      }),
-    ]);
+    ] as const;
 
-    return addApolloState(apolloClient, {
-      props: { accessToken },
-    });
+    try {
+      const { cookie } = context.req.headers;
+
+      if (!cookie) {
+        throw new Error(
+          "no need to fetch for access token if there is no cookie",
+        );
+      }
+
+      const { accessToken } = await refreshAccessToken({
+        headers: { cookie },
+      });
+
+      // põe em cache estas queries
+      await Promise.allSettled([
+        ...queries,
+        sdk.query.me({
+          context: {
+            headers: {
+              authorization: authorizationHeaderWithToken(accessToken),
+            },
+          },
+        }),
+      ]);
+
+      return addApolloState(apolloClient, {
+        props: { accessToken },
+      });
+    } catch {
+      // põe em cache estas queries
+      await Promise.allSettled(queries);
+
+      return addApolloState(apolloClient);
+    }
   };
 };

@@ -19,9 +19,9 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => {
   const apolloClient = useApolloClient(pageProps);
 
   useEffect(() => {
-    // set access token coming from the server props for the client on mount
+    // set access token coming from the server props for the client
     setAccessToken(pageProps.accessToken || null);
-  }, []);
+  }, [pageProps.accessToken]);
 
   return (
     <ApolloProvider client={apolloClient}>
