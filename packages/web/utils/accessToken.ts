@@ -8,4 +8,6 @@ export function setAccessToken(token: AccessToken) {
   accessToken = token;
 }
 
-export const authorizationHeaderWithToken = () => `Bearer ${getAccessToken()}`;
+export function authorizationHeaderWithToken(token?: AccessToken) {
+  return `Bearer ${token || getAccessToken()}`;
+}

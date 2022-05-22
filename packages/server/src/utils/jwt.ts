@@ -1,6 +1,5 @@
 import { Response } from "express";
 import { sign, verify } from "jsonwebtoken";
-import { REFRESH_ACCESS_TOKEN_ENDPOINT } from "../constants";
 import { User } from "../entities";
 
 export interface TokenPayload {
@@ -35,11 +34,12 @@ export const createRefreshToken: TokenFn = user => {
 
 export const sendRefreshToken = (response: Response, user: User): void => {
   response.cookie(process.env.COOKIE_NAME, createRefreshToken(user), {
-    // domain: ".example.com",
+    domain: "localhost",
     httpOnly: true,
     maxAge: cookieExpirationInSeconds * 1000, // maxAge is in milliseconds
-    path: REFRESH_ACCESS_TOKEN_ENDPOINT,
+    // path: REFRESH_ACCESS_TOKEN_ENDPOINT,
     secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
   });
 };
 

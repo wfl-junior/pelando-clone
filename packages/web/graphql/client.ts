@@ -21,7 +21,7 @@ let apolloClient: Client | undefined;
 export function createApolloClient() {
   return new ApolloClient({
     ssrMode: !isBrowser(),
-    link: new HttpLink({ uri: `${API_URL}/graphql` }),
+    link: new HttpLink({ uri: `${API_URL}/graphql`, credentials: "include" }),
     cache: new InMemoryCache(),
   });
 }

@@ -7,14 +7,21 @@ import { SidebarContextProvider } from "@/contexts/SidebarContext";
 import { ThemeContextProvider } from "@/contexts/ThemeContext";
 import { useApolloClient } from "@/graphql/client";
 import "@/styles/globals.css";
+import { setAccessToken } from "@/utils/accessToken";
 import { ApolloProvider } from "@apollo/client";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import NextNProgress from "nextjs-progressbar";
+import { useEffect } from "react";
 
 const App: NextPage<AppProps> = ({ Component, pageProps }) => {
   const apolloClient = useApolloClient(pageProps);
+
+  useEffect(() => {
+    // set access token coming from the server props for the client on mount
+    setAccessToken(pageProps.accessToken || null);
+  }, []);
 
   return (
     <ApolloProvider client={apolloClient}>
