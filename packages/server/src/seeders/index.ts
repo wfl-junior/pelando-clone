@@ -6,8 +6,7 @@ import { seedStores } from "./stores/store.seeder";
 
 async function seed() {
   await new DataSource(ormconfig as any).initialize();
-  await seedStores();
-  await seedCategories();
+  await Promise.all([seedStores(), seedCategories()]);
   await seedProducts();
 
   process.exit(0);

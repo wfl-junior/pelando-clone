@@ -5,6 +5,7 @@ export async function seedProducts() {
   const stores = await Store.find();
   const categories = await Category.find();
 
+  await Product.createQueryBuilder().delete().execute();
   await Product.insert(
     products.map(({ store, category, ...product }) => ({
       ...product,
