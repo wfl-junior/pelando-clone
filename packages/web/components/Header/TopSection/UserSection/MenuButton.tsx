@@ -1,6 +1,4 @@
-import { Icon } from "@/@types/app";
 import { CaretDownIcon } from "@/components/icons/header/top/CaretDownIcon";
-import { SignOutIcon } from "@/components/icons/header/top/SignOutIcon";
 import { UserImagePlaceholder } from "@/components/UserImagePlaceholder";
 import { useMeQuery } from "@/hooks/apollo/useMeQuery";
 import { Menu } from "@headlessui/react";
@@ -8,11 +6,11 @@ import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { LogoutButton } from "./LogoutButton";
 
 interface MenuLink {
   label: string;
   route: string;
-  Icon?: Icon;
 }
 
 const menuLinks: MenuLink[] = [
@@ -27,11 +25,6 @@ const menuLinks: MenuLink[] = [
   {
     label: "Configurações",
     route: "#",
-  },
-  {
-    label: "Encerrar sessão",
-    route: "#",
-    Icon: SignOutIcon,
   },
 ];
 
@@ -89,26 +82,26 @@ export const MenuButton: React.FC = () => {
         </div>
 
         <ul className="divide-default-border flex flex-col divide-y">
-          {menuLinks.map(({ label, route, Icon }) => (
+          {menuLinks.map(({ label, route }) => (
             <Menu.Item key={label + route} as="li">
               {({ active }) => (
                 <Link href={route}>
                   <a
                     className={classNames(
-                      "flex cursor-pointer items-center justify-between py-3.5 px-4 font-bold transition-colors",
+                      "block cursor-pointer py-3.5 px-4 font-bold transition-colors",
                       active
                         ? "bg-secondary-foreground/10"
                         : "bg-default-background",
                     )}
                   >
-                    <span>{label}</span>
-
-                    {Icon && <Icon className="w-5" />}
+                    {label}
                   </a>
                 </Link>
               )}
             </Menu.Item>
           ))}
+
+          <LogoutButton />
         </ul>
       </Menu.Items>
     </Menu>

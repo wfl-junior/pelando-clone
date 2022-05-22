@@ -1,7 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { FieldError } from "./FieldError";
 
-@ObjectType({ isAbstract: true })
+@ObjectType()
 export class ResolverResponse {
   @Field()
   ok: boolean;

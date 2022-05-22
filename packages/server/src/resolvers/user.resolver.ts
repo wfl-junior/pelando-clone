@@ -9,6 +9,7 @@ import { User } from "../entities";
 import { LoginInput } from "../graphql-types/Input/LoginInput";
 import { RegisterInput } from "../graphql-types/Input/RegisterInput";
 import { FieldError } from "../graphql-types/Object/FieldError";
+import { ResolverResponse } from "../graphql-types/Object/ResolverResponse";
 import { LoginResponse } from "../graphql-types/Object/users/LoginResponse";
 import { MeResponse } from "../graphql-types/Object/users/MeResponse";
 import { RegisterResponse } from "../graphql-types/Object/users/RegisterResponse";
@@ -123,7 +124,20 @@ export class UserResolver {
         return yupErrorResponse(error);
       }
 
-      console.log({ time: new Date(), where: "mutation register", error });
+      console.log({ time: new Date(), where: "mutation login", error });
+      return defaultErrorResponse();
+    }
+  }
+
+  @Mutation(() => ResolverResponse)
+  logout(
+    @Context() { response }: IContext,
+  ): IResolverResponse<ResolverResponse> {
+    try {
+      response.clearCookie(process.env.COOKIE_NAME);
+      return { ok: true };
+    } catch (error) {
+      console.log({ time: new Date(), where: "mutation logout", error });
       return defaultErrorResponse();
     }
   }

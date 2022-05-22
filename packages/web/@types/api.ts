@@ -124,3 +124,7 @@ export interface LoginMutationVariables {
 export interface MeQueryResponse {
   me: GraphQLResponse & { user: User | null };
 }
+
+export interface LogoutMutationResponse {
+  logout: GraphQLResponse;
+}
