@@ -37,3 +37,4 @@ lerna-debug.log*
 .env
 schema.gql
 ormconfig.ts
+database.sqlite
