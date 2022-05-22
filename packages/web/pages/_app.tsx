@@ -1,5 +1,6 @@
 import { AppBar } from "@/components/AppBar";
 import { Header } from "@/components/Header";
+import { Main } from "@/components/Main";
 import { Modal } from "@/components/Modal";
 import { Sidebar } from "@/components/Sidebar";
 import { ModalContextProvider } from "@/contexts/ModalContext";
@@ -56,9 +57,9 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => {
 
               <Header />
               <Sidebar />
-              <main className="container my-4">
+              <Main>
                 <Component {...pageProps} />
-              </main>
+              </Main>
               <AppBar />
 
               <Modal />
