@@ -1,7 +1,15 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, JoinColumn, JoinTable, ManyToOne } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToOne,
+  OneToMany,
+} from "typeorm";
 import { Category, Store } from ".";
 import { EntityNode } from "./node.entity";
+import { UserProductVote } from "./user-product-vote.entity";
 
 @ObjectType()
 @Entity("products", { orderBy: { createdAt: "ASC" } })
@@ -53,4 +61,9 @@ export class Product extends EntityNode {
     onDelete: "CASCADE",
   })
   public category: Category;
+
+  @OneToMany(() => UserProductVote, userVote => userVote.product, {
+    onDelete: "CASCADE",
+  })
+  public userVotes: UserProductVote[];
 }

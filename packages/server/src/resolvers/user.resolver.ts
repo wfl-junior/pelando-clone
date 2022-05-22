@@ -36,7 +36,7 @@ export class UserResolver {
 
       const user = await User.create({
         ...input,
-        offerVoteValue: getRandomNumberBetween(6, 7),
+        productVoteValue: getRandomNumberBetween(6, 7),
       }).save();
 
       sendRefreshToken(response, user);
