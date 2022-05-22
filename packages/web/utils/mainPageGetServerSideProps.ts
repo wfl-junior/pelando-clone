@@ -1,5 +1,6 @@
 import { getVariables } from "@/components/MainPage/ProductsSection";
 import { addApolloState, initializeApollo } from "@/graphql/client";
+import { fakeMeQuery } from "@/graphql/queries/fake/fakeMeQuery";
 import { getSdk } from "@/graphql/sdk";
 import { GetServerSideProps } from "next";
 import { authorizationHeaderWithToken } from "./accessToken";
@@ -30,6 +31,12 @@ export const mainPageGetServerSideProps = (
         headers: { cookie },
       });
 
+      if (!accessToken) {
+        throw new Error(
+          "no need to fetch me query if there is no access token",
+        );
+      }
+
       // põe em cache estas queries
       await Promise.allSettled([
         ...queries,
@@ -48,6 +55,9 @@ export const mainPageGetServerSideProps = (
     } catch {
       // põe em cache estas queries
       await Promise.allSettled(queries);
+
+      // por fake me query em cache, para não precisar dar fetch no client, já que não está autenticado, não tem necessidade
+      apolloClient.writeQuery(fakeMeQuery);
 
       return addApolloState(apolloClient);
     }
