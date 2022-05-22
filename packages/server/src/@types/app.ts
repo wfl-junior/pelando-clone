@@ -6,7 +6,7 @@ import { ResolverResponse } from "../graphql-types/Object/ResolverResponse";
 export interface IContext {
   request: Request;
   response: Response;
-  user?: User;
+  user?: User | null;
 }
 
 export interface IContextWithUser extends IContext {
