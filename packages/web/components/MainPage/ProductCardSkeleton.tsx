@@ -1,62 +1,50 @@
-import { useIsBreakpoint } from "@/hooks/useIsBreakpoint";
 import React from "react";
 import { Skeleton } from "../Skeleton";
 
-export const ProductCardSkeleton: React.FC = () => {
-  const isLargeBreakpoint = useIsBreakpoint("lg");
+export const ProductCardSkeleton: React.FC = () => (
+  <div className="bg-default-background/5 border-default-border grid-template-areas-product-card grid w-full animate-pulse grid-cols-[120px_auto] rounded border py-2 shadow-md md:w-3/4 lg:grid-cols-[156px_auto]">
+    {/* image area */}
+    <div className="pl-2 pb-2" style={{ gridArea: "image" }}>
+      <div className="border-default-border bg-inactive-background aspect-square w-full rounded border"></div>
+    </div>
 
-  return (
+    {/* content area */}
     <div
-      className="bg-default-background/5 border-default-border grid w-full animate-pulse grid-cols-[120px_auto] rounded border py-2 shadow-md md:w-3/4 lg:grid-cols-[156px_auto]"
-      style={{
-        gridTemplateAreas: isLargeBreakpoint
-          ? `"image content" "image action"`
-          : `"image content" "action action"`,
-      }}
+      className="flex flex-col gap-3 px-2 pr-2 md:px-4"
+      style={{ gridArea: "content" }}
     >
-      {/* image area */}
-      <div className="pl-2 pb-2" style={{ gridArea: "image" }}>
-        <div className="border-default-border bg-inactive-background aspect-square w-full rounded border"></div>
+      {/* store & time */}
+      <div className="flex items-center justify-between">
+        <Skeleton className="h-2 w-12" />
+
+        <Skeleton className="h-2 w-5" />
       </div>
 
-      {/* content area */}
-      <div
-        className="flex flex-col gap-3 px-2 pr-2 md:px-4"
-        style={{ gridArea: "content" }}
-      >
-        {/* store & time */}
-        <div className="flex items-center justify-between">
-          <Skeleton className="h-2 w-12" />
+      {/* title */}
+      <div className="flex flex-col gap-3">
+        <Skeleton className="h-3 w-full" />
 
-          <Skeleton className="h-2 w-5" />
-        </div>
-
-        {/* title */}
-        <div className="flex flex-col gap-3">
-          <Skeleton className="h-3 w-full" />
-
-          <Skeleton className="h-3 w-3/4" />
-        </div>
-
-        {/* price */}
-        <Skeleton className="h-2.5 w-16" />
+        <Skeleton className="h-3 w-3/4" />
       </div>
 
-      {/* action area */}
-      <div
-        className="border-default-border mt-auto flex items-center justify-between border-t px-2 pt-3 lg:pl-4"
-        style={{ gridArea: "action" }}
-      >
-        {/* temperature */}
+      {/* price */}
+      <Skeleton className="h-2.5 w-16" />
+    </div>
+
+    {/* action area */}
+    <div
+      className="border-default-border mt-auto flex items-center justify-between border-t px-2 pt-3 lg:pl-4"
+      style={{ gridArea: "action" }}
+    >
+      {/* temperature */}
+      <Skeleton className="h-10 w-24 p-1.5" border />
+
+      {/* comments & cart */}
+      <div className="flex items-center gap-2 md:gap-6">
+        <Skeleton className="h-10 w-16 p-1.5" border />
+
         <Skeleton className="h-10 w-24 p-1.5" border />
-
-        {/* comments & cart */}
-        <div className="flex items-center gap-2 md:gap-6">
-          <Skeleton className="h-10 w-16 p-1.5" border />
-
-          <Skeleton className="h-10 w-24 p-1.5" border />
-        </div>
       </div>
     </div>
-  );
-};
+  </div>
+);

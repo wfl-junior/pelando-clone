@@ -99,6 +99,18 @@ module.exports = {
             display: "none",
           },
         },
+        ".grid-template-areas-hero": {
+          gridTemplateAreas: `"image heading" "stores stores"`,
+          [`@media (min-width: ${screens.lg})`]: {
+            gridTemplateAreas: `"image heading" "image stores"`,
+          },
+        },
+        ".grid-template-areas-product-card": {
+          gridTemplateAreas: `"image content" "action action"`,
+          [`@media (min-width: ${screens.lg})`]: {
+            gridTemplateAreas: `"image content" "image action"`,
+          },
+        },
       });
     },
   ],
