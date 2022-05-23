@@ -1,9 +1,8 @@
-import { SetStateCallback, useStateCallback } from "@/hooks/useStateCallback";
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 interface IRegisterOrLoginContext {
   step: number;
-  setStep: SetStateCallback<number>;
+  setStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const RegisterOrLoginContext = createContext({} as IRegisterOrLoginContext);
@@ -14,7 +13,7 @@ export const useRegisterOrLoginContext = () =>
 export const RegisterOrLoginContextProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const [step, setStep] = useStateCallback(0);
+  const [step, setStep] = useState(0);
 
   return (
     <RegisterOrLoginContext.Provider value={{ step, setStep }}>
