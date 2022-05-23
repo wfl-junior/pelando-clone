@@ -1,12 +1,12 @@
-import { useMeQuery } from "@/hooks/apollo/useMeQuery";
+import { useUser } from "@/hooks/useUser";
 import React from "react";
 import { LogoutButton } from "./LogoutButton";
 import { RegisterOrLoginTogglerButton } from "./RegisterOrLoginTogglerButton";
 
 export const RegisterOrLogoutButton: React.FC = () => {
-  const { data } = useMeQuery();
+  const { isLoggedIn } = useUser();
 
-  if (data?.me.user) {
+  if (isLoggedIn) {
     return <LogoutButton />;
   }
 

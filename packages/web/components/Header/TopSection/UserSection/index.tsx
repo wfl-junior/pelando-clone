@@ -1,14 +1,14 @@
 import { Button } from "@/components/Button";
 import { useModalContext } from "@/contexts/ModalContext";
-import { useMeQuery } from "@/hooks/apollo/useMeQuery";
+import { useUser } from "@/hooks/useUser";
 import React from "react";
 import { UserButtons } from "./UserButtons";
 
 export const UserSection: React.FC = () => {
   const { toggleModal } = useModalContext();
-  const { data } = useMeQuery();
+  const { isLoggedIn } = useUser();
 
-  return data?.me.user ? (
+  return isLoggedIn ? (
     <UserButtons />
   ) : (
     <Button onClick={() => toggleModal(true, "register-login")}>

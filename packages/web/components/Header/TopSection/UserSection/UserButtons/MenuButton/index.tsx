@@ -1,6 +1,6 @@
 import { CaretDownIcon } from "@/components/icons/header/top/CaretDownIcon";
 import { UserImagePlaceholder } from "@/components/UserImagePlaceholder";
-import { useMeQuery } from "@/hooks/apollo/useMeQuery";
+import { useUser } from "@/hooks/useUser";
 import { Menu } from "@headlessui/react";
 import classNames from "classnames";
 import Image from "next/image";
@@ -29,10 +29,11 @@ const menuLinks: MenuLink[] = [
 ];
 
 export const MenuButton: React.FC = () => {
-  const { data } = useMeQuery();
+  const { user } = useUser();
 
-  // só vai aparecer se já tiver user, checando no parent
-  const user = data!.me.user!;
+  if (!user) {
+    return null;
+  }
 
   return (
     <Menu as="div" className="relative">
