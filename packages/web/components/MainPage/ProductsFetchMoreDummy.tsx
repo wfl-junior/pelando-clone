@@ -4,11 +4,12 @@ import {
   ProductsQueryVariables,
 } from "@/@types/api";
 import { ApolloQueryResult, FetchMoreQueryOptions } from "@apollo/client";
-import React, { MutableRefObject, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 interface ProductsFetchMoreDummyProps {
   children?: React.ReactNode;
-  currentPageRef: MutableRefObject<number>;
+  currentProductsLength: number;
+  productsPerPage: number;
   variables: ProductsQueryVariables;
   fetchMore(
     fetchMoreOptions: FetchMoreQueryOptions<
@@ -27,7 +28,8 @@ interface ProductsFetchMoreDummyProps {
 }
 
 export const ProductsFetchMoreDummy: React.FC<ProductsFetchMoreDummyProps> = ({
-  currentPageRef,
+  currentProductsLength,
+  productsPerPage,
   fetchMore,
   variables,
   children,
@@ -42,7 +44,10 @@ export const ProductsFetchMoreDummy: React.FC<ProductsFetchMoreDummyProps> = ({
         if (entry.isIntersecting) {
           // quando der trigger, lembrar de dar unobserve para não triggar denovo
           observer.unobserve(el);
-          const nextPage = ++currentPageRef.current;
+          // Math.ceil em caso de products length estar quebrado, o que não deve acontecer, mas nextPage deve ser Int e se estiver quebrado pode causar erros de keys duplicadas
+          const nextPage = Math.ceil(
+            currentProductsLength / productsPerPage + 1,
+          );
 
           fetchMore({
             variables: {
