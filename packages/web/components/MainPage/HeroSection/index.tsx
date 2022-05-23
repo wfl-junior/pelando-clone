@@ -1,6 +1,6 @@
 import React from "react";
 import { MainPageHeroImage } from "../MainPageHeroImage";
-import { RegisterOrLoginButton } from "./RegisterOrLoginButton";
+import { HeadingSection } from "./HeadingSection";
 import { StoresSection } from "./StoresSection";
 
 export const HeroSection: React.FC = () => (
@@ -10,12 +10,7 @@ export const HeroSection: React.FC = () => (
     </div>
 
     <div className="flex flex-col p-2 lg:p-0" style={{ gridArea: "heading" }}>
-      <h2 className="text-xl font-bold">O que é o Pelando?</h2>
-
-      <p>
-        Uma plataforma para encontrar promoções e tirar dúvidas.{" "}
-        <RegisterOrLoginButton>Faça parte!</RegisterOrLoginButton>
-      </p>
+      <HeadingSection />
     </div>
 
     <div
