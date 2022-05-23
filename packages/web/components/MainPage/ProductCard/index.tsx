@@ -26,8 +26,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             src={product.image}
             alt={`Imagem do produto ${product.title} da loja ${product.store.name}`}
             className="w-full object-contain"
-            width="156"
-            height="156"
+            width={156}
+            height={156}
           />
         </a>
       </Link>

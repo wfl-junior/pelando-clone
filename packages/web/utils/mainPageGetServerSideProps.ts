@@ -1,3 +1,4 @@
+import type { ProductsQueryInput } from "@/@types/api";
 import { getVariables } from "@/components/MainPage/ProductsSection";
 import { addApolloState, initializeApollo } from "@/graphql/client";
 import { fakeMeQuery } from "@/graphql/queries/fake/fakeMeQuery";
@@ -7,7 +8,7 @@ import { authorizationHeaderWithToken } from "./accessToken";
 import { refreshAccessToken } from "./refreshAccessToken";
 
 export const mainPageGetServerSideProps = (
-  category?: string,
+  variables?: ProductsQueryInput,
 ): GetServerSideProps => {
   return async context => {
     const apolloClient = initializeApollo();
@@ -15,7 +16,7 @@ export const mainPageGetServerSideProps = (
 
     const queries = [
       sdk.query.stores(),
-      sdk.query.products({ variables: getVariables(category) }),
+      sdk.query.products({ variables: getVariables(variables) }),
     ] as const;
 
     try {

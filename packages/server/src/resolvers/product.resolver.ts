@@ -5,14 +5,15 @@ import { DEFAULT_PER_PAGE } from "../constants";
 import { Product } from "../entities";
 import { UserProductVote } from "../entities/user-product-vote.entity";
 import { UserProductVoteType } from "../graphql-types/enums/UserProductVoteType";
-import { ProductsQueryInput } from "../graphql-types/Input/ProductsQueryInput";
-import { RemoveVoteFromProductInput } from "../graphql-types/Input/RemoveVoteFromProductInput";
-import { VoteOnProductInput } from "../graphql-types/Input/VoteOnProductInput";
+import { ProductsQueryInput } from "../graphql-types/Input/products/ProductsQueryInput";
+import { RemoveVoteFromProductInput } from "../graphql-types/Input/products/RemoveVoteFromProductInput";
+import { VoteOnProductInput } from "../graphql-types/Input/products/VoteOnProductInput";
 import { ProductQueryResponse } from "../graphql-types/Object/products/ProductQueryResponse";
 import { ProductsQueryResponse } from "../graphql-types/Object/products/ProductsQueryResponse";
 import { AuthGuard } from "../guards/auth.guard";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
 import { getPageInfo } from "../utils/getPageInfo";
+import { removeNullPropertiesDeep } from "../utils/removeNullPropertiesDeep";
 
 @Resolver(() => Product)
 export class ProductResolver {
@@ -30,7 +31,10 @@ export class ProductResolver {
         take: perPage,
         skip: offset,
         relations: ["store", "category"],
-        where: input?.where as any, //! ts não gosta do null, mas TypeORM converte null para undefined
+        where: input?.where ? removeNullPropertiesDeep(input.where) : undefined,
+        order: input?.orderBy
+          ? removeNullPropertiesDeep(input.orderBy)
+          : undefined,
       });
 
       return {

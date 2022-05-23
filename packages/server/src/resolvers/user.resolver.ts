@@ -6,8 +6,8 @@ import { ValidationError } from "yup";
 import { IContext, IContextWithUser, IResolverResponse } from "../@types/app";
 import { UNIQUE_EMAIL_INDEX, UNIQUE_USERNAME_INDEX } from "../constants";
 import { User } from "../entities";
-import { LoginInput } from "../graphql-types/Input/LoginInput";
-import { RegisterInput } from "../graphql-types/Input/RegisterInput";
+import { LoginInput } from "../graphql-types/Input/users/LoginInput";
+import { RegisterInput } from "../graphql-types/Input/users/RegisterInput";
 import { FieldError } from "../graphql-types/Object/FieldError";
 import { ResolverResponse } from "../graphql-types/Object/ResolverResponse";
 import { LoginResponse } from "../graphql-types/Object/users/LoginResponse";
@@ -17,6 +17,7 @@ import { AuthGuard } from "../guards/auth.guard";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
 import { getRandomNumberBetween } from "../utils/getRandomNumberBetween";
 import { createAccessToken, sendRefreshToken } from "../utils/jwt";
+import { removeNullPropertiesDeep } from "../utils/removeNullPropertiesDeep";
 import { yupErrorResponse } from "../utils/yupErrorResponse";
 import { loginValidationSchema } from "../yup/loginValidationSchema";
 import { registerValidationSchema } from "../yup/registerValidationSchema";
@@ -91,7 +92,7 @@ export class UserResolver {
       );
 
       const user = await User.findOne({
-        where: input as any, //! ts não gosta do null, mas TypeORM converte null para undefined
+        where: input ? removeNullPropertiesDeep(input) : undefined,
         select: ["id", "email", "username", "password"],
       });
 

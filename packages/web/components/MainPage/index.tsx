@@ -1,17 +1,22 @@
+import { ProductsQueryInput } from "@/@types/api";
 import React, { Fragment } from "react";
 import { HeroSection } from "./HeroSection";
 import { ProductsSection } from "./ProductsSection";
 
 interface MainPageProps {
   highlight?: boolean;
-  category?: string;
+  productsQueryVariables?: ProductsQueryInput;
 }
 
-export const MainPage: React.FC<MainPageProps> = ({ highlight, category }) => {
-  return (
-    <Fragment>
-      <HeroSection />
-      <ProductsSection highlight={highlight} category={category} />
-    </Fragment>
-  );
-};
+export const MainPage: React.FC<MainPageProps> = ({
+  highlight,
+  productsQueryVariables,
+}) => (
+  <Fragment>
+    <HeroSection />
+    <ProductsSection
+      highlight={highlight}
+      productsQueryVariables={productsQueryVariables}
+    />
+  </Fragment>
+);

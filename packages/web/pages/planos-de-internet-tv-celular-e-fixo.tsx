@@ -1,13 +1,16 @@
 import { MainPage } from "@/components/MainPage";
+import { getProductsVariablesForCategory } from "@/utils/getProductsVariablesForCategory";
 import { mainPageGetServerSideProps } from "@/utils/mainPageGetServerSideProps";
 import { NextPage } from "next";
 
-const category = "planos-de-internet-tv-celular-e-fixo";
+const variables = getProductsVariablesForCategory(
+  "planos-de-internet-tv-celular-e-fixo",
+);
 
-export const getServerSideProps = mainPageGetServerSideProps(category);
+export const getServerSideProps = mainPageGetServerSideProps(variables);
 
 const PlanosDeInternetTvCelularEFixo: NextPage = () => (
-  <MainPage category={category} />
+  <MainPage productsQueryVariables={variables} />
 );
 
 export default PlanosDeInternetTvCelularEFixo;

@@ -1,11 +1,14 @@
 import { MainPage } from "@/components/MainPage";
+import { getProductsVariablesForCategory } from "@/utils/getProductsVariablesForCategory";
 import { mainPageGetServerSideProps } from "@/utils/mainPageGetServerSideProps";
 import { NextPage } from "next";
 
-const category = "games-e-pc-gamer";
+const variables = getProductsVariablesForCategory("games-e-pc-gamer");
 
-export const getServerSideProps = mainPageGetServerSideProps(category);
+export const getServerSideProps = mainPageGetServerSideProps(variables);
 
-const GamesEPcGamer: NextPage = () => <MainPage category={category} />;
+const GamesEPcGamer: NextPage = () => (
+  <MainPage productsQueryVariables={variables} />
+);
 
 export default GamesEPcGamer;

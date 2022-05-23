@@ -1,5 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { CategoryWhereInput } from "./CategoryWhereInput";
+import { CategoryWhereInput } from "../categories/CategoryWhereInput";
 
 @InputType()
 export class ProductWhereInput {

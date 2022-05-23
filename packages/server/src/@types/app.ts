@@ -17,8 +17,14 @@ export interface Class<T> {
   new (...args: unknown[]): T;
 }
 
+export type BasicObjectType = Record<string | number | symbol, any>;
+
 export type NonNullable<T> = Exclude<T, null>;
-export type RequiredNonNullable<T> = { [P in keyof T]-?: NonNullable<T[P]> };
+export type RequiredNonNullable<T> = { [K in keyof T]-?: NonNullable<T[K]> };
+
+export type DeepNonNullable<T> = T extends BasicObjectType
+  ? { [K in keyof T]: DeepNonNullable<T[K]> }
+  : NonNullable<T>;
 
 export type IResolverGoodResponse<T extends ResolverResponse> =
   RequiredNonNullable<Omit<T, "errors" | "ok">> & { ok: true };

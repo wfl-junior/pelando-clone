@@ -1,5 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { UserProductVoteType } from "../enums/UserProductVoteType";
+import { UserProductVoteType } from "../../enums/UserProductVoteType";
 import { RemoveVoteFromProductInput } from "./RemoveVoteFromProductInput";
 
 @InputType()

@@ -3,6 +3,8 @@ export interface FieldError {
   message: string;
 }
 
+export type OrderByDirection = "ASC" | "DESC";
+
 export interface GraphQLResponse {
   ok: boolean;
   errors: FieldError[] | null;
@@ -21,8 +23,18 @@ export interface ProductWhereInput {
   category?: CategoryWhereInput | null;
 }
 
+export interface ProductOrderByInput {
+  body?: OrderByDirection | null;
+  couponCode?: OrderByDirection | null;
+  price?: OrderByDirection | null;
+  sourceUrl?: OrderByDirection | null;
+  title?: OrderByDirection | null;
+  temperature?: OrderByDirection | null;
+}
+
 export interface ProductsQueryInput extends PaginatedQueryInput {
   where?: ProductWhereInput | null;
+  orderBy?: ProductOrderByInput | null;
 }
 
 export interface PaginatedQueryVariables {

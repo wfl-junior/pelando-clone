@@ -22,7 +22,6 @@ export const Step: React.FC<StepProps> = ({
 
   useEffect(() => {
     isFirstRenderRef.current = false;
-    // TODO: ver o por quê de step de username estar renderizando 2 vezes inicialmente
   }, []);
 
   // isValid do Formik pode ter errors de outros steps

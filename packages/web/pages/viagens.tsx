@@ -1,11 +1,12 @@
 import { MainPage } from "@/components/MainPage";
+import { getProductsVariablesForCategory } from "@/utils/getProductsVariablesForCategory";
 import { mainPageGetServerSideProps } from "@/utils/mainPageGetServerSideProps";
 import { NextPage } from "next";
 
-const category = "viagens";
+const variables = getProductsVariablesForCategory("viagens");
 
-export const getServerSideProps = mainPageGetServerSideProps(category);
+export const getServerSideProps = mainPageGetServerSideProps(variables);
 
-const Viagens: NextPage = () => <MainPage category={category} />;
+const Viagens: NextPage = () => <MainPage productsQueryVariables={variables} />;
 
 export default Viagens;

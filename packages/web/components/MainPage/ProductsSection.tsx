@@ -1,4 +1,4 @@
-import { ProductsQueryVariables } from "@/@types/api";
+import type { ProductsQueryInput, ProductsQueryVariables } from "@/@types/api";
 import { defaultErrorMessage } from "@/constants";
 import { useProductsQuery } from "@/hooks/apollo/useProductsQuery";
 import React, { useRef } from "react";
@@ -9,26 +9,28 @@ import { ProductsFetchMoreDummy } from "./ProductsFetchMoreDummy";
 const firstPage = 1;
 const productsPerPage = 8;
 
-export const getVariables = (category?: string): ProductsQueryVariables => ({
+export const getVariables = (
+  variables?: ProductsQueryInput,
+): ProductsQueryVariables => ({
   input: {
+    ...variables,
     page: firstPage,
     perPage: productsPerPage,
-    where: category ? { category: { slug: category } } : undefined,
   },
 });
 
 interface ProductsSectionProps {
   highlight?: boolean;
-  category?: string;
+  productsQueryVariables?: ProductsQueryInput;
 }
 
 export const ProductsSection: React.FC<ProductsSectionProps> = ({
   highlight,
-  category,
+  productsQueryVariables,
 }) => {
   const currentPageRef = useRef(firstPage);
   const { data, loading, fetchMore, variables, error } = useProductsQuery({
-    variables: getVariables(category),
+    variables: getVariables(productsQueryVariables),
     notifyOnNetworkStatusChange: true,
   });
 
