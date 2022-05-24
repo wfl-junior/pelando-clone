@@ -15,6 +15,7 @@ export const ColdButton: React.FC = () => {
 
   return (
     <button
+      disabled={loading}
       type="button"
       title="Esfriar"
       className="hover:bg-secondary-background hover:text-blue flex aspect-square w-6 items-center justify-center rounded-full transition-colors"

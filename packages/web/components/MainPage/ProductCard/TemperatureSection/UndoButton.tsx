@@ -19,6 +19,7 @@ export const UndoButton: React.FC<UndoButtonProps> = ({ hovering }) => {
 
   return (
     <button
+      disabled={loading}
       type="button"
       title="Desfazer"
       className={classNames(

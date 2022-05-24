@@ -15,6 +15,7 @@ export const HotButton: React.FC = () => {
 
   return (
     <button
+      disabled={loading}
       type="button"
       title="Esquentar"
       className="hover:bg-secondary-background hover:text-primary flex aspect-square w-6 items-center justify-center rounded-full transition-colors"
