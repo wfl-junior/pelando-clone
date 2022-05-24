@@ -1,9 +1,8 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import bcrypt from "bcrypt";
-import { BeforeInsert, Column, Entity, Index, OneToMany } from "typeorm";
+import { BeforeInsert, Column, Entity, Index } from "typeorm";
 import { UNIQUE_EMAIL_INDEX, UNIQUE_USERNAME_INDEX } from "../constants";
 import { EntityNode } from "./node.entity";
-import { UserProductVote } from "./user-product-vote.entity";
 
 @ObjectType()
 @Entity("users", { orderBy: { createdAt: "ASC" } })
@@ -32,9 +31,4 @@ export class User extends EntityNode {
   protected async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
   }
-
-  @OneToMany(() => UserProductVote, productVotes => productVotes.product, {
-    onDelete: "CASCADE",
-  })
-  public productVotes: UserProductVote[];
 }

@@ -77,6 +77,8 @@ export interface Store extends Model {
   image: string;
 }
 
+export type UserProductVoteType = "HOT" | "COLD";
+
 export interface Product extends Model {
   body: string;
   couponCode: string | null;
@@ -85,6 +87,7 @@ export interface Product extends Model {
   title: string;
   image: string;
   temperature: number;
+  userVoteType: UserProductVoteType;
   store: Store;
 }
 
@@ -140,4 +143,30 @@ export interface MeQueryResponse {
 
 export interface LogoutMutationResponse {
   logout: GraphQLResponse;
+}
+
+export interface RemoveVoteFromProductInput {
+  productId: string;
+}
+
+export interface RemoveVoteFromProductVariables {
+  input: RemoveVoteFromProductInput;
+}
+
+export interface VoteOnProductInput extends RemoveVoteFromProductInput {
+  type: UserProductVoteType;
+}
+
+export interface VoteOnProductVariables {
+  input: VoteOnProductInput;
+}
+
+export type ProductQueryResponse = GraphQLResponse & { product: Product };
+
+export interface VoteOnProductResponse {
+  voteOnProduct: ProductQueryResponse;
+}
+
+export interface RemoveVoteFromProductResponse {
+  removeVoteFromProduct: ProductQueryResponse;
 }

@@ -1,5 +1,6 @@
 import { UseGuards } from "@nestjs/common";
 import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { QueryFailedError } from "typeorm";
 import { IContextWithUser, IResolverResponse } from "../@types/app";
 import { DEFAULT_PER_PAGE } from "../constants";
 import { Product } from "../entities";
@@ -76,25 +77,6 @@ export class ProductResolver {
         };
       }
 
-      const vote = await UserProductVote.findOne({
-        where: {
-          userId: user.id,
-          productId,
-        },
-      });
-
-      if (vote) {
-        return {
-          ok: false,
-          errors: [
-            {
-              path: "productId",
-              message: "user already voted on this product",
-            },
-          ],
-        };
-      }
-
       switch (type) {
         case UserProductVoteType.HOT: {
           product.temperature += user.productVoteValue;
@@ -106,25 +88,43 @@ export class ProductResolver {
         }
       }
 
-      await Promise.all([
-        product.save(),
-        UserProductVote.insert({
-          userId: user.id,
-          productId,
-          type,
-        }),
-      ]);
+      await UserProductVote.insert({
+        userId: user.id,
+        productId,
+        type,
+      });
+
+      // salva product somente se voto tiver sido inserido corretamente
+      await product.save();
+
+      product.userVoteType = type;
 
       return {
         ok: true,
         product,
       };
     } catch (error) {
+      if (
+        error instanceof QueryFailedError &&
+        error.message.includes("UNIQUE")
+      ) {
+        return {
+          ok: false,
+          errors: [
+            {
+              path: "productId",
+              message: "user already voted on this product",
+            },
+          ],
+        };
+      }
+
       console.log({
         time: new Date(),
         where: "mutation vote on product",
         error,
       });
+
       return defaultErrorResponse();
     }
   }
@@ -186,7 +186,10 @@ export class ProductResolver {
         }
       }
 
-      await Promise.all([product.save(), vote.remove()]);
+      await product.save();
+
+      // remove voto somente se product tiver sido salvo
+      await vote.remove();
 
       return {
         ok: true,
@@ -195,9 +198,10 @@ export class ProductResolver {
     } catch (error) {
       console.log({
         time: new Date(),
-        where: "mutation vote on product",
+        where: "mutation remove vote from product",
         error,
       });
+
       return defaultErrorResponse();
     }
   }

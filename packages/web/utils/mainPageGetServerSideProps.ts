@@ -14,10 +14,7 @@ export const mainPageGetServerSideProps = (
     const apolloClient = initializeApollo();
     const sdk = getSdk(apolloClient);
 
-    const queries = [
-      sdk.query.stores(),
-      sdk.query.products({ variables: getVariables(variables) }),
-    ] as const;
+    const queries = [sdk.query.stores()];
 
     try {
       const { cookie } = context.req.headers;
@@ -46,16 +43,19 @@ export const mainPageGetServerSideProps = (
         context.res.setHeader(setCookieHeaderName, setCookieHeader);
       }
 
+      const options = {
+        context: {
+          headers: {
+            authorization: authorizationHeaderWithToken(accessToken),
+          },
+        },
+      };
+
       // põe em cache estas queries
       await Promise.allSettled([
         ...queries,
-        sdk.query.me({
-          context: {
-            headers: {
-              authorization: authorizationHeaderWithToken(accessToken),
-            },
-          },
-        }),
+        sdk.query.products({ variables: getVariables(variables), ...options }),
+        sdk.query.me(options),
       ]);
 
       return addApolloState(apolloClient, {
@@ -63,7 +63,10 @@ export const mainPageGetServerSideProps = (
       });
     } catch {
       // põe em cache estas queries
-      await Promise.allSettled(queries);
+      await Promise.allSettled([
+        ...queries,
+        sdk.query.products({ variables: getVariables(variables) }),
+      ]);
 
       // por fake me query em cache, para não precisar dar fetch no client, já que não está autenticado, não tem necessidade
       apolloClient.writeQuery(fakeMeQuery);
