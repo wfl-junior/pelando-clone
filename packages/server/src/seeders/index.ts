@@ -8,9 +8,10 @@ import { seedStores } from "./stores/store.seeder";
 async function seed() {
   const options = { ...ormconfig } as DataSourceOptions;
 
-  if (ormconfig.type === "sqlite") {
+  if (ormconfig.type === "sqlite" && process.env.NODE_ENV !== "test") {
     Object.assign(options, {
       // se for sqlite tem que pegar o database de dist
+      // exceto para tests, para tests deve usar o normal
       database: path.join(__dirname, "..", "..", "dist", "database.sqlite"),
     });
   }
