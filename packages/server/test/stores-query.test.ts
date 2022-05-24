@@ -1,14 +1,12 @@
 import { Store } from "@/src/entities";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
-import { print } from "graphql";
-import request from "supertest";
 import { AppModule } from "../src/app.module";
-import { graphqlEndpoint } from "./constants";
-import { storesQuery } from "./queries/storesQuery";
+import { TestClient } from "./client";
 
 describe("stores query", () => {
   let app: INestApplication;
+  let client: TestClient;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -17,60 +15,51 @@ describe("stores query", () => {
 
     app = moduleRef.createNestApplication();
     await app.init();
+    client = new TestClient(app);
   });
 
   afterAll(async () => {
     await app.close();
   });
 
-  it("works", () => {
+  it("works", async () => {
     const perPage = 10;
 
-    return request(app.getHttpServer())
-      .post(graphqlEndpoint)
-      .send({
-        query: print(storesQuery),
-        variables: {
-          input: {
-            perPage,
-          },
-        },
-      })
-      .expect(200)
-      .expect(async response => {
-        const stores = await Store.find({
-          select: ["id"],
-          take: perPage,
-        });
+    const response = await client.query.stores({
+      input: {
+        perPage,
+      },
+    });
 
-        expect(response.body.data.stores.stores.edges).toEqual(stores);
-      });
+    expect(response.status).toBe(200);
+
+    const stores = await Store.find({
+      select: ["id"],
+      take: perPage,
+    });
+
+    expect(response.body.data.stores.stores.edges).toEqual(stores);
   });
 
-  it("works with pagination", () => {
+  it("works with pagination", async () => {
     const page = 2;
     const perPage = 10;
 
-    return request(app.getHttpServer())
-      .post(graphqlEndpoint)
-      .send({
-        query: print(storesQuery),
-        variables: {
-          input: {
-            page,
-            perPage,
-          },
-        },
-      })
-      .expect(200)
-      .expect(async response => {
-        const stores = await Store.find({
-          select: ["id"],
-          take: perPage,
-          skip: (page - 1) * perPage,
-        });
+    const response = await client.query.stores({
+      input: {
+        page,
+        perPage,
+      },
+    });
 
-        expect(response.body.data.stores.stores.edges).toEqual(stores);
-      });
+    expect(response.status).toBe(200);
+
+    const stores = await Store.find({
+      select: ["id"],
+      take: perPage,
+      skip: (page - 1) * perPage,
+    });
+
+    expect(response.body.data.stores.stores.edges).toEqual(stores);
   });
 });
