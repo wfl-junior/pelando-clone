@@ -1,13 +1,13 @@
-import { Product } from "@/src/entities";
+import { Store } from "@/src/entities";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { print } from "graphql";
 import request from "supertest";
 import { AppModule } from "../src/app.module";
 import { graphqlEndpoint } from "./constants";
-import { productsQuery } from "./queries/productsQuery";
+import { storesQuery } from "./queries/storesQuery";
 
-describe("products query", () => {
+describe("stores query", () => {
   let app: INestApplication;
 
   beforeAll(async () => {
@@ -29,64 +29,48 @@ describe("products query", () => {
     return request(app.getHttpServer())
       .post(graphqlEndpoint)
       .send({
-        query: print(productsQuery),
+        query: print(storesQuery),
         variables: {
           input: {
             perPage,
-            orderBy: {
-              createdAt: "ASC",
-            },
           },
         },
       })
       .expect(200)
       .expect(async response => {
-        const products = await Product.find({
+        const stores = await Store.find({
           select: ["id"],
           take: perPage,
-          order: {
-            createdAt: "ASC",
-            // porque TypeORM faz uma distinct query adicionando order by id ASC, por causa de relations
-            id: "ASC",
-          },
         });
 
-        expect(response.body.data.products.products.edges).toEqual(products);
+        expect(response.body.data.stores.stores.edges).toEqual(stores);
       });
   });
 
   it("works with pagination", () => {
-    const page = 3;
+    const page = 2;
     const perPage = 10;
 
     return request(app.getHttpServer())
       .post(graphqlEndpoint)
       .send({
-        query: print(productsQuery),
+        query: print(storesQuery),
         variables: {
           input: {
             page,
             perPage,
-            orderBy: {
-              createdAt: "ASC",
-            },
           },
         },
       })
       .expect(200)
       .expect(async response => {
-        const products = await Product.find({
+        const stores = await Store.find({
           select: ["id"],
           take: perPage,
           skip: (page - 1) * perPage,
-          order: {
-            createdAt: "ASC",
-            // porque TypeORM faz uma distinct query adicionando order by id ASC, por causa de relations
-            id: "ASC",
-          },
         });
 
-        expect(response.body.data.products.products.edges).toEqual(products);
+        expect(response.body.data.stores.stores.edges).toEqual(stores);
       });
   });
 });
