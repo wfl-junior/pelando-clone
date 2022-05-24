@@ -1,6 +1,6 @@
 import { UseGuards } from "@nestjs/common";
 import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
-import { In, QueryFailedError } from "typeorm";
+import { FindOptionsWhere, In, QueryFailedError } from "typeorm";
 import { IContext, IContextWithUser, IResolverResponse } from "../@types/app";
 import { DEFAULT_PER_PAGE } from "../constants";
 import { Product } from "../entities";
@@ -30,35 +30,50 @@ export class ProductResolver {
       const page = input?.page || 1;
       const offset = perPage * page - perPage;
 
+      const where: FindOptionsWhere<Product> = {};
+
+      if (input?.where) {
+        const { ids } = input.where;
+        const parsedInputWhere = removeNullPropertiesDeep(input.where);
+        delete parsedInputWhere.ids;
+        Object.assign(where, parsedInputWhere);
+
+        if (ids) {
+          Object.assign(where, { id: In(ids) });
+        }
+      }
+
       const [products, count] = await Product.findAndCount({
         take: perPage,
         skip: offset,
         relations: ["store", "category"],
-        where: input?.where ? removeNullPropertiesDeep(input.where) : undefined,
+        where,
         order: input?.orderBy
           ? removeNullPropertiesDeep(input.orderBy)
           : undefined,
       });
 
-      const user = await getUserFromRequest(request);
+      try {
+        const user = await getUserFromRequest(request);
 
-      if (user) {
-        // TODO: talvez trocar este bloco por join na query principal
-        const map = new Map<Product["id"], Product>();
+        if (user) {
+          // TODO: talvez trocar este bloco por join na query principal
+          const map = new Map<Product["id"], Product>();
 
-        products.forEach(product => {
-          map.set(product.id, product);
-        });
+          products.forEach(product => {
+            map.set(product.id, product);
+          });
 
-        const votes = await UserProductVote.find({
-          where: { productId: In([...map.keys()]) },
-        });
+          const votes = await UserProductVote.find({
+            where: { productId: In([...map.keys()]) },
+          });
 
-        votes.forEach(vote => {
-          const product = map.get(vote.productId);
-          Object.assign(product, { userVoteType: vote.type });
-        });
-      }
+          votes.forEach(vote => {
+            const product = map.get(vote.productId);
+            Object.assign(product, { userVoteType: vote.type });
+          });
+        }
+      } catch {}
 
       return {
         ok: true,

@@ -5,4 +5,7 @@ import { CategoryWhereInput } from "../categories/CategoryWhereInput";
 export class ProductWhereInput {
   @Field(() => CategoryWhereInput, { nullable: true })
   category?: CategoryWhereInput | null;
+
+  @Field(() => [String], { nullable: true })
+  ids?: string[] | null;
 }

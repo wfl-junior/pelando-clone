@@ -21,6 +21,7 @@ export interface CategoryWhereInput {
 
 export interface ProductWhereInput {
   category?: CategoryWhereInput | null;
+  ids?: Array<Product["id"]> | null;
 }
 
 export interface ProductOrderByInput {

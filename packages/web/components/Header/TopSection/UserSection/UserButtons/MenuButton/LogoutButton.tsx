@@ -16,8 +16,12 @@ export const LogoutButton = () => {
             "flex w-full cursor-pointer items-center justify-between py-3.5 px-4 transition-colors",
             active ? "bg-secondary-foreground/10" : "bg-default-background",
           )}
-          onClick={() => {
-            logoutMutation();
+          onClick={async () => {
+            try {
+              await logoutMutation();
+            } catch (error) {
+              console.log({ error });
+            }
           }}
         >
           <span>Encerrar sessão</span>

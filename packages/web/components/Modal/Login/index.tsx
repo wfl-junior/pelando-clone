@@ -1,11 +1,7 @@
 import { useModalContext } from "@/contexts/ModalContext";
 import { useRegisterOrLoginContext } from "@/contexts/RegisterOrLoginContext";
-import { meQuery } from "@/graphql/queries/meQuery";
 import { useLoginMutation } from "@/hooks/apollo/useLoginMutation";
-import {
-  authorizationHeaderWithToken,
-  setAccessToken,
-} from "@/utils/accessToken";
+import { updateProductsVotesForUser } from "@/utils/updateProductsVotesForUser";
 import { loginValidationSchemas } from "@/yup/loginValidationSchema";
 import { ApolloError } from "@apollo/client";
 import { Formik, FormikErrors } from "formik";
@@ -34,24 +30,7 @@ const type = "login";
 export const Login: React.FC = () => {
   const { step, setStep } = useRegisterOrLoginContext();
   const { toggleModal } = useModalContext();
-  const [loginMutation] = useLoginMutation({
-    refetchQueries: result => {
-      if (result.data?.login.accessToken) {
-        setAccessToken(result.data.login.accessToken);
-
-        return [
-          {
-            query: meQuery,
-            context: {
-              headers: { authorization: authorizationHeaderWithToken() },
-            },
-          },
-        ];
-      }
-
-      return [];
-    },
-  });
+  const [login] = useLoginMutation();
 
   const steps: Array<ReturnType<React.FC>> = [<StepOne />, <StepTwo />];
 
@@ -76,7 +55,7 @@ export const Login: React.FC = () => {
             }
 
             try {
-              const response = await loginMutation({
+              const response = await login({
                 variables: {
                   // enviar email sem username se tiver email, ou se tiver username enviar username sem email
                   input: values.email
@@ -116,7 +95,8 @@ export const Login: React.FC = () => {
                 }
               }
 
-              // fecha modal se tiver sucesso
+              // sucesso
+              await updateProductsVotesForUser();
               toggleModal(false);
             } catch (error) {
               if (error instanceof ApolloError) {
