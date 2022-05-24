@@ -7,6 +7,7 @@ import { Product } from "../entities";
 import { UserProductVote } from "../entities/user-product-vote.entity";
 import { ProductsQueryInput } from "../graphql-types/Input/products/ProductsQueryInput";
 import { ProductsQueryResponse } from "../graphql-types/Object/products/ProductsQueryResponse";
+import { calculatePaginationOffset } from "../utils/calculatePaginationOffset";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
 import { getPageInfo } from "../utils/getPageInfo";
 import { getUserFromRequest } from "../utils/getUserFromRequest";
@@ -23,7 +24,7 @@ export class ProductResolver {
     try {
       const perPage = input?.perPage || DEFAULT_PER_PAGE;
       const page = input?.page || 1;
-      const offset = perPage * page - perPage;
+      const offset = calculatePaginationOffset(page, perPage);
 
       const where: FindOptionsWhere<Product> = {};
 

@@ -1,4 +1,6 @@
+import { DEFAULT_PER_PAGE } from "@/src/constants";
 import { Store } from "@/src/entities";
+import { calculatePaginationOffset } from "@/src/utils/calculatePaginationOffset";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { AppModule } from "../src/app.module";
@@ -22,7 +24,20 @@ describe("stores query", () => {
     await app.close();
   });
 
-  it("works", async () => {
+  it("works without variables", async () => {
+    const response = await client.query.stores();
+
+    expect(response.status).toBe(200);
+
+    const stores = await Store.find({
+      select: ["id"],
+      take: DEFAULT_PER_PAGE,
+    });
+
+    expect(response.body.data.stores.stores?.edges).toEqual(stores);
+  });
+
+  it("works with perPage variable", async () => {
     const perPage = 10;
 
     const response = await client.query.stores({
@@ -41,7 +56,7 @@ describe("stores query", () => {
     expect(response.body.data.stores.stores?.edges).toEqual(stores);
   });
 
-  it("works with pagination", async () => {
+  it("works with pagination variables", async () => {
     const page = 2;
     const perPage = 10;
 
@@ -57,7 +72,7 @@ describe("stores query", () => {
     const stores = await Store.find({
       select: ["id"],
       take: perPage,
-      skip: (page - 1) * perPage,
+      skip: calculatePaginationOffset(page, perPage),
     });
 
     expect(response.body.data.stores.stores?.edges).toEqual(stores);
