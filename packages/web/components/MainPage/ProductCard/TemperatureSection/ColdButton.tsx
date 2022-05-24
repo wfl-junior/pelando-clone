@@ -1,4 +1,5 @@
 import { ColdIcon } from "@/components/icons/product-card/ColdIcon";
+import { Spinner } from "@/components/Spinner";
 import { useModalContext } from "@/contexts/ModalContext";
 import { useProductCardContext } from "@/contexts/ProductCardContext";
 import { useVoteOnProductMutation } from "@/hooks/apollo/useVoteOnProductMutation";
@@ -7,7 +8,7 @@ import { authorizationHeaderWithToken } from "@/utils/accessToken";
 import React from "react";
 
 export const ColdButton: React.FC = () => {
-  const [vote] = useVoteOnProductMutation();
+  const [vote, { loading }] = useVoteOnProductMutation();
   const { product } = useProductCardContext();
   const { isLoggedIn } = useUser();
   const { toggleModal } = useModalContext();
@@ -42,7 +43,11 @@ export const ColdButton: React.FC = () => {
         }
       }}
     >
-      <ColdIcon className="w-4.5" />
+      {loading ? (
+        <Spinner className="w-5 before:w-3/5" color="inactive-background" />
+      ) : (
+        <ColdIcon className="w-4.5" />
+      )}
     </button>
   );
 };
