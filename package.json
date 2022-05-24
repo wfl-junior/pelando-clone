@@ -14,6 +14,10 @@
   },
   "scripts": {
     "web": "cd packages/web && yarn dev",
-    "server": "cd packages/server && yarn start:dev"
+    "server": "cd packages/server && yarn start:dev",
+    "both": "concurrently \"yarn web\" \"yarn server\""
+  },
+  "devDependencies": {
+    "concurrently": "^7.2.1"
   }
 }
