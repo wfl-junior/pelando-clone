@@ -44,7 +44,7 @@ describe("products query", () => {
       },
     });
 
-    expect(response.body.data.products.products.edges).toEqual(products);
+    expect(response.body.data.products.products?.edges).toEqual(products);
   });
 
   it("works with pagination", async () => {
@@ -72,6 +72,6 @@ describe("products query", () => {
       },
     });
 
-    expect(response.body.data.products.products.edges).toEqual(products);
+    expect(response.body.data.products.products?.edges).toEqual(products);
   });
 });

@@ -38,7 +38,7 @@ describe("stores query", () => {
       take: perPage,
     });
 
-    expect(response.body.data.stores.stores.edges).toEqual(stores);
+    expect(response.body.data.stores.stores?.edges).toEqual(stores);
   });
 
   it("works with pagination", async () => {
@@ -60,6 +60,6 @@ describe("stores query", () => {
       skip: (page - 1) * perPage,
     });
 
-    expect(response.body.data.stores.stores.edges).toEqual(stores);
+    expect(response.body.data.stores.stores?.edges).toEqual(stores);
   });
 });
