@@ -1,12 +1,14 @@
 import { useProductCardContext } from "@/contexts/ProductCardContext";
+import { useUser } from "@/hooks/useUser";
 import classNames from "classnames";
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import { ColdButton } from "./ColdButton";
 import { HotButton } from "./HotButton";
 import { UndoButton } from "./UndoButton";
 
 export const TemperatureSection: React.FC = () => {
   const [hovering, setHovering] = useState(false);
+  const { isLoggedIn } = useUser();
   const {
     product: { temperature, userVoteType },
   } = useProductCardContext();
@@ -17,23 +19,38 @@ export const TemperatureSection: React.FC = () => {
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
     >
-      {userVoteType ? <UndoButton hovering={hovering} /> : <ColdButton />}
+      {isLoggedIn ? (
+        <Fragment>
+          {userVoteType ? <UndoButton hovering={hovering} /> : <ColdButton />}
+        </Fragment>
+      ) : (
+        <ColdButton />
+      )}
 
       <span
-        className={classNames("font-bold", {
-          "text-primary":
-            (!userVoteType && temperature >= 350 && temperature < 1000) ||
-            userVoteType === "HOT",
-          "text-red": !userVoteType && temperature >= 1000,
-          "text-blue":
-            (!userVoteType && temperature < 0) || userVoteType === "COLD",
-          "mr-1.5": !!userVoteType,
-        })}
+        className={classNames(
+          "font-bold",
+          isLoggedIn && userVoteType
+            ? {
+                "text-primary": userVoteType === "HOT",
+                "text-blue": userVoteType === "COLD",
+                "mr-1.5": true,
+              }
+            : {
+                "text-primary": temperature >= 350 && temperature < 1000,
+                "text-red": temperature >= 1000,
+                "text-blue": temperature < 0,
+              },
+        )}
       >
         {Math.floor(temperature)}º
       </span>
 
-      {!userVoteType && <HotButton />}
+      {isLoggedIn ? (
+        <Fragment>{!userVoteType && <HotButton />}</Fragment>
+      ) : (
+        <HotButton />
+      )}
     </div>
   );
 };

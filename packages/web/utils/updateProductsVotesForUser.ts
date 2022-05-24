@@ -8,18 +8,18 @@ export async function updateProductsVotesForUser() {
 
   const cache = client.cache.extract();
 
-  const ids: string[] = [];
-
-  for (const key in cache) {
+  const ids = Object.keys(cache).reduce<string[]>((ids, key) => {
     if (key.startsWith("Product:")) {
       const id = key.replace(/Product:/i, "");
       ids.push(id);
     }
-  }
+
+    return ids;
+  }, []);
 
   await client.query<ProductsQueryResponse, ProductsQueryVariables>({
     query: productsUserVotesQuery,
-    fetchPolicy: "network-only",
+    // fetchPolicy: "network-only", // sem network-only pode dar problema se logar em outra conta após logout
     variables: {
       input: {
         perPage: ids.length,

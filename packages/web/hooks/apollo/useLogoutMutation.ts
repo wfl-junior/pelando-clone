@@ -35,18 +35,18 @@ export function useLogoutMutation(
       });
 
       // remove userVoteType dos products em cache
-      const cacheObject = cache.extract();
+      // const cacheObject = cache.extract();
 
-      for (const key in cacheObject) {
-        if (key.startsWith("Product:")) {
-          cache.modify({
-            id: key,
-            fields: {
-              userVoteType: () => null,
-            },
-          });
-        }
-      }
+      // for (const key in cacheObject) {
+      //   if (key.startsWith("Product:")) {
+      //     cache.modify({
+      //       id: key,
+      //       fields: {
+      //         userVoteType: () => null,
+      //       },
+      //     });
+      //   }
+      // }
     },
   });
 }
