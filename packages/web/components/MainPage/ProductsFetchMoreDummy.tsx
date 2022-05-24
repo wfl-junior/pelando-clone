@@ -3,6 +3,7 @@ import {
   ProductsQueryResponse,
   ProductsQueryVariables,
 } from "@/@types/api";
+import { authorizationHeaderWithToken } from "@/utils/accessToken";
 import { ApolloQueryResult, FetchMoreQueryOptions } from "@apollo/client";
 import React, { useEffect, useRef } from "react";
 
@@ -55,6 +56,11 @@ export const ProductsFetchMoreDummy: React.FC<ProductsFetchMoreDummyProps> = ({
               input: {
                 ...variables.input,
                 page: nextPage,
+              },
+            },
+            context: {
+              headers: {
+                authorization: authorizationHeaderWithToken(),
               },
             },
             updateQuery: (previousResult, { fetchMoreResult }) => ({

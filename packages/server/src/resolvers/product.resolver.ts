@@ -1,7 +1,7 @@
 import { UseGuards } from "@nestjs/common";
 import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
-import { QueryFailedError } from "typeorm";
-import { IContextWithUser, IResolverResponse } from "../@types/app";
+import { In, QueryFailedError } from "typeorm";
+import { IContext, IContextWithUser, IResolverResponse } from "../@types/app";
 import { DEFAULT_PER_PAGE } from "../constants";
 import { Product } from "../entities";
 import { UserProductVote } from "../entities/user-product-vote.entity";
@@ -14,12 +14,14 @@ import { ProductsQueryResponse } from "../graphql-types/Object/products/Products
 import { AuthGuard } from "../guards/auth.guard";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
 import { getPageInfo } from "../utils/getPageInfo";
+import { getUserFromRequest } from "../utils/getUserFromRequest";
 import { removeNullPropertiesDeep } from "../utils/removeNullPropertiesDeep";
 
 @Resolver(() => Product)
 export class ProductResolver {
   @Query(() => ProductsQueryResponse)
   async products(
+    @Context() { request }: IContext,
     @Args("input", { type: () => ProductsQueryInput, nullable: true })
     input?: ProductsQueryInput | null,
   ): Promise<IResolverResponse<ProductsQueryResponse>> {
@@ -28,7 +30,7 @@ export class ProductResolver {
       const page = input?.page || 1;
       const offset = perPage * page - perPage;
 
-      const [result, count] = await Product.findAndCount({
+      const [products, count] = await Product.findAndCount({
         take: perPage,
         skip: offset,
         relations: ["store", "category"],
@@ -38,10 +40,30 @@ export class ProductResolver {
           : undefined,
       });
 
+      const user = await getUserFromRequest(request);
+
+      if (user) {
+        // TODO: talvez trocar este bloco por join na query principal
+        const map = new Map<Product["id"], Product>();
+
+        products.forEach(product => {
+          map.set(product.id, product);
+        });
+
+        const votes = await UserProductVote.find({
+          where: { productId: In([...map.keys()]) },
+        });
+
+        votes.forEach(vote => {
+          const product = map.get(vote.productId);
+          Object.assign(product, { userVoteType: vote.type });
+        });
+      }
+
       return {
         ok: true,
         products: {
-          edges: result,
+          edges: products,
           info: getPageInfo({ count, perPage, offset }),
         },
       };
