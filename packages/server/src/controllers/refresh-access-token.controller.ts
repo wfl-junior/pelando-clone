@@ -30,7 +30,7 @@ export class RefreshAccessTokenController {
 
       const user = await User.findOneOrFail({
         where: { id },
-        select: ["id"],
+        select: { id: true },
       });
 
       sendRefreshToken(response, user);

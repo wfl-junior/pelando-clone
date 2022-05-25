@@ -93,9 +93,13 @@ export class UserResolver {
 
       const user = await User.findOne({
         where: input ? removeNullPropertiesDeep(input) : undefined,
-        select: ["id", "email", "username", "password"],
+        select: {
+          id: true,
+          password: true,
+        },
       });
 
+      // se user existir e senha estiver correta é logado com sucesso
       if (user && (await bcrypt.compare(password, user.password))) {
         sendRefreshToken(response, user);
 
@@ -109,6 +113,7 @@ export class UserResolver {
 
       return {
         ok: false,
+        // mostrar erro genérico para todos os campos
         errors: Object.entries({ ...input, password }).reduce<FieldError[]>(
           (errors, [key, value]) => {
             if (value) {
