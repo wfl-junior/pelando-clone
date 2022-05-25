@@ -1,8 +1,4 @@
-import {
-  PaginatedQueryVariables,
-  ProductsQueryResponse,
-  ProductsQueryVariables,
-} from "@/@types/api";
+import { ProductsQueryResponse, ProductsQueryVariables } from "@/@types/api";
 import { authorizationHeaderWithToken } from "@/utils/accessToken";
 import { ApolloQueryResult, FetchMoreQueryOptions } from "@apollo/client";
 import React, { useEffect, useRef } from "react";
@@ -14,14 +10,14 @@ interface ProductsFetchMoreDummyProps {
   variables: ProductsQueryVariables;
   fetchMore(
     fetchMoreOptions: FetchMoreQueryOptions<
-      PaginatedQueryVariables,
+      ProductsQueryVariables,
       ProductsQueryResponse
     > & {
       updateQuery?: (
         previousQueryResult: ProductsQueryResponse,
         options: {
           fetchMoreResult: ProductsQueryResponse;
-          variables: PaginatedQueryVariables;
+          variables: ProductsQueryVariables;
         },
       ) => ProductsQueryResponse;
     },

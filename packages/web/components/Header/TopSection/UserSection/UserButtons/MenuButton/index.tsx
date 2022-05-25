@@ -56,12 +56,7 @@ export const MenuButton: React.FC = () => {
         <CaretDownIcon className="w-6" />
       </Menu.Button>
 
-      <Menu.Items
-        className="bg-default-background absolute right-0 top-full z-20 w-[250px] translate-y-4 transform overflow-hidden rounded-lg"
-        style={{
-          boxShadow: "0 4px 12px 0 rgba(var(--color-default-shadow) / 0.2)",
-        }}
-      >
+      <Menu.Items className="bg-default-background shadow-user-menu absolute right-0 top-full z-20 w-[250px] translate-y-4 transform overflow-hidden rounded-lg">
         <div className="pt-4.5 flex flex-col items-center justify-center gap-1 px-2 pb-2">
           <div className="w-14">
             {user.image ? (
