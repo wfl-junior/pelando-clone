@@ -8,7 +8,7 @@ import {
 } from "typeorm";
 import { UserProductVoteType } from "../graphql-types/enums/UserProductVoteType";
 
-@Entity("user_product_vote", { orderBy: { createdAt: "ASC" } })
+@Entity("user_product_vote")
 export class UserProductVote extends BaseEntity {
   @PrimaryColumn("uuid", { name: "user_id" })
   public readonly userId: string;

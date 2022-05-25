@@ -5,7 +5,7 @@ import { UNIQUE_EMAIL_INDEX, UNIQUE_USERNAME_INDEX } from "../constants";
 import { EntityNode } from "./node.entity";
 
 @ObjectType()
-@Entity("users", { orderBy: { createdAt: "ASC" } })
+@Entity("users")
 export class User extends EntityNode {
   @Field()
   @Column()

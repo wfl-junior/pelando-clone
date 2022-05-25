@@ -5,7 +5,7 @@ import { UserProductVoteType } from "../graphql-types/enums/UserProductVoteType"
 import { EntityNode } from "./node.entity";
 
 @ObjectType()
-@Entity("products", { orderBy: { createdAt: "ASC" } })
+@Entity("products")
 export class Product extends EntityNode {
   @Field()
   @Column("text")

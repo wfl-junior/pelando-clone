@@ -4,7 +4,7 @@ import { Product } from ".";
 import { EntityNode } from "./node.entity";
 
 @ObjectType()
-@Entity("stores", { orderBy: { createdAt: "ASC" } })
+@Entity("stores")
 export class Store extends EntityNode {
   @Field()
   @Column()
