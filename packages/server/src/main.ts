@@ -1,6 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import "dotenv/config";
 import { AppModule } from "./app.module";
 import { FRONTEND_URL, REFRESH_ACCESS_TOKEN_ENDPOINT } from "./constants";
 

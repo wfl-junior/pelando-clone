@@ -1,7 +1,6 @@
 import { ormconfig } from "@/ormconfig";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { IContext } from "./@types/app";
@@ -10,7 +9,6 @@ import * as Resolvers from "./resolvers";
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
     TypeOrmModule.forRoot(ormconfig),
     ...Object.values(Resolvers),
     GraphQLModule.forRoot<ApolloDriverConfig>({
