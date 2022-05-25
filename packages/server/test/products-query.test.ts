@@ -231,4 +231,73 @@ describe("products query", () => {
       transformEntitiesDatesToString(products),
     );
   });
+
+  it("works with orderBy and where", async () => {
+    const orderBy: ProductOrderByInput = {
+      title: OrderByDirection.ASC,
+    };
+
+    const where: ProductWhereInput = {
+      category: {
+        slug: "gratis",
+      },
+    };
+
+    const response = await client.query.products({
+      input: {
+        orderBy,
+        where,
+      },
+    });
+
+    expect(response.status).toBe(200);
+
+    const products = await Product.find({
+      ...defaultFindOptions,
+      take: DEFAULT_PER_PAGE,
+      where: removeNullPropertiesDeep(where),
+      order: removeNullPropertiesDeep(orderBy),
+    });
+
+    expect(response.body.data.products.products?.edges).toEqual(
+      transformEntitiesDatesToString(products),
+    );
+  });
+
+  it("works with orderBy, where and pagination", async () => {
+    const page = 3;
+    const perPage = 8;
+    const orderBy: ProductOrderByInput = {
+      title: OrderByDirection.DESC,
+    };
+
+    const where: ProductWhereInput = {
+      category: {
+        slug: "casa-e-cozinha",
+      },
+    };
+
+    const response = await client.query.products({
+      input: {
+        page,
+        perPage,
+        orderBy,
+        where,
+      },
+    });
+
+    expect(response.status).toBe(200);
+
+    const products = await Product.find({
+      ...defaultFindOptions,
+      take: perPage,
+      skip: calculatePaginationOffset(page, perPage),
+      order: removeNullPropertiesDeep(orderBy),
+      where: removeNullPropertiesDeep(where),
+    });
+
+    expect(response.body.data.products.products?.edges).toEqual(
+      transformEntitiesDatesToString(products),
+    );
+  });
 });

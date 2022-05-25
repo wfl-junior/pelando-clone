@@ -1,3 +1,4 @@
+import { RegisterResponse } from "@/src/graphql-types/Object/users/RegisterResponse";
 import { Response as STResponse } from "supertest";
 
 export interface Variables<TInput> {
@@ -9,3 +10,7 @@ export interface Response<TData> extends STResponse {
     data: TData;
   };
 }
+
+export type TestRegisterMutationResponse = Response<{
+  register: RegisterResponse;
+}>;
