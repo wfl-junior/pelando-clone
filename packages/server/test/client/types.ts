@@ -1,3 +1,4 @@
+import { LoginResponse } from "@/src/graphql-types/Object/users/LoginResponse";
 import { RegisterResponse } from "@/src/graphql-types/Object/users/RegisterResponse";
 import { Response as STResponse } from "supertest";
 
@@ -13,4 +14,8 @@ export interface Response<TData> extends STResponse {
 
 export type TestRegisterMutationResponse = Response<{
   register: RegisterResponse;
+}>;
+
+export type TestLoginMutationResponse = Response<{
+  login: LoginResponse;
 }>;
