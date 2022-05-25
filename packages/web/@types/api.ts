@@ -25,6 +25,8 @@ export interface ProductWhereInput {
 }
 
 export interface ProductOrderByInput {
+  id?: OrderByDirection | null;
+  createdAt?: OrderByDirection | null;
   body?: OrderByDirection | null;
   couponCode?: OrderByDirection | null;
   price?: OrderByDirection | null;
