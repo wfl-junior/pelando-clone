@@ -7,8 +7,42 @@ import { calculatePaginationOffset } from "@/src/utils/calculatePaginationOffset
 import { removeNullPropertiesDeep } from "@/src/utils/removeNullPropertiesDeep";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
+import { FindManyOptions } from "typeorm";
 import { AppModule } from "../src/app.module";
 import { TestClient } from "./client";
+import { transformEntitiesDatesToString } from "./utils/transformDatesToString";
+
+const defaultFindOptions: FindManyOptions<Product> = {
+  relations: ["store", "category"],
+  select: {
+    id: true,
+    createdAt: true,
+    updatedAt: false,
+    body: true,
+    couponCode: true,
+    price: true,
+    sourceUrl: true,
+    title: true,
+    image: true,
+    temperature: true,
+    store: {
+      id: true,
+      createdAt: true,
+      updatedAt: false,
+      slug: true,
+      name: true,
+      url: true,
+      image: true,
+    },
+    category: {
+      id: true,
+      createdAt: true,
+      updatedAt: false,
+      slug: true,
+      title: true,
+    },
+  },
+};
 
 describe("products query", () => {
   let app: INestApplication;
@@ -34,17 +68,13 @@ describe("products query", () => {
     expect(response.status).toBe(200);
 
     const products = await Product.find({
-      select: ["id"],
+      ...defaultFindOptions,
       take: DEFAULT_PER_PAGE,
-      order: {
-        // order by padrão
-        createdAt: "ASC",
-        // porque TypeORM faz uma distinct query adicionando order by id ASC, por causa de relations
-        id: "ASC",
-      },
     });
 
-    expect(response.body.data.products.products?.edges).toEqual(products);
+    expect(response.body.data.products.products?.edges).toEqual(
+      transformEntitiesDatesToString(products),
+    );
   });
 
   it("works with perPage variable", async () => {
@@ -59,17 +89,13 @@ describe("products query", () => {
     expect(response.status).toBe(200);
 
     const products = await Product.find({
-      select: ["id"],
+      ...defaultFindOptions,
       take: perPage,
-      order: {
-        // order by padrão
-        createdAt: "ASC",
-        // porque TypeORM faz uma distinct query adicionando order by id ASC, por causa de relations
-        id: "ASC",
-      },
     });
 
-    expect(response.body.data.products.products?.edges).toEqual(products);
+    expect(response.body.data.products.products?.edges).toEqual(
+      transformEntitiesDatesToString(products),
+    );
   });
 
   it("works with pagination variables", async () => {
@@ -86,18 +112,14 @@ describe("products query", () => {
     expect(response.status).toBe(200);
 
     const products = await Product.find({
-      select: ["id"],
+      ...defaultFindOptions,
       take: perPage,
       skip: calculatePaginationOffset(page, perPage),
-      order: {
-        // order by padrão
-        createdAt: "ASC",
-        // porque TypeORM faz uma distinct query adicionando order by id ASC, por causa de relations
-        id: "ASC",
-      },
     });
 
-    expect(response.body.data.products.products?.edges).toEqual(products);
+    expect(response.body.data.products.products?.edges).toEqual(
+      transformEntitiesDatesToString(products),
+    );
   });
 
   it("works with where category slug", async () => {
@@ -116,23 +138,14 @@ describe("products query", () => {
     expect(response.status).toBe(200);
 
     const products = await Product.find({
-      select: ["id"],
+      ...defaultFindOptions,
       take: DEFAULT_PER_PAGE,
       where: removeNullPropertiesDeep(where),
-      order: {
-        // order by padrão
-        createdAt: "ASC",
-        // porque TypeORM faz uma distinct query adicionando order by id ASC, por causa de relations
-        id: "ASC",
-      },
     });
 
-    products.forEach(product => {
-      // @ts-expect-error
-      delete product.createdAt;
-    });
-
-    expect(response.body.data.products.products?.edges).toEqual(products);
+    expect(response.body.data.products.products?.edges).toEqual(
+      transformEntitiesDatesToString(products),
+    );
   });
 
   it("works with where category slug and pagination", async () => {
@@ -155,19 +168,15 @@ describe("products query", () => {
     expect(response.status).toBe(200);
 
     const products = await Product.find({
-      select: ["id"],
+      ...defaultFindOptions,
       take: perPage,
       skip: calculatePaginationOffset(page, perPage),
       where: removeNullPropertiesDeep(where),
-      order: {
-        // order by padrão
-        createdAt: "ASC",
-        // porque TypeORM faz uma distinct query adicionando order by id ASC, por causa de relations
-        id: "ASC",
-      },
     });
 
-    expect(response.body.data.products.products?.edges).toEqual(products);
+    expect(response.body.data.products.products?.edges).toEqual(
+      transformEntitiesDatesToString(products),
+    );
   });
 
   it("works with orderBy", async () => {
@@ -184,16 +193,14 @@ describe("products query", () => {
     expect(response.status).toBe(200);
 
     const products = await Product.find({
-      select: ["id"],
+      ...defaultFindOptions,
       take: DEFAULT_PER_PAGE,
-      order: {
-        ...removeNullPropertiesDeep(orderBy),
-        // porque TypeORM faz uma distinct query adicionando order by id ASC, por causa de relations
-        id: "ASC",
-      },
+      order: removeNullPropertiesDeep(orderBy),
     });
 
-    expect(response.body.data.products.products?.edges).toEqual(products);
+    expect(response.body.data.products.products?.edges).toEqual(
+      transformEntitiesDatesToString(products),
+    );
   });
 
   it("works with orderBy and pagination", async () => {
@@ -214,16 +221,14 @@ describe("products query", () => {
     expect(response.status).toBe(200);
 
     const products = await Product.find({
-      select: ["id"],
+      ...defaultFindOptions,
       take: perPage,
       skip: calculatePaginationOffset(page, perPage),
-      order: {
-        ...removeNullPropertiesDeep(orderBy),
-        // porque TypeORM faz uma distinct query adicionando order by id ASC, por causa de relations
-        id: "ASC",
-      },
+      order: removeNullPropertiesDeep(orderBy),
     });
 
-    expect(response.body.data.products.products?.edges).toEqual(products);
+    expect(response.body.data.products.products?.edges).toEqual(
+      transformEntitiesDatesToString(products),
+    );
   });
 });

@@ -6,6 +6,11 @@ export const storesQuery = gql`
       stores {
         edges {
           id
+          createdAt
+          slug
+          name
+          url
+          image
         }
       }
     }

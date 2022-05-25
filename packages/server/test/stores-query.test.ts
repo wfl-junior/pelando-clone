@@ -3,8 +3,22 @@ import { Store } from "@/src/entities";
 import { calculatePaginationOffset } from "@/src/utils/calculatePaginationOffset";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
+import { FindManyOptions } from "typeorm";
 import { AppModule } from "../src/app.module";
 import { TestClient } from "./client";
+import { transformEntitiesDatesToString } from "./utils/transformDatesToString";
+
+const defaultFindOptions: FindManyOptions<Store> = {
+  select: {
+    id: true,
+    createdAt: true,
+    updatedAt: false,
+    slug: true,
+    name: true,
+    url: true,
+    image: true,
+  },
+};
 
 describe("stores query", () => {
   let app: INestApplication;
@@ -30,11 +44,13 @@ describe("stores query", () => {
     expect(response.status).toBe(200);
 
     const stores = await Store.find({
-      select: ["id"],
+      ...defaultFindOptions,
       take: DEFAULT_PER_PAGE,
     });
 
-    expect(response.body.data.stores.stores?.edges).toEqual(stores);
+    expect(response.body.data.stores.stores?.edges).toEqual(
+      transformEntitiesDatesToString(stores),
+    );
   });
 
   it("works with perPage variable", async () => {
@@ -49,11 +65,13 @@ describe("stores query", () => {
     expect(response.status).toBe(200);
 
     const stores = await Store.find({
-      select: ["id"],
+      ...defaultFindOptions,
       take: perPage,
     });
 
-    expect(response.body.data.stores.stores?.edges).toEqual(stores);
+    expect(response.body.data.stores.stores?.edges).toEqual(
+      transformEntitiesDatesToString(stores),
+    );
   });
 
   it("works with pagination variables", async () => {
@@ -70,11 +88,13 @@ describe("stores query", () => {
     expect(response.status).toBe(200);
 
     const stores = await Store.find({
-      select: ["id"],
+      ...defaultFindOptions,
       take: perPage,
       skip: calculatePaginationOffset(page, perPage),
     });
 
-    expect(response.body.data.stores.stores?.edges).toEqual(stores);
+    expect(response.body.data.stores.stores?.edges).toEqual(
+      transformEntitiesDatesToString(stores),
+    );
   });
 });
