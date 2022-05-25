@@ -75,6 +75,11 @@ module.exports = {
         85: "0.85",
         97: "0.97",
       },
+      boxShadow: {
+        "user-menu": "0 4px 12px 0 rgba(var(--color-default-shadow) / 0.2)",
+        "notifications-menu":
+          "0 0 10px 0 rgb(var(--color-default-shadow) / 0.3)",
+      },
     },
   },
   plugins: [
@@ -110,12 +115,6 @@ module.exports = {
           [`@media (min-width: ${screens.lg})`]: {
             gridTemplateAreas: `"image content" "image action"`,
           },
-        },
-        ".shadow-user-menu": {
-          boxShadow: "0 4px 12px 0 rgba(var(--color-default-shadow) / 0.2)",
-        },
-        ".shadow-notifications": {
-          boxShadow: "0 0 10px 0 rgb(var(--color-default-shadow) / 0.3)",
         },
       });
     },

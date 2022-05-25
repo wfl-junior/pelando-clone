@@ -54,7 +54,7 @@ export const NotificationsButton: React.FC = () => {
             className={classNames(
               "bg-default-background flex flex-col",
               isMediumBreakpoint
-                ? "shadow-notifications absolute top-full right-0 z-20 h-[468px] w-[360px] translate-y-3 rounded"
+                ? "shadow-notifications-menu absolute top-full right-0 z-20 h-[468px] w-[360px] translate-y-3 rounded"
                 : "fixed inset-x-0 top-12 bottom-[53px] z-50",
             )}
           >
