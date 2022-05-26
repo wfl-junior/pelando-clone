@@ -15,7 +15,7 @@ const userInput: Pick<User, "email" | "username"> = {
   username: "testing",
 };
 
-describe("login mutation", () => {
+describe("successful login mutation", () => {
   let app: INestApplication;
   let client: TestClient;
   let response: TestLoginMutationResponse;
@@ -45,11 +45,9 @@ describe("login mutation", () => {
   });
 
   afterAll(async () => {
-    await Promise.all([
-      app.close(),
-      // limpa users do banco de dados para evitar dúplicas nos testes
-      User.createQueryBuilder().delete().execute(),
-    ]);
+    // limpa user do banco de dados para evitar dúplicas nos testes
+    await user.remove();
+    await app.close();
   });
 
   it("user can login", async () => {

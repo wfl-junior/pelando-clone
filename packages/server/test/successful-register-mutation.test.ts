@@ -16,7 +16,7 @@ const userInput: Omit<RegisterInput, "password"> = {
   username: "testing",
 };
 
-describe("register mutation", () => {
+describe("successful register mutation", () => {
   let app: INestApplication;
   let client: TestClient;
   let response: TestRegisterMutationResponse;
@@ -39,11 +39,9 @@ describe("register mutation", () => {
   });
 
   afterAll(async () => {
-    await Promise.all([
-      app.close(),
-      // limpa users do banco de dados para evitar dúplicas nos testes
-      User.createQueryBuilder().delete().execute(),
-    ]);
+    // limpa user do banco de dados para evitar dúplicas nos testes
+    await User.delete(userInput);
+    await app.close();
   });
 
   it("user can register", async () => {

@@ -19,3 +19,20 @@ export type TestRegisterMutationResponse = Response<{
 export type TestLoginMutationResponse = Response<{
   login: LoginResponse;
 }>;
+
+export interface ResponseError {
+  message: string;
+  [key: string]: any;
+}
+
+export interface ResponseWithErrors<TData> extends STResponse {
+  body:
+    | {
+        errors: ResponseError[];
+        data: null;
+      }
+    | {
+        data: TData;
+        errors?: undefined;
+      };
+}
