@@ -64,7 +64,10 @@ export class ProductResolver {
           });
 
           const votes = await UserProductVote.find({
-            where: { productId: In([...map.keys()]) },
+            where: {
+              userId: user.id,
+              productId: In([...map.keys()]),
+            },
           });
 
           votes.forEach(vote => {
@@ -99,10 +102,35 @@ export class ProductResolver {
     input: ProductQueryInput,
   ): Promise<IResolverResponse<ProductQueryResponse>> {
     try {
-      const product = await Product.findOne({
-        where: input.where,
-        relations: ["store", "category"],
-      });
+      const query = Product.createQueryBuilder("product")
+        .innerJoinAndSelect("product.store", "store")
+        .innerJoinAndSelect("product.category", "category")
+        .where(input.where);
+
+      try {
+        const user = await getUserFromRequest(request);
+
+        if (user) {
+          query
+            .leftJoin(
+              "user_product_vote",
+              "vote",
+              "vote.productId = product.id AND vote.userId = :userId",
+              { userId: user.id },
+            )
+            .addSelect("vote.type", "userVoteType");
+        }
+      } catch (error) {
+        // ignorar se for erro de jwt
+        if (!(error instanceof JsonWebTokenError)) {
+          throw error;
+        }
+      }
+
+      const {
+        entities: [product],
+        raw: [raw],
+      } = await query.getRawAndEntities();
 
       if (!product) {
         return {
@@ -116,26 +144,7 @@ export class ProductResolver {
         };
       }
 
-      try {
-        const user = await getUserFromRequest(request);
-
-        if (user) {
-          // TODO: talvez trocar este bloco por join na query de product
-
-          const vote = await UserProductVote.findOne({
-            where: { productId: product.id },
-          });
-
-          if (vote) {
-            product.userVoteType = vote.type;
-          }
-        }
-      } catch (error) {
-        // ignorar se for erro de jwt
-        if (!(error instanceof JsonWebTokenError)) {
-          throw error;
-        }
-      }
+      product.userVoteType = raw.userVoteType;
 
       return {
         ok: true,
