@@ -1,6 +1,6 @@
 import { GoogleIcon } from "@/components/icons/register-or-login-modal/GoogleIcon";
 import { useModalContext } from "@/contexts/ModalContext";
-import { useLoginWithGoogleMutation } from "@/hooks/apollo/useLoginWithGoogleMutation";
+import { useLoginWithGoogleMutation } from "@/hooks/apollo/mutations/useLoginWithGoogleMutation";
 import { updateProductsVotesForUser } from "@/utils/updateProductsVotesForUser";
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import React from "react";

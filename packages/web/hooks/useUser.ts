@@ -1,5 +1,5 @@
 import { User } from "@/@types/api";
-import { useMeQuery } from "./apollo/useMeQuery";
+import { useMeQuery } from "./apollo/queries/useMeQuery";
 
 type UseUserResponse =
   | {

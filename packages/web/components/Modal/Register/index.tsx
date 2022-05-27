@@ -1,7 +1,7 @@
 import { useModalContext } from "@/contexts/ModalContext";
 import { useRegisterOrLoginContext } from "@/contexts/RegisterOrLoginContext";
 import { meQuery } from "@/graphql/queries/meQuery";
-import { useRegisterMutation } from "@/hooks/apollo/useRegisterMutation";
+import { useRegisterMutation } from "@/hooks/apollo/mutations/useRegisterMutation";
 import {
   authorizationHeaderWithToken,
   setAccessToken,

@@ -1,5 +1,5 @@
 import { SignOutIcon } from "@/components/icons/header/top/SignOutIcon";
-import { useLogoutMutation } from "@/hooks/apollo/useLogoutMutation";
+import { useLogoutMutation } from "@/hooks/apollo/mutations/useLogoutMutation";
 import { Menu } from "@headlessui/react";
 import classNames from "classnames";
 import React from "react";

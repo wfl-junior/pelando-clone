@@ -1,5 +1,5 @@
 import { ProductsQueryResponse, ProductsQueryVariables } from "@/@types/api";
-import { useProductsQuery } from "@/hooks/apollo/useProductsQuery";
+import { useProductsQuery } from "@/hooks/apollo/queries/useProductsQuery";
 import { getReadableDate } from "@/utils/getReadableDate";
 import { overflowText } from "@/utils/overflowText";
 import { QueryHookOptions } from "@apollo/client";

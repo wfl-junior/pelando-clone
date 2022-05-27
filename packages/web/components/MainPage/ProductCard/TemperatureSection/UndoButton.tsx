@@ -2,7 +2,7 @@ import { ColdIcon } from "@/components/icons/product-card/ColdIcon";
 import { HotIcon } from "@/components/icons/product-card/HotIcon";
 import { Spinner } from "@/components/Spinner";
 import { useProductCardContext } from "@/contexts/ProductCardContext";
-import { useRemoveVoteFromProductMutation } from "@/hooks/apollo/useRemoveVoteFromProductMutation";
+import { useRemoveVoteFromProductMutation } from "@/hooks/apollo/mutations/useRemoveVoteFromProductMutation";
 import { authorizationHeaderWithToken } from "@/utils/accessToken";
 import classNames from "classnames";
 import React, { Fragment } from "react";

@@ -1,6 +1,6 @@
 import type { ProductsQueryInput, ProductsQueryVariables } from "@/@types/api";
 import { defaultErrorMessage } from "@/constants";
-import { useProductsQuery } from "@/hooks/apollo/useProductsQuery";
+import { useProductsQuery } from "@/hooks/apollo/queries/useProductsQuery";
 import React from "react";
 import { ProductCard } from "./ProductCard";
 import { ProductCardSkeleton } from "./ProductCardSkeleton";

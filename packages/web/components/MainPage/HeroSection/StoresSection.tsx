@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/Skeleton";
 import { defaultErrorMessage } from "@/constants";
-import { useStoresQuery } from "@/hooks/apollo/useStoresQuery";
+import { useStoresQuery } from "@/hooks/apollo/queries/useStoresQuery";
 import Link from "next/link";
 import React, { Fragment } from "react";
 

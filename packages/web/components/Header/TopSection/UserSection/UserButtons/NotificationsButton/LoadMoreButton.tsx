@@ -1,6 +1,6 @@
 import { ProductsQueryResponse, ProductsQueryVariables } from "@/@types/api";
 import { AngleDownIcon } from "@/components/icons/header/top/AngleDownIcon";
-import { useProductsQuery } from "@/hooks/apollo/useProductsQuery";
+import { useProductsQuery } from "@/hooks/apollo/queries/useProductsQuery";
 import { QueryHookOptions } from "@apollo/client";
 import React, { Fragment } from "react";
 

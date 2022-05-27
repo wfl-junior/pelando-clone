@@ -1,6 +1,6 @@
 import { useModalContext } from "@/contexts/ModalContext";
 import { useRegisterOrLoginContext } from "@/contexts/RegisterOrLoginContext";
-import { useLoginMutation } from "@/hooks/apollo/useLoginMutation";
+import { useLoginMutation } from "@/hooks/apollo/mutations/useLoginMutation";
 import { updateProductsVotesForUser } from "@/utils/updateProductsVotesForUser";
 import { loginValidationSchemas } from "@/yup/loginValidationSchema";
 import { ApolloError } from "@apollo/client";

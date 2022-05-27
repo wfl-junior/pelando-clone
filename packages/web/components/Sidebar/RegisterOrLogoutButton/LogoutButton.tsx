@@ -1,5 +1,5 @@
 import { SignOutIcon } from "@/components/icons/header/top/SignOutIcon";
-import { useLogoutMutation } from "@/hooks/apollo/useLogoutMutation";
+import { useLogoutMutation } from "@/hooks/apollo/mutations/useLogoutMutation";
 import React from "react";
 
 export const LogoutButton: React.FC = () => {
