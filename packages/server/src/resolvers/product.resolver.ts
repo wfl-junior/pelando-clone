@@ -1,10 +1,9 @@
 import { Args, Context, Query, Resolver } from "@nestjs/graphql";
 import { JsonWebTokenError } from "jsonwebtoken";
-import { FindOptionsWhere, In } from "typeorm";
+import { In } from "typeorm";
 import { IContext, IResolverResponse } from "../@types/app";
 import { DEFAULT_PER_PAGE } from "../constants";
-import { Product } from "../entities";
-import { UserProductVote } from "../entities/user-product-vote.entity";
+import { Product, User } from "../entities";
 import { ProductQueryInput } from "../graphql-types/Input/products/ProductQueryInput";
 import { ProductsQueryInput } from "../graphql-types/Input/products/ProductsQueryInput";
 import { ProductQueryResponse } from "../graphql-types/Object/products/ProductQueryResponse";
@@ -29,51 +28,46 @@ export class ProductResolver {
       const page = input?.page || 1;
       const offset = calculatePaginationOffset(page, perPage);
 
-      const where: FindOptionsWhere<Product> = {};
+      const query = Product.createQueryBuilder("product")
+        .innerJoinAndSelect("product.store", "store")
+        .innerJoinAndSelect("product.category", "category")
+        .take(perPage)
+        .skip(offset);
 
       if (input?.where) {
         const { ids } = input.where;
-        const parsedInputWhere = removeNullPropertiesDeep(input.where);
-        delete parsedInputWhere.ids;
-        Object.assign(where, parsedInputWhere);
+        const where = removeNullPropertiesDeep(input.where);
+        delete where.ids;
 
         if (ids) {
           Object.assign(where, { id: In(ids) });
         }
+
+        query.where(where);
       }
 
-      const [products, count] = await Product.findAndCount({
-        take: perPage,
-        skip: offset,
-        relations: ["store", "category"],
-        where,
-        order: input?.orderBy
-          ? removeNullPropertiesDeep(input.orderBy)
-          : undefined,
-      });
+      if (input?.orderBy) {
+        Object.entries(input.orderBy).forEach(([key, value]) => {
+          if (value) {
+            query.addOrderBy(`product.${key}`, value);
+          }
+        });
+      }
+
+      let user: User | null = null;
 
       try {
-        const user = await getUserFromRequest(request);
+        user = await getUserFromRequest(request);
 
         if (user) {
-          // TODO: talvez trocar este bloco por join na query de products
-          const map = new Map<Product["id"], Product>();
-
-          products.forEach(product => {
-            map.set(product.id, product);
-          });
-
-          const votes = await UserProductVote.find({
-            where: {
-              userId: user.id,
-              productId: In([...map.keys()]),
-            },
-          });
-
-          votes.forEach(vote => {
-            const product = map.get(vote.productId);
-            Object.assign(product, { userVoteType: vote.type });
-          });
+          query
+            .leftJoin(
+              "user_product_vote",
+              "vote",
+              "vote.productId = product.id AND vote.userId = :userId",
+              { userId: user.id },
+            )
+            .addSelect("vote.type", "userVoteType");
         }
       } catch (error) {
         // ignorar se for erro de jwt
@@ -82,11 +76,20 @@ export class ProductResolver {
         }
       }
 
+      const { entities: products, raw } = await query.getRawAndEntities();
+
+      if (user) {
+        products.forEach((product, index) => {
+          const rawProduct = raw[index];
+          Object.assign(product, { userVoteType: rawProduct.userVoteType });
+        });
+      }
+
       return {
         ok: true,
         products: {
           edges: products,
-          info: getPageInfo({ count, perPage, offset }),
+          info: getPageInfo({ count: await Product.count(), perPage, offset }),
         },
       };
     } catch (error) {
@@ -127,6 +130,7 @@ export class ProductResolver {
         }
       }
 
+      // pegar raw porque o TypeORM não tem um jeito mais fácil de adicionar columns extras na entity
       const {
         entities: [product],
         raw: [raw],
