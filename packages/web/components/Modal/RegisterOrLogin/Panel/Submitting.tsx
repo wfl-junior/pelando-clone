@@ -1,9 +1,9 @@
 import { Spinner } from "@/components/Spinner";
 import React from "react";
 
-export const StepSubmitting: React.FC = () => (
+export const Submitting: React.FC = () => (
   <div
-    className="flex flex-col items-center justify-center gap-2"
+    className="my-auto flex flex-col items-center justify-center gap-2"
     aria-busy="true"
     aria-live="assertive"
   >

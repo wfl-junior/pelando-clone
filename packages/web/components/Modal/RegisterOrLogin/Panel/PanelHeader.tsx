@@ -1,6 +1,6 @@
 import React from "react";
-import { CloseButton } from "./CloseButton";
-import { PanelProps } from "./Panel";
+import { PanelProps } from ".";
+import { CloseButton } from "../CloseButton";
 
 interface PanelHeaderProps extends PanelProps {
   children?: React.ReactNode;

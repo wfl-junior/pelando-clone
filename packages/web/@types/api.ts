@@ -121,8 +121,16 @@ export interface RegisterMutationVariables {
   input: RegisterInput;
 }
 
+interface LoginResponse extends GraphQLResponse {
+  accessToken: string;
+}
+
 export interface LoginMutationResponse {
-  login: GraphQLResponse & { accessToken: string };
+  login: LoginResponse;
+}
+
+export interface LoginWithGoogleMutationResponse {
+  loginWithGoogle: LoginResponse;
 }
 
 export type LoginInput = { password: string } & (

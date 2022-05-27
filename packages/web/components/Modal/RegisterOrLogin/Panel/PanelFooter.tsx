@@ -1,6 +1,6 @@
 import { useModalContext } from "@/contexts/ModalContext";
 import React from "react";
-import { PanelProps } from "./Panel";
+import { PanelProps } from ".";
 
 interface PanelFooterProps extends PanelProps {
   onClick?: () => any | Promise<any>;
