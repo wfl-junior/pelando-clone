@@ -17,6 +17,7 @@ import { ResolverResponse } from "../graphql-types/Object/ResolverResponse";
 import { LoginResponse } from "../graphql-types/Object/users/LoginResponse";
 import { RegisterResponse } from "../graphql-types/Object/users/RegisterResponse";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
+import { getShortCode } from "../utils/getShortCode";
 import { createAccessToken, sendRefreshToken } from "../utils/jwt";
 import { removeNullPropertiesDeep } from "../utils/removeNullPropertiesDeep";
 import { yupErrorResponse } from "../utils/yupErrorResponse";
@@ -178,12 +179,27 @@ export class AuthResolver {
       });
 
       if (!user) {
-        user = await User.create({
+        user = User.create({
           email: data.email,
           username: data.name.replace(" ", "-"),
           image: data.picture,
           googleId: data.sub,
-        }).save();
+        });
+
+        try {
+          await user.save();
+        } catch (error) {
+          // caso username seja duplicado, o que acontecerá caso tenha mais de um user usando google login com o mesmo nome
+          if (
+            error instanceof QueryFailedError &&
+            error.message.includes(UNIQUE_USERNAME_INDEX)
+          ) {
+            user.username = `${user.username}-${getShortCode()}`;
+            await user.save();
+          } else {
+            throw error;
+          }
+        }
       }
 
       sendRefreshToken(response, user);
