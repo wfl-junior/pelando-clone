@@ -1,5 +1,5 @@
 export function getShortCode(length = 5): string {
-  let characters = "abcdefghijklmnopqrtuvwxyz";
+  let characters = "abcdefghijklmnopqrstuvwxyz";
   characters += characters.toUpperCase();
   characters += "0123456789";
 
