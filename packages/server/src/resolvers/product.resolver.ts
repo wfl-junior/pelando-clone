@@ -4,6 +4,7 @@ import { In } from "typeorm";
 import { IContext, IResolverResponse } from "../@types/app";
 import { DEFAULT_PER_PAGE } from "../constants";
 import { Product, User } from "../entities";
+import { OrderByDirection } from "../graphql-types/enums/OrderByDirection";
 import { ProductQueryInput } from "../graphql-types/Input/products/ProductQueryInput";
 import { ProductsQueryInput } from "../graphql-types/Input/products/ProductsQueryInput";
 import { ProductQueryResponse } from "../graphql-types/Object/products/ProductQueryResponse";
@@ -47,7 +48,12 @@ export class ProductResolver {
       }
 
       if (input?.orderBy) {
-        Object.entries(input.orderBy).forEach(([key, value]) => {
+        // TODO: ver o porquê de orderBy não estar vindo em ordem
+        (
+          Object.entries(input.orderBy) as Array<
+            [string, OrderByDirection | null]
+          >
+        ).forEach(([key, value]) => {
           if (value) {
             query.addOrderBy(`product.${key}`, value);
           }
@@ -76,7 +82,11 @@ export class ProductResolver {
         }
       }
 
-      const { entities: products, raw } = await query.getRawAndEntities();
+      // pegar raw porque o TypeORM não tem um jeito mais fácil de adicionar columns extras na entity
+      const [{ entities: products, raw }, count] = await Promise.all([
+        query.getRawAndEntities(),
+        Product.count(),
+      ]);
 
       if (user) {
         products.forEach((product, index) => {
@@ -89,7 +99,7 @@ export class ProductResolver {
         ok: true,
         products: {
           edges: products,
-          info: getPageInfo({ count: await Product.count(), perPage, offset }),
+          info: getPageInfo({ count, perPage, offset }),
         },
       };
     } catch (error) {
