@@ -1,6 +1,6 @@
 import { Args, Context, Query, Resolver } from "@nestjs/graphql";
 import { JsonWebTokenError } from "jsonwebtoken";
-import { In } from "typeorm";
+import { FindOptionsWhere, In } from "typeorm";
 import { IContext, IResolverResponse } from "../@types/app";
 import { DEFAULT_PER_PAGE } from "../constants";
 import { Product, User } from "../entities";
@@ -35,15 +35,18 @@ export class ProductResolver {
         .take(perPage)
         .skip(offset);
 
+      let where: FindOptionsWhere<Product> | undefined = undefined;
+
       if (input?.where) {
         const { ids } = input.where;
-        const where = removeNullPropertiesDeep(input.where);
-        delete where.ids;
+        const parsedWhere = removeNullPropertiesDeep(input.where);
+        delete parsedWhere.ids;
 
         if (ids) {
-          Object.assign(where, { id: In(ids) });
+          Object.assign(parsedWhere, { id: In(ids) });
         }
 
+        where = parsedWhere;
         query.where(where);
       }
 
@@ -85,7 +88,7 @@ export class ProductResolver {
       // pegar raw porque o TypeORM não tem um jeito mais fácil de adicionar columns extras na entity
       const [{ entities: products, raw }, count] = await Promise.all([
         query.getRawAndEntities(),
-        Product.count(),
+        Product.count({ where }),
       ]);
 
       if (user) {
