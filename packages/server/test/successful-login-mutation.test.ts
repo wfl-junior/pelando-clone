@@ -1,5 +1,4 @@
 import { User } from "@/src/entities";
-import { getRandomNumberBetween } from "@/src/utils/getRandomNumberBetween";
 import { TokenPayload } from "@/src/utils/jwt";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
@@ -33,7 +32,6 @@ describe("successful login mutation", () => {
     user = await User.create({
       ...userInput,
       password,
-      productVoteValue: getRandomNumberBetween(6, 7),
     }).save();
 
     response = await client.mutation.login({

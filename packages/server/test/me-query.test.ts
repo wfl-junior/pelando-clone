@@ -1,5 +1,4 @@
 import { User } from "@/src/entities";
-import { getRandomNumberBetween } from "@/src/utils/getRandomNumberBetween";
 import { createAccessToken } from "@/src/utils/jwt";
 import { INestApplication, UnauthorizedException } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
@@ -31,7 +30,6 @@ describe("me query", () => {
     newUser = await User.create({
       ...userInput,
       password,
-      productVoteValue: getRandomNumberBetween(6, 7),
     }).save();
 
     accessToken = createAccessToken(newUser);

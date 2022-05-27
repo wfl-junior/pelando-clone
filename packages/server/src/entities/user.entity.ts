@@ -2,6 +2,7 @@ import { Field, ObjectType } from "@nestjs/graphql";
 import bcrypt from "bcrypt";
 import { BeforeInsert, Column, Entity, Index } from "typeorm";
 import { UNIQUE_EMAIL_INDEX, UNIQUE_USERNAME_INDEX } from "../constants";
+import { getRandomNumberBetween } from "../utils/getRandomNumberBetween";
 import { EntityNode } from "./node.entity";
 
 @ObjectType()
@@ -44,5 +45,10 @@ export class User extends EntityNode {
     if (!this.googleId && typeof this.password !== "string") {
       throw new Error("password is required");
     }
+  }
+
+  @BeforeInsert()
+  protected async addProductVoteValue() {
+    this.productVoteValue = getRandomNumberBetween(6, 7);
   }
 }

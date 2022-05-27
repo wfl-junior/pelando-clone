@@ -13,7 +13,7 @@ export const registerValidationSchemas = [
       .string()
       .required("${label} é obrigatório.")
       .matches(
-        /^[a-zA-Z-_]+$/i,
+        /^[a-z-_áàâãéèêíïóôõöúçñ]+$/i,
         "${label} inválido. Somente caracteres alpha, - e _",
       )
       .label("Nome de usuário"),

@@ -17,7 +17,6 @@ import { ResolverResponse } from "../graphql-types/Object/ResolverResponse";
 import { LoginResponse } from "../graphql-types/Object/users/LoginResponse";
 import { RegisterResponse } from "../graphql-types/Object/users/RegisterResponse";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
-import { getRandomNumberBetween } from "../utils/getRandomNumberBetween";
 import { createAccessToken, sendRefreshToken } from "../utils/jwt";
 import { removeNullPropertiesDeep } from "../utils/removeNullPropertiesDeep";
 import { yupErrorResponse } from "../utils/yupErrorResponse";
@@ -37,10 +36,7 @@ export class AuthResolver {
         strict: true,
       });
 
-      const user = await User.create({
-        ...input,
-        productVoteValue: getRandomNumberBetween(6, 7),
-      }).save();
+      const user = await User.create(input).save();
 
       sendRefreshToken(response, user);
 
@@ -177,20 +173,14 @@ export class AuthResolver {
       }
 
       let user = await User.findOne({
-        where: {
-          email: data.email,
-          googleId: data.sub,
-        },
-        select: {
-          id: true,
-        },
+        where: { googleId: data.sub },
+        select: { id: true },
       });
 
       if (!user) {
         user = await User.create({
           email: data.email,
           username: data.name.replace(" ", "-"),
-          productVoteValue: getRandomNumberBetween(6, 7),
           image: data.picture,
           googleId: data.sub,
         }).save();
