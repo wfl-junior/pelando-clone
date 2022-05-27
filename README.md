@@ -10,6 +10,8 @@
 1. Abrir pasta raiz do projeto em um terminal.
 1. Rodar comando `yarn install` para instalar todos os pacotes.
 1. Rodar comando `cd packages/server`.
+1. Rodar comando `mv .env.example .env` para renomear arquivo de variáveis de ambiente, ou renomeie manualmente.
+1. Preencha suas variáveis de ambiente.
 1. Rodar comando `mv database.example.sqlite database.sqlite` para renomear arquivo de exemplo do banco de dados SQLite, ou renomeie manualmente.
 1. Rodar comando `mv ormconfig.example.ts ormconfig.ts` para renomear o arquivo de exemplo de configuração do TypeORM, ou renomeie manualmente.
 1. Rodar comando `yarn seed` para semear o banco de dados.
