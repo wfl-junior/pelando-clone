@@ -10,11 +10,11 @@ export const AppBar: React.FC = () => {
   return (
     <nav
       ref={appBarRef}
-      className="border-default-border bg-default-background fixed inset-x-0 bottom-0 z-40 border-t px-4 py-1 md:hidden"
+      className="border-default-border bg-default-background fixed inset-x-0 bottom-0 z-[25] border-t px-4 py-1 md:hidden"
     >
       <ul className="flex items-center">
         {navLinks.map(({ label, route, Icon }, index) => {
-          // TODO: transformar em rota ativa quando adicionar outras rotas
+          // TODO: transformar em rota ativa quando adicionar as outras rotas
           const isActive = index === (open ? 3 : 0);
           const isHamburguer = index === 3;
 

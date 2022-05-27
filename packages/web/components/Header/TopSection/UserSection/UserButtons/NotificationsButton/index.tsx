@@ -52,10 +52,10 @@ export const NotificationsButton: React.FC = () => {
 
           <Menu.Items
             className={classNames(
-              "bg-default-background flex flex-col",
+              "bg-default-background z-50 flex flex-col",
               isMediumBreakpoint
-                ? "shadow-notifications-menu absolute top-full right-0 z-20 h-[468px] w-[360px] translate-y-3 rounded"
-                : "fixed inset-x-0 top-12 bottom-[53px] z-50",
+                ? "shadow-notifications-menu absolute top-full right-0 h-[468px] w-[360px] translate-y-3 rounded"
+                : "fixed inset-x-0 top-12 bottom-0",
             )}
           >
             {isMediumBreakpoint && <TopArrow />}

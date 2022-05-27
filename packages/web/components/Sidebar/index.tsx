@@ -45,19 +45,15 @@ export const Sidebar: React.FC = () => {
           setOpen(false);
         }
       }}
+      style={
+        isMediumBreakpoint
+          ? undefined
+          : {
+              height: `calc(100vh - ${appBarRef.current?.offsetHeight || 0}px)`,
+            }
+      }
     >
-      <aside
-        className="bg-default-background animate-slide-left-in absolute left-0 top-0 flex h-screen w-screen flex-col md:w-72"
-        style={
-          isMediumBreakpoint
-            ? undefined
-            : {
-                height: `calc(100vh - ${
-                  appBarRef.current?.offsetHeight || 0
-                }px)`,
-              }
-        }
-      >
+      <aside className="bg-default-background animate-slide-left-in absolute left-0 top-0 flex h-full w-full flex-col md:w-72">
         <div className="text-default-foreground flex h-full flex-col gap-3 p-4">
           <UserSection />
 
