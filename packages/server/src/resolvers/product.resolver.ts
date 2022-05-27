@@ -5,10 +5,13 @@ import { IContext, IResolverResponse } from "../@types/app";
 import { DEFAULT_PER_PAGE } from "../constants";
 import { Product } from "../entities";
 import { UserProductVote } from "../entities/user-product-vote.entity";
+import { ProductQueryInput } from "../graphql-types/Input/products/ProductQueryInput";
 import { ProductsQueryInput } from "../graphql-types/Input/products/ProductsQueryInput";
+import { ProductQueryResponse } from "../graphql-types/Object/products/ProductQueryResponse";
 import { ProductsQueryResponse } from "../graphql-types/Object/products/ProductsQueryResponse";
 import { calculatePaginationOffset } from "../utils/calculatePaginationOffset";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
+import { getEntityNotFoundMessage } from "../utils/getEntityNotFoundMessage";
 import { getPageInfo } from "../utils/getPageInfo";
 import { getUserFromRequest } from "../utils/getUserFromRequest";
 import { removeNullPropertiesDeep } from "../utils/removeNullPropertiesDeep";
@@ -85,6 +88,61 @@ export class ProductResolver {
       };
     } catch (error) {
       console.log({ time: new Date(), where: "query products", error });
+      return defaultErrorResponse();
+    }
+  }
+
+  @Query(() => ProductQueryResponse)
+  async product(
+    @Context() { request }: IContext,
+    @Args("input", { type: () => ProductQueryInput })
+    input: ProductQueryInput,
+  ): Promise<IResolverResponse<ProductQueryResponse>> {
+    try {
+      const product = await Product.findOne({
+        where: input.where,
+        relations: ["store", "category"],
+      });
+
+      if (!product) {
+        return {
+          ok: false,
+          errors: [
+            {
+              path: "id",
+              message: getEntityNotFoundMessage("Product"),
+            },
+          ],
+        };
+      }
+
+      try {
+        const user = await getUserFromRequest(request);
+
+        if (user) {
+          // TODO: talvez trocar este bloco por join na query de product
+
+          const vote = await UserProductVote.findOne({
+            where: { productId: product.id },
+          });
+
+          if (vote) {
+            product.userVoteType = vote.type;
+          }
+        }
+      } catch (error) {
+        // ignorar se for erro de jwt
+        if (!(error instanceof JsonWebTokenError)) {
+          throw error;
+        }
+      }
+
+      return {
+        ok: true,
+        product,
+      };
+    } catch (error) {
+      console.log({ time: new Date(), where: "query product", error });
       return defaultErrorResponse();
     }
   }

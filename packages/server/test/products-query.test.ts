@@ -1,8 +1,8 @@
 import { DEFAULT_PER_PAGE } from "@/src/constants";
 import { Product } from "@/src/entities";
 import { OrderByDirection } from "@/src/graphql-types/enums/OrderByDirection";
-import { ProductOrderByInput } from "@/src/graphql-types/Input/products/ProductOrderByInput";
-import { ProductWhereInput } from "@/src/graphql-types/Input/products/ProductWhereInput";
+import { ProductsOrderByInput } from "@/src/graphql-types/Input/products/ProductsOrderByInput";
+import { ProductsWhereInput } from "@/src/graphql-types/Input/products/ProductsWhereInput";
 import { calculatePaginationOffset } from "@/src/utils/calculatePaginationOffset";
 import { removeNullPropertiesDeep } from "@/src/utils/removeNullPropertiesDeep";
 import { INestApplication } from "@nestjs/common";
@@ -123,7 +123,7 @@ describe("products query", () => {
   });
 
   it("works with where category slug", async () => {
-    const where: ProductWhereInput = {
+    const where: ProductsWhereInput = {
       category: {
         slug: "games-e-pc-gamer",
       },
@@ -151,7 +151,7 @@ describe("products query", () => {
   it("works with where category slug and pagination", async () => {
     const page = 2;
     const perPage = 10;
-    const where: ProductWhereInput = {
+    const where: ProductsWhereInput = {
       category: {
         slug: "eletronicos",
       },
@@ -180,7 +180,7 @@ describe("products query", () => {
   });
 
   it("works with orderBy", async () => {
-    const orderBy: ProductOrderByInput = {
+    const orderBy: ProductsOrderByInput = {
       price: OrderByDirection.DESC,
     };
 
@@ -206,7 +206,7 @@ describe("products query", () => {
   it("works with orderBy and pagination", async () => {
     const page = 4;
     const perPage = 5;
-    const orderBy: ProductOrderByInput = {
+    const orderBy: ProductsOrderByInput = {
       temperature: OrderByDirection.DESC,
     };
 
@@ -233,11 +233,11 @@ describe("products query", () => {
   });
 
   it("works with orderBy and where", async () => {
-    const orderBy: ProductOrderByInput = {
+    const orderBy: ProductsOrderByInput = {
       title: OrderByDirection.ASC,
     };
 
-    const where: ProductWhereInput = {
+    const where: ProductsWhereInput = {
       category: {
         slug: "gratis",
       },
@@ -267,11 +267,11 @@ describe("products query", () => {
   it("works with orderBy, where and pagination", async () => {
     const page = 3;
     const perPage = 8;
-    const orderBy: ProductOrderByInput = {
+    const orderBy: ProductsOrderByInput = {
       title: OrderByDirection.DESC,
     };
 
-    const where: ProductWhereInput = {
+    const where: ProductsWhereInput = {
       category: {
         slug: "casa-e-cozinha",
       },

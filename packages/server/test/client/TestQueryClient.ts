@@ -1,5 +1,7 @@
 import { PaginatedQueryInput } from "@/src/graphql-types/Input/PaginatedQueryInput";
+import { ProductQueryInput } from "@/src/graphql-types/Input/products/ProductQueryInput";
 import { ProductsQueryInput } from "@/src/graphql-types/Input/products/ProductsQueryInput";
+import { ProductQueryResponse } from "@/src/graphql-types/Object/products/ProductQueryResponse";
 import { ProductsQueryResponse } from "@/src/graphql-types/Object/products/ProductsQueryResponse";
 import { StoresQueryResponse } from "@/src/graphql-types/Object/stores/StoresQueryResponse";
 import { MeResponse } from "@/src/graphql-types/Object/users/MeResponse";
@@ -8,6 +10,7 @@ import { print } from "graphql";
 import supertest from "supertest";
 import { graphqlEndpoint } from "../constants";
 import { meQuery } from "../queries/meQuery";
+import { productQuery } from "../queries/productQuery";
 import { productsQuery } from "../queries/productsQuery";
 import { storesQuery } from "../queries/storesQuery";
 import type { Response, ResponseWithErrors, Variables } from "./types";
@@ -44,5 +47,16 @@ export class TestQueryClient {
       .post(graphqlEndpoint)
       .set("authorization", `Bearer ${accessToken}`)
       .send({ query: print(meQuery) });
+  }
+
+  product(
+    variables?: Variables<ProductQueryInput>,
+  ): Promise<Response<{ product: ProductQueryResponse }>> {
+    return supertest(this.app.getHttpServer())
+      .post(graphqlEndpoint)
+      .send({
+        query: print(productQuery),
+        variables,
+      });
   }
 }

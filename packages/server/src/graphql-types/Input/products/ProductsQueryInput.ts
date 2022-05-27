@@ -1,13 +1,13 @@
 import { Field, InputType } from "@nestjs/graphql";
 import { PaginatedQueryInput } from "../PaginatedQueryInput";
-import { ProductOrderByInput } from "./ProductOrderByInput";
-import { ProductWhereInput } from "./ProductWhereInput";
+import { ProductsOrderByInput } from "./ProductsOrderByInput";
+import { ProductsWhereInput } from "./ProductsWhereInput";
 
 @InputType()
 export class ProductsQueryInput extends PaginatedQueryInput {
-  @Field(() => ProductWhereInput, { nullable: true })
-  where?: ProductWhereInput | null;
+  @Field(() => ProductsWhereInput, { nullable: true })
+  where?: ProductsWhereInput | null;
 
-  @Field(() => ProductOrderByInput, { nullable: true })
-  orderBy?: ProductOrderByInput | null;
+  @Field(() => ProductsOrderByInput, { nullable: true })
+  orderBy?: ProductsOrderByInput | null;
 }

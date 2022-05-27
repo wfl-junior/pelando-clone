@@ -2,7 +2,7 @@ import { Field, InputType } from "@nestjs/graphql";
 import { OrderByDirection } from "../../enums/OrderByDirection";
 
 @InputType()
-export class ProductOrderByInput {
+export class ProductsOrderByInput {
   @Field(() => OrderByDirection, { nullable: true })
   id?: OrderByDirection | null;
 
