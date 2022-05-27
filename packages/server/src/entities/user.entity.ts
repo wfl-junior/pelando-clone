@@ -7,6 +7,10 @@ import { EntityNode } from "./node.entity";
 @ObjectType()
 @Entity("users")
 export class User extends EntityNode {
+  @Column("varchar", { select: false, nullable: true })
+  @Index({ unique: true })
+  public googleId?: string | null;
+
   @Field()
   @Column()
   @Index(UNIQUE_EMAIL_INDEX, { unique: true })
@@ -24,11 +28,21 @@ export class User extends EntityNode {
   @Column("float", { name: "product_vote_value" })
   public productVoteValue: number;
 
-  @Column({ select: false })
-  public password: string;
+  @Column("varchar", { select: false, nullable: true })
+  public password?: string | null;
 
   @BeforeInsert()
   protected async hashPassword() {
-    this.password = await bcrypt.hash(this.password, 10);
+    if (this.password) {
+      this.password = await bcrypt.hash(this.password, 10);
+    }
+  }
+
+  // alterar para database trigger se possível
+  @BeforeInsert()
+  protected async requirePasswordIfNormalUser() {
+    if (!this.googleId && typeof this.password !== "string") {
+      throw new Error("password is required");
+    }
   }
 }

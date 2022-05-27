@@ -37,3 +37,14 @@ export interface IResolverBadResponse {
 export type IResolverResponse<T extends ResolverResponse> =
   | IResolverGoodResponse<T>
   | IResolverBadResponse;
+
+export interface GoogleOAuthResponse {
+  email: string;
+  email_verified: boolean;
+  family_name: string;
+  given_name: string;
+  locale: string;
+  name: string;
+  picture: string | null;
+  sub: string;
+}

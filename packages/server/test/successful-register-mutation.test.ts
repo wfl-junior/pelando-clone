@@ -68,7 +68,7 @@ describe("successful register mutation", () => {
     });
 
     expect(password).not.toBe(user!.password);
-    expect(await bcrypt.compare(password, user!.password)).toBe(true);
+    expect(await bcrypt.compare(password, user!.password!)).toBe(true);
   });
 
   it("response is ok and doesn't have errors", async () => {
