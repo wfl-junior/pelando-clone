@@ -62,7 +62,7 @@ export const NavigationSection: React.FC = () => {
         onScroll={() => updateButtonsVisibility()}
       >
         {navLinks.map(({ label, route, Icon }, index) => {
-          const isActive = router.asPath === route;
+          const isActive = router.route === route;
           const isFirstIteration = index === 0;
 
           return (

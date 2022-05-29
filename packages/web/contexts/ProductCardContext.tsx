@@ -3,7 +3,6 @@ import React, { createContext, useContext } from "react";
 
 interface IProductCardContext {
   product: Product;
-  highlight?: boolean;
 }
 
 const ProductCardContext = createContext({} as IProductCardContext);

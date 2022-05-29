@@ -10,7 +10,6 @@ import { TitleSection } from "./TitleSection";
 
 interface ProductCardProps {
   product: Product;
-  highlight?: boolean;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = props => (

@@ -4,6 +4,6 @@ import type { NextPage } from "next";
 
 export const getServerSideProps = mainPageGetServerSideProps();
 
-const Home: NextPage = () => <MainPage highlight />;
+const Home: NextPage = () => <MainPage />;
 
 export default Home;

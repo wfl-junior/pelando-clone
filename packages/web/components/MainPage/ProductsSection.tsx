@@ -20,12 +20,10 @@ export const getVariables = (
 });
 
 interface ProductsSectionProps {
-  highlight?: boolean;
   productsQueryVariables?: ProductsQueryInput;
 }
 
 export const ProductsSection: React.FC<ProductsSectionProps> = ({
-  highlight,
   productsQueryVariables,
 }) => {
   const { data, loading, fetchMore, variables, error } = useProductsQuery({
@@ -53,18 +51,12 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({
                   fetchMore={fetchMore}
                   variables={variables!}
                 >
-                  <ProductCard product={product} highlight={highlight} />
+                  <ProductCard product={product} />
                 </ProductsFetchMoreDummy>
               );
             }
 
-            return (
-              <ProductCard
-                key={product.id}
-                product={product}
-                highlight={highlight}
-              />
-            );
+            return <ProductCard key={product.id} product={product} />;
           })
         : !loading && (
             <p className="text-center font-bold sm:text-lg lg:text-xl">

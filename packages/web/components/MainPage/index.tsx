@@ -4,19 +4,14 @@ import { HeroSection } from "./HeroSection";
 import { ProductsSection } from "./ProductsSection";
 
 interface MainPageProps {
-  highlight?: boolean;
   productsQueryVariables?: ProductsQueryInput;
 }
 
 export const MainPage: React.FC<MainPageProps> = ({
-  highlight,
   productsQueryVariables,
 }) => (
   <Fragment>
     <HeroSection />
-    <ProductsSection
-      highlight={highlight}
-      productsQueryVariables={productsQueryVariables}
-    />
+    <ProductsSection productsQueryVariables={productsQueryVariables} />
   </Fragment>
 );
