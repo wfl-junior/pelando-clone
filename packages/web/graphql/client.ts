@@ -1,12 +1,20 @@
 import { API_URL } from "@/constants";
+import {
+  authorizationHeaderWithToken,
+  setAccessToken,
+} from "@/utils/accessToken";
 import { isBrowser } from "@/utils/isBrowser";
 import { isEqual } from "@/utils/isEqual";
+import { refreshAccessToken } from "@/utils/refreshAccessToken";
 import {
   ApolloClient,
+  concat,
+  fromPromise,
   HttpLink,
   InMemoryCache,
   NormalizedCacheObject,
 } from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
 import merge from "deepmerge";
 import { useMemo } from "react";
 
@@ -19,9 +27,40 @@ const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 let apolloClient: Client | undefined;
 
 export function createApolloClient() {
+  const httpLink = new HttpLink({
+    uri: `${API_URL}/graphql`,
+    credentials: "include",
+  });
+
+  const errorLink = onError(({ graphQLErrors, operation, forward }) => {
+    if (graphQLErrors?.some(error => error.message === "Unauthorized")) {
+      try {
+        return fromPromise(
+          refreshAccessToken().then(({ accessToken }) => {
+            if (accessToken) {
+              setAccessToken(accessToken);
+              const context = operation.getContext();
+
+              operation.setContext({
+                ...context,
+                headers: {
+                  ...context.headers,
+                  authorization: authorizationHeaderWithToken(accessToken),
+                },
+              });
+            }
+          }),
+        ).flatMap(() => forward(operation));
+      } catch (error) {
+        // TODO: adicionar toast
+        console.log({ error });
+      }
+    }
+  });
+
   return new ApolloClient({
     ssrMode: !isBrowser(),
-    link: new HttpLink({ uri: `${API_URL}/graphql`, credentials: "include" }),
+    link: concat(errorLink, httpLink),
     cache: new InMemoryCache(),
   });
 }
