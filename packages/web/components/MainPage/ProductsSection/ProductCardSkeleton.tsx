@@ -1,8 +1,8 @@
+import { Skeleton } from "@/components/Skeleton";
 import React from "react";
-import { Skeleton } from "../Skeleton";
 
 export const ProductCardSkeleton: React.FC = () => (
-  <div className="bg-default-background/5 border-default-border grid-template-areas-product-card grid w-full animate-pulse grid-cols-[120px_auto] rounded border py-2 shadow-md md:w-3/4 lg:grid-cols-[156px_auto]">
+  <div className="bg-default-background/5 border-default-border grid-template-areas-product-card grid w-full animate-pulse grid-cols-[120px_auto] rounded border py-2 shadow-md lg:grid-cols-[156px_auto]">
     {/* image area */}
     <div className="pl-2 pb-2" style={{ gridArea: "image" }}>
       <div className="border-default-border bg-inactive-background aspect-square w-full rounded border"></div>

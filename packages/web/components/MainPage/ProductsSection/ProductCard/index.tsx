@@ -14,7 +14,7 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = props => (
   <ProductCardContextProvider {...props}>
-    <div className="bg-default-background border-default-border grid-template-areas-product-card grid w-full grid-cols-[120px_auto] rounded border py-2 shadow-md md:w-3/4 lg:grid-cols-[156px_auto]">
+    <div className="bg-default-background border-default-border grid-template-areas-product-card grid w-full grid-cols-[120px_auto] rounded border py-2 shadow-md lg:grid-cols-[156px_auto]">
       {/* image area */}
       <div className="pl-2 pb-2" style={{ gridArea: "image" }}>
         <ImageSection />
