@@ -5,7 +5,6 @@ import { authorizationHeaderWithToken } from "./accessToken";
 
 export async function updateProductsVotesForUser() {
   const client = initializeApollo();
-
   const cache = client.cache.extract();
 
   const ids = Object.keys(cache).reduce<string[]>((ids, key) => {
@@ -19,7 +18,7 @@ export async function updateProductsVotesForUser() {
 
   await client.query<ProductsQueryResponse, ProductsQueryVariables>({
     query: productsUserVotesQuery,
-    // fetchPolicy: "network-only", // sem network-only pode dar problema se logar em outra conta após logout
+    fetchPolicy: "network-only", // sem network-only pode dar problema se logar em outra conta após logout
     variables: {
       input: {
         perPage: ids.length,
