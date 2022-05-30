@@ -1,8 +1,7 @@
-import { LogoutMutationResponse, MeQueryResponse } from "@/@types/api";
+import { LogoutMutationResponse } from "@/@types/api";
 import { logoutMutation } from "@/graphql/mutations/logoutMutation";
-import { fakeMeQuery } from "@/graphql/queries/fake/fakeMeQuery";
-import { meQuery } from "@/graphql/queries/meQuery";
 import { setAccessToken } from "@/utils/accessToken";
+import { applyFakeMeQuery } from "@/utils/applyFakeMeQuery";
 import {
   ApolloCache,
   MutationHookOptions,
@@ -20,19 +19,7 @@ export function useLogoutMutation(
       setAccessToken(null);
 
       // sobrescreve a me query para ui atualizar para usuário deslogado
-      const data = cache.readQuery<MeQueryResponse>({ query: meQuery });
-
-      cache.writeQuery({
-        ...fakeMeQuery,
-        data: {
-          ...data,
-          ...fakeMeQuery.data,
-          me: {
-            ...data?.me,
-            ...fakeMeQuery.data.me,
-          },
-        },
-      });
+      applyFakeMeQuery(cache);
 
       // remove userVoteType dos products em cache
       // const cacheObject = cache.extract();

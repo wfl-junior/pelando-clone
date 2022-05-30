@@ -1,6 +1,8 @@
 import {
   MeQueryResponse,
   PaginatedQueryVariables,
+  ProductQueryResponse,
+  ProductQueryVariables,
   ProductsQueryResponse,
   ProductsQueryVariables,
   StoresQueryResponse,
@@ -8,6 +10,7 @@ import {
 import { ApolloQueryResult, QueryOptions } from "@apollo/client";
 import { Client } from "./client";
 import { meQuery } from "./queries/meQuery";
+import { productQuery } from "./queries/productQuery";
 import { productsQuery } from "./queries/productsQuery";
 import { storesQuery } from "./queries/storesQuery";
 
@@ -20,6 +23,7 @@ interface Sdk {
     stores: ClientQuery<StoresQueryResponse, PaginatedQueryVariables>;
     products: ClientQuery<ProductsQueryResponse, ProductsQueryVariables>;
     me: ClientQuery<MeQueryResponse>;
+    product: ClientQuery<ProductQueryResponse, ProductQueryVariables>;
   };
 }
 
@@ -42,6 +46,12 @@ export function getSdk(client: Client): Sdk {
         return client.query({
           ...options,
           query: meQuery,
+        });
+      },
+      product: options => {
+        return client.query({
+          ...options,
+          query: productQuery,
         });
       },
     },

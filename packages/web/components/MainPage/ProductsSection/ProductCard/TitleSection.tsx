@@ -6,7 +6,7 @@ export const TitleSection: React.FC = () => {
   const { product } = useProductCardContext();
 
   return (
-    <Link href="#">
+    <Link href={`/o/${product.id}`}>
       <a className="hover:text-tertiary-foreground mt-2 block font-bold transition-colors lg:text-xl">
         {product.title}
       </a>

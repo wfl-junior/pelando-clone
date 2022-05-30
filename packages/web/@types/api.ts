@@ -19,12 +19,16 @@ export interface CategoryWhereInput {
   slug?: string | null;
 }
 
-export interface ProductWhereInput {
+export interface ProductsWhereInput {
   category?: CategoryWhereInput | null;
   ids?: Array<Product["id"]> | null;
 }
 
-export interface ProductOrderByInput {
+export interface ProductWhereInput {
+  id: Product["id"];
+}
+
+export interface ProductsOrderByInput {
   id?: OrderByDirection | null;
   createdAt?: OrderByDirection | null;
   body?: OrderByDirection | null;
@@ -36,8 +40,12 @@ export interface ProductOrderByInput {
 }
 
 export interface ProductsQueryInput extends PaginatedQueryInput {
-  where?: ProductWhereInput | null;
-  orderBy?: ProductOrderByInput | null;
+  where?: ProductsWhereInput | null;
+  orderBy?: ProductsOrderByInput | null;
+}
+
+export interface ProductQueryInput {
+  where: ProductWhereInput;
 }
 
 export interface PaginatedQueryVariables {
@@ -46,6 +54,10 @@ export interface PaginatedQueryVariables {
 
 export interface ProductsQueryVariables {
   input?: ProductsQueryInput | null;
+}
+
+export interface ProductQueryVariables {
+  input: ProductQueryInput;
 }
 
 export interface Model {
@@ -105,6 +117,10 @@ export interface StoresQueryResponse {
 
 export interface ProductsQueryResponse {
   products: GraphQLResponse & { products: PaginatedData<Product> };
+}
+
+export interface ProductQueryResponse {
+  product: GraphQLResponse & { product: Product };
 }
 
 export interface RegisterMutationResponse {
@@ -172,12 +188,10 @@ export interface VoteOnProductVariables {
   input: VoteOnProductInput;
 }
 
-export type ProductQueryResponse = GraphQLResponse & { product: Product };
-
 export interface VoteOnProductResponse {
-  voteOnProduct: ProductQueryResponse;
+  voteOnProduct: GraphQLResponse & { product: Product };
 }
 
 export interface RemoveVoteFromProductResponse {
-  removeVoteFromProduct: ProductQueryResponse;
+  removeVoteFromProduct: GraphQLResponse & { product: Product };
 }

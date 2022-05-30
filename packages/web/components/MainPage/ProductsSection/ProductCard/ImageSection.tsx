@@ -7,7 +7,7 @@ export const ImageSection: React.FC = () => {
   const { product } = useProductCardContext();
 
   return (
-    <Link href="#">
+    <Link href={`/o/${product.id}`}>
       <a className="border-default-border block aspect-square w-full overflow-hidden rounded border">
         <Image
           src={product.image}

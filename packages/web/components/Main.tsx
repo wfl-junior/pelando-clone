@@ -5,5 +5,5 @@ interface MainProps {
 }
 
 export const Main: React.FC<MainProps> = ({ children }) => (
-  <main className="container mt-4 mb-16 md:mb-4">{children}</main>
+  <main className="mb-16 md:mb-4">{children}</main>
 );

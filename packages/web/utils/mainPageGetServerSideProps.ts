@@ -1,47 +1,23 @@
 import type { ProductsQueryInput } from "@/@types/api";
 import { getVariables } from "@/components/MainPage/ProductsSection";
 import { addApolloState, initializeApollo } from "@/graphql/client";
-import { fakeMeQuery } from "@/graphql/queries/fake/fakeMeQuery";
 import { getSdk } from "@/graphql/sdk";
 import { GetServerSideProps } from "next";
 import { authorizationHeaderWithToken } from "./accessToken";
-import { refreshAccessToken } from "./refreshAccessToken";
+import { applyFakeMeQuery } from "./applyFakeMeQuery";
+import { refreshAccessTokenServerSide } from "./refreshAccessTokenServerSide";
 
 export const mainPageGetServerSideProps = (
   variables?: ProductsQueryInput,
 ): GetServerSideProps => {
-  return async context => {
+  return async ({ req, res }) => {
     const apolloClient = initializeApollo();
     const sdk = getSdk(apolloClient);
 
     const queries = [sdk.query.stores()];
 
     try {
-      const { cookie } = context.req.headers;
-
-      if (!cookie) {
-        throw new Error(
-          "no need to fetch for access token if there is no cookie",
-        );
-      }
-
-      const { accessToken, headers } = await refreshAccessToken({
-        headers: { cookie },
-      });
-
-      if (!accessToken) {
-        throw new Error(
-          "no need to fetch me query if there is no access token",
-        );
-      }
-
-      const setCookieHeaderName = "set-cookie";
-      const setCookieHeader = headers.get(setCookieHeaderName);
-
-      if (setCookieHeader) {
-        // encaminha o set-cookie de refresh access token do server pro client
-        context.res.setHeader(setCookieHeaderName, setCookieHeader);
-      }
+      const accessToken = await refreshAccessTokenServerSide(req, res);
 
       const options = {
         context: {
@@ -69,7 +45,7 @@ export const mainPageGetServerSideProps = (
       ]);
 
       // por fake me query em cache, para não precisar dar fetch no client, já que não está autenticado, não tem necessidade
-      apolloClient.writeQuery(fakeMeQuery);
+      applyFakeMeQuery(apolloClient);
 
       return addApolloState(apolloClient);
     }
