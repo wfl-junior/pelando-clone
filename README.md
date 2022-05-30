@@ -15,6 +15,7 @@
 1. Rodar comando `mv database.example.sqlite database.sqlite` para renomear arquivo de exemplo do banco de dados SQLite, ou renomeie manualmente.
 1. Rodar comando `mv ormconfig.example.ts ormconfig.ts` para renomear o arquivo de exemplo de configuração do TypeORM, ou renomeie manualmente.
 1. Rodar comando `yarn seed` para semear o banco de dados.
+1. (Opcional) Rodar comando `cd ../web && mv .env.example .env`, criar um [Google client id](https://console.cloud.google.com/apis/credentials) para login com o Google, e adicionar na variável `NEXT_PUBLIC_GOOGLE_CLIENT_ID`
 1. Rodar comando `cd ../..`
 1. Rodar `yarn both` para iniciar os servidores da api e web. Opcionalmente pode rodar cada servidor em uma aba diferente, basta rodar `yarn web` em um terminal e `yarn server` em outro.
 1. Abrir [http://localhost:3000](http://localhost:3000) e curtir a aplicação :D
