@@ -8,7 +8,7 @@ import { EntityNode } from "./node.entity";
 @ObjectType()
 @Entity("users")
 export class User extends EntityNode {
-  @Column("varchar", { select: false, nullable: true })
+  @Column("varchar", { select: false, nullable: true, name: "google_id" })
   @Index({ unique: true })
   public googleId?: string | null;
 
@@ -32,9 +32,17 @@ export class User extends EntityNode {
   @Column("varchar", { select: false, nullable: true })
   public password?: string | null;
 
+  private get type(): "google" | "normal" {
+    if (this.googleId) {
+      return "google";
+    }
+
+    return "normal";
+  }
+
   @BeforeInsert()
   protected async hashPassword() {
-    if (this.password) {
+    if (typeof this.password === "string") {
       this.password = await bcrypt.hash(this.password, 10);
     }
   }
@@ -42,8 +50,8 @@ export class User extends EntityNode {
   // alterar para database trigger se possível
   @BeforeInsert()
   protected async requirePasswordIfNormalUser() {
-    if (!this.googleId && typeof this.password !== "string") {
-      throw new Error("password is required");
+    if (this.type === "normal" && typeof this.password !== "string") {
+      throw new Error("Password is required");
     }
   }
 
