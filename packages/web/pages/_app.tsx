@@ -1,4 +1,5 @@
 import { AppBar } from "@/components/AppBar";
+import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Main } from "@/components/Main";
 import { Modal } from "@/components/Modal";
@@ -61,6 +62,7 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => {
                 <Component {...pageProps} />
               </Main>
               <AppBar />
+              <Footer />
 
               <Modal />
 

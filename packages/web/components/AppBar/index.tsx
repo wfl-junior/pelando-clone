@@ -1,11 +1,17 @@
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import classNames from "classnames";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { Fragment } from "react";
 import { navLinks } from "./navLinks";
 
 export const AppBar: React.FC = () => {
+  const { route } = useRouter();
   const { open, setOpen, appBarRef } = useSidebarContext();
+
+  if (route.startsWith("/o")) {
+    return null;
+  }
 
   return (
     <nav

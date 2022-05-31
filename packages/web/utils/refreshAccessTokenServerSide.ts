@@ -20,11 +20,11 @@ export async function refreshAccessTokenServerSide(
   }
 
   const setCookieHeaderName = "set-cookie";
-  const setCookieHeader = headers.get(setCookieHeaderName);
+  const cookieValue = headers.get(setCookieHeaderName);
 
-  if (setCookieHeader) {
+  if (cookieValue) {
     // encaminha o set-cookie de refresh access token do server pro client
-    response.setHeader(setCookieHeaderName, setCookieHeader);
+    response.setHeader(setCookieHeaderName, cookieValue);
   }
 
   return accessToken;
