@@ -1,4 +1,5 @@
 import { ProductQueryVariables } from "@/@types/api";
+import { ProductPage } from "@/components/ProductPage";
 import { defaultErrorMessage } from "@/constants";
 import { addApolloState, initializeApollo } from "@/graphql/client";
 import { getSdk } from "@/graphql/sdk";
@@ -7,12 +8,9 @@ import { authorizationHeaderWithToken } from "@/utils/accessToken";
 import { applyFakeMeQuery } from "@/utils/applyFakeMeQuery";
 import { refreshAccessTokenServerSide } from "@/utils/refreshAccessTokenServerSide";
 import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 
-interface ProductPageProps {
-  id: string;
-}
-
-function getVariables(id: string): ProductQueryVariables {
+export function getVariables(id: string): ProductQueryVariables {
   return {
     input: {
       where: { id },
@@ -21,7 +19,7 @@ function getVariables(id: string): ProductQueryVariables {
 }
 
 export const getServerSideProps: GetServerSideProps<
-  ProductPageProps,
+  {},
   { id: string }
 > = async ({ req, res, params }) => {
   const apolloClient = initializeApollo();
@@ -60,7 +58,7 @@ export const getServerSideProps: GetServerSideProps<
     }
 
     return addApolloState(apolloClient, {
-      props: { accessToken, id },
+      props: { accessToken },
     });
   } catch {
     // põe em cache estas queries
@@ -69,18 +67,19 @@ export const getServerSideProps: GetServerSideProps<
     // por fake me query em cache, para não precisar dar fetch no client, já que não está autenticado, não tem necessidade
     applyFakeMeQuery(apolloClient);
 
-    return addApolloState(apolloClient, {
-      props: { id },
-    });
+    return addApolloState(apolloClient);
   }
 };
 
-const Product: React.FC<ProductPageProps> = ({ id }) => {
-  const { data, error } = useProductQuery({ variables: getVariables(id) });
+const Product: React.FC = () => {
+  const { query } = useRouter();
+  const { data, error } = useProductQuery({
+    variables: getVariables(query.id as string),
+  });
 
   return (
     <div className="flex flex-col gap-4">
-      <section className="bg-default-background pb-4 pt-8">
+      <section className="bg-default-background pt-8">
         <div className="container">
           {!data || error ? (
             <div className="flex items-center justify-center">
@@ -89,9 +88,7 @@ const Product: React.FC<ProductPageProps> = ({ id }) => {
               </p>
             </div>
           ) : (
-            <h1 className="text-xl font-bold md:text-2xl">
-              {data.product.product.title}
-            </h1>
+            <ProductPage />
           )}
         </div>
       </section>

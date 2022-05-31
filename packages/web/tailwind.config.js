@@ -70,6 +70,7 @@ module.exports = {
       },
       fontSize: {
         "2.5xl": ["1.75rem", "2.125rem"],
+        "4.5xl": ["2.625rem", "3rem"],
       },
       opacity: {
         85: "0.85",
@@ -115,6 +116,9 @@ module.exports = {
           [`@media (min-width: ${screens.lg})`]: {
             gridTemplateAreas: `"image content" "image action"`,
           },
+        },
+        ".grid-template-areas-product-page": {
+          gridTemplateAreas: `"image title action" "image description action"`,
         },
       });
     },
