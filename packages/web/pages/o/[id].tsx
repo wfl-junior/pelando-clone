@@ -1,22 +1,10 @@
-import { ProductQueryVariables } from "@/@types/api";
-import { ProductPage } from "@/components/ProductPage";
-import { defaultErrorMessage } from "@/constants";
+import { getVariables, ProductPage } from "@/components/ProductPage";
 import { addApolloState, initializeApollo } from "@/graphql/client";
 import { getSdk } from "@/graphql/sdk";
-import { useProductQuery } from "@/hooks/apollo/queries/useProductQuery";
 import { authorizationHeaderWithToken } from "@/utils/accessToken";
 import { applyFakeMeQuery } from "@/utils/applyFakeMeQuery";
 import { refreshAccessTokenServerSide } from "@/utils/refreshAccessTokenServerSide";
-import { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
-
-export function getVariables(id: string): ProductQueryVariables {
-  return {
-    input: {
-      where: { id },
-    },
-  };
-}
+import type { GetServerSideProps, NextPage } from "next";
 
 export const getServerSideProps: GetServerSideProps<
   {},
@@ -71,29 +59,6 @@ export const getServerSideProps: GetServerSideProps<
   }
 };
 
-const Product: React.FC = () => {
-  const { query } = useRouter();
-  const { data, error } = useProductQuery({
-    variables: getVariables(query.id as string),
-  });
-
-  return (
-    <div className="flex flex-col gap-4">
-      <section className="bg-default-background pt-8">
-        <div className="container">
-          {!data || error ? (
-            <div className="flex items-center justify-center">
-              <p className="text-center font-bold lg:text-xl">
-                {defaultErrorMessage}
-              </p>
-            </div>
-          ) : (
-            <ProductPage />
-          )}
-        </div>
-      </section>
-    </div>
-  );
-};
+const Product: NextPage = () => <ProductPage />;
 
 export default Product;

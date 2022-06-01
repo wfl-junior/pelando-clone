@@ -1,4 +1,4 @@
-import { getVariables } from "@/pages/o/[id]";
+import { getVariables } from "@/components/ProductPage";
 import { useRouter } from "next/router";
 import { useProductQuery } from "./apollo/queries/useProductQuery";
 

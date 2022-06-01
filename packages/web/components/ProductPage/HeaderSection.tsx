@@ -1,12 +1,21 @@
-import { useProductForProductPage } from "@/hooks/useProductForProductPage";
+import { useProductQuery } from "@/hooks/apollo/queries/useProductQuery";
 import { useRouter } from "next/router";
 import React, { Fragment } from "react";
+import { getVariables } from ".";
 import { ArrowLeftIcon } from "../icons/header/top/ArrowLeftIcon";
 import { ExternalLinkIcon } from "../icons/product-page/ExternalLinkIcon";
 
 export const HeaderSection: React.FC = () => {
-  const { back } = useRouter();
-  const { title, price, sourceUrl } = useProductForProductPage();
+  const { back, query } = useRouter();
+  const { data, error } = useProductQuery({
+    variables: getVariables(query.id as string),
+  });
+
+  if (!data || error) {
+    return null;
+  }
+
+  const { title, price, sourceUrl } = data.product.product;
 
   return (
     <header className="bg-default-background xs:gap-3 container fixed inset-x-0 top-0 z-30 flex h-[3.75rem] items-center justify-between gap-2 sm:gap-4 md:hidden">

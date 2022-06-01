@@ -1,7 +1,7 @@
+import { CheckIcon } from "@/components/icons/CheckIcon";
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import Link from "next/link";
 import React from "react";
-import { CheckIcon } from "../icons/CheckIcon";
 
 export const TitleSection: React.FC = () => {
   const { store, title } = useProductForProductPage();

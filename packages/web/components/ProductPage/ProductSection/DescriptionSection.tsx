@@ -1,7 +1,7 @@
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import classNames from "classnames";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { AngleDownIcon } from "../icons/header/top/AngleDownIcon";
+import { AngleDownIcon } from "../../icons/header/top/AngleDownIcon";
 
 export const DescriptionSection: React.FC = () => {
   const paragraphRef = useRef<HTMLParagraphElement>(null);

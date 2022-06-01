@@ -1,19 +1,44 @@
+import { ProductQueryVariables } from "@/@types/api";
+import { defaultErrorMessage } from "@/constants";
+import { useProductQuery } from "@/hooks/apollo/queries/useProductQuery";
+import { useRouter } from "next/router";
 import React, { Fragment } from "react";
-import { ActionSection } from "./ActionSection";
-import { DescriptionSection } from "./DescriptionSection";
 import { HeaderSection } from "./HeaderSection";
-import { ImageSection } from "./ImageSection";
-import { TitleSection } from "./TitleSection";
+import { ProductSection } from "./ProductSection";
 
-export const ProductPage: React.FC = () => (
-  <Fragment>
-    <HeaderSection />
+export function getVariables(id: string): ProductQueryVariables {
+  return {
+    input: {
+      where: { id },
+    },
+  };
+}
 
-    <div className="grid-template-areas-product-page grid gap-4 lg:grid-cols-[18rem_minmax(0,1fr)_18rem] lg:grid-rows-[auto_1fr] lg:gap-x-6 lg:gap-y-2 xl:grid-cols-[20rem_minmax(0,1fr)_20rem]">
-      <TitleSection />
-      <ImageSection />
-      <ActionSection />
-      <DescriptionSection />
-    </div>
-  </Fragment>
-);
+export const ProductPage: React.FC = () => {
+  const { query } = useRouter();
+  const { data, error } = useProductQuery({
+    variables: getVariables(query.id as string),
+  });
+
+  return (
+    <Fragment>
+      <HeaderSection />
+
+      <div className="flex flex-col gap-4">
+        <section className="bg-default-background pt-8">
+          <div className="container">
+            {!data || error ? (
+              <div className="flex items-center justify-center">
+                <p className="text-center font-bold lg:text-xl">
+                  {defaultErrorMessage}
+                </p>
+              </div>
+            ) : (
+              <ProductSection />
+            )}
+          </div>
+        </section>
+      </div>
+    </Fragment>
+  );
+};
