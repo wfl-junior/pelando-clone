@@ -22,6 +22,10 @@ export const productQuery = gql`
         store {
           name
         }
+        category {
+          title
+          slug
+        }
       }
     }
   }

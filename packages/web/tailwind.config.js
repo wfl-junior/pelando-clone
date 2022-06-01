@@ -143,6 +143,22 @@ module.exports = {
             `,
           },
         },
+        ".grid-template-areas-product-page-extra": {
+          gridTemplateAreas: `
+            "alerts" 
+            "comments" 
+            "deals" 
+            "stores"
+          `,
+          [`@media (min-width: ${screens.lg})`]: {
+            gridTemplateAreas: `
+              "alerts stores"
+              "comments stores"
+              "comments sidebar"
+              "deals deals"
+            `,
+          },
+        },
       });
     },
   ],

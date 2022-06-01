@@ -104,6 +104,7 @@ export interface Product extends Model {
   temperature: number;
   userVoteType: UserProductVoteType;
   store: Store;
+  category: Category;
 }
 
 export interface Category extends Model {

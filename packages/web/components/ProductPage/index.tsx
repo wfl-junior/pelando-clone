@@ -3,6 +3,7 @@ import { defaultErrorMessage } from "@/constants";
 import { useProductQuery } from "@/hooks/apollo/queries/useProductQuery";
 import { useRouter } from "next/router";
 import React, { Fragment } from "react";
+import { ExtraSection } from "./ExtraSection";
 import { HeaderSection } from "./HeaderSection";
 import { ProductSection } from "./ProductSection";
 
@@ -25,7 +26,7 @@ export const ProductPage: React.FC = () => {
       <HeaderSection />
 
       <div className="flex flex-col gap-4">
-        <section className="bg-default-background pt-8">
+        <section className="bg-default-background pt-8 shadow">
           <div className="container">
             {!data || error ? (
               <div className="flex items-center justify-center">
@@ -38,6 +39,8 @@ export const ProductPage: React.FC = () => {
             )}
           </div>
         </section>
+
+        <ExtraSection />
       </div>
     </Fragment>
   );
