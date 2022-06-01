@@ -9,7 +9,7 @@ export const ProductPage: React.FC = () => (
   <Fragment>
     <HeaderSection />
 
-    <div className="lg:grid-template-areas-product-page flex flex-col gap-4 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)_18rem] lg:gap-6 xl:grid-cols-[20rem_minmax(0,1fr)_20rem]">
+    <div className="grid-template-areas-product-page grid gap-4 lg:grid-cols-[18rem_minmax(0,1fr)_18rem] lg:grid-rows-[auto_1fr] lg:gap-x-6 lg:gap-y-2 xl:grid-cols-[20rem_minmax(0,1fr)_20rem]">
       <TitleSection />
       <ImageSection />
       <ActionSection />

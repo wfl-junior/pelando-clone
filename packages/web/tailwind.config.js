@@ -106,19 +106,42 @@ module.exports = {
           },
         },
         ".grid-template-areas-hero": {
-          gridTemplateAreas: `"image heading" "stores stores"`,
+          gridTemplateAreas: `
+            "image heading"
+            "stores stores"
+          `,
           [`@media (min-width: ${screens.lg})`]: {
-            gridTemplateAreas: `"image heading" "image stores"`,
+            gridTemplateAreas: `
+              "image heading"
+              "image stores"
+            `,
           },
         },
         ".grid-template-areas-product-card": {
-          gridTemplateAreas: `"image content" "action action"`,
+          gridTemplateAreas: `
+            "image content"
+            "action action"
+          `,
           [`@media (min-width: ${screens.lg})`]: {
-            gridTemplateAreas: `"image content" "image action"`,
+            gridTemplateAreas: `
+              "image content"
+              "image action"
+            `,
           },
         },
         ".grid-template-areas-product-page": {
-          gridTemplateAreas: `"image title action" "image description action"`,
+          gridTemplateAreas: `
+            "title" 
+            "image" 
+            "action" 
+            "description"
+          `,
+          [`@media (min-width: ${screens.lg})`]: {
+            gridTemplateAreas: `
+              "image title action"
+              "image description action"
+            `,
+          },
         },
       });
     },

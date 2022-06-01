@@ -10,7 +10,8 @@ export const CouponButton: React.FC = () => {
 
   return (
     <button
-      className="bg-inactive-background group relative flex items-center justify-center rounded-full py-1.5 px-4 font-bold"
+      type="button"
+      className="bg-inactive-background hover:text-tertiary-foreground group relative flex items-center justify-center rounded-full py-1.5 px-4 font-bold transition-colors"
       onClick={async () => {
         await navigator.clipboard.writeText(couponCode);
 
