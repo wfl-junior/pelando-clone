@@ -52,4 +52,8 @@
   input::placeholder {
     color: rgb(117 117 117);
   }
+
+  textarea::placeholder {
+    @apply text-secondary-foreground;
+  }
 }
