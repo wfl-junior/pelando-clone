@@ -36,7 +36,7 @@ export const AlertsSection: React.FC = () => {
   );
 
   return (
-    <section className="container lg:px-0" style={{ gridArea: "alerts" }}>
+    <section className="container lg:px-0">
       <div className="bg-default-background border-default-border flex flex-col rounded-md border p-3 shadow md:px-8">
         <h2 className="font-bold md:text-xl">Crie um alerta de desejo</h2>
 

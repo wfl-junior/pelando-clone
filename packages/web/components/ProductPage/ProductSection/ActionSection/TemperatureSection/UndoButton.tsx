@@ -49,7 +49,7 @@ export const UndoButton: React.FC<UndoButtonProps> = ({ hovering }) => {
       }}
     >
       {loading ? (
-        <Spinner className="w-5 before:w-3/5" color="inactive-background" />
+        <Spinner className="w-4.5 before:w-3/5" color="inactive-background" />
       ) : (
         <Fragment>
           {hovering ? (
@@ -61,7 +61,7 @@ export const UndoButton: React.FC<UndoButtonProps> = ({ hovering }) => {
               {userVoteType === "HOT" ? (
                 <HotIcon className="w-4.5" />
               ) : (
-                <ColdIcon className="w-4.5" />
+                <ColdIcon className="w-4" />
               )}
             </Fragment>
           )}

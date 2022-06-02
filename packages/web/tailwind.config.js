@@ -145,16 +145,14 @@ module.exports = {
         },
         ".grid-template-areas-product-page-extra": {
           gridTemplateAreas: `
-            "alerts" 
-            "comments" 
+            "main"
             "deals" 
             "stores"
           `,
           [`@media (min-width: ${screens.lg})`]: {
             gridTemplateAreas: `
-              "alerts stores"
-              "comments stores"
-              "comments sidebar"
+              "main stores"
+              "main sidebar"
               "deals deals"
             `,
           },

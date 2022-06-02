@@ -3,7 +3,7 @@ import { StoreList } from "./StoreList";
 
 export const StoresSection: React.FC = () => (
   <section
-    className="container flex flex-col gap-2 py-4 lg:px-0"
+    className="container flex flex-col gap-2 py-4 lg:p-0"
     style={{ gridArea: "stores" }}
   >
     <h2 className="text-2xl font-bold">Lojas em destaque</h2>

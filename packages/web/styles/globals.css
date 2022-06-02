@@ -15,13 +15,13 @@
     --color-default-shadow: 0 0 0;
     --color-default-fade: 255 255 255;
     --color-default-border: 233 233 233;
-    --color-secondary-background: 240 240 240;
+    --color-secondary-background: 246 246 246;
     --color-secondary-foreground: 153 153 153;
     --color-secondary-button: 233 233 233;
     --color-tertiary-foreground: 0 0 0;
     --color-inactive-background: 233 233 233;
     --color-input-background: 233 233 233;
-    --color-red: 210 45 58;
+    --color-red: 255 44 44;
     --color-blue: 18 98 178;
   }
 

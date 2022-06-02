@@ -45,9 +45,9 @@ export const HotButton: React.FC = () => {
       }}
     >
       {loading ? (
-        <Spinner className="w-5 before:w-3/5" color="inactive-background" />
+        <Spinner className="w-4.5 before:w-3/5" color="inactive-background" />
       ) : (
-        <HotIcon className="w-5" />
+        <HotIcon className="w-4.5" />
       )}
     </button>
   );
