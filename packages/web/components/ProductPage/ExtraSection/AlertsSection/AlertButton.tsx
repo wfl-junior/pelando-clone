@@ -28,7 +28,9 @@ export const AlertButton: React.FC<AlertButtonProps> = ({
           return toggleModal(true, "register-login");
         }
 
-        onClick?.(e);
+        if (onClick) {
+          onClick(e);
+        }
       }}
       {...props}
     >

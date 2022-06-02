@@ -1,4 +1,8 @@
 import { getVariables, ProductPage } from "@/components/ProductPage";
+import {
+  getRandomTip,
+  tipQuery,
+} from "@/components/ProductPage/ExtraSection/CommentsSection/TipSection/tips";
 import { addApolloState, initializeApollo } from "@/graphql/client";
 import { getSdk } from "@/graphql/sdk";
 import { authorizationHeaderWithToken } from "@/utils/accessToken";
@@ -12,6 +16,11 @@ export const getServerSideProps: GetServerSideProps<
 > = async ({ req, res, params }) => {
   const apolloClient = initializeApollo();
   const sdk = getSdk(apolloClient);
+
+  apolloClient.writeQuery({
+    query: tipQuery,
+    data: getRandomTip(),
+  });
 
   const { id } = params!;
 

@@ -7,7 +7,7 @@ export const AddCommentSection: React.FC = () => {
   const { user } = useUser();
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1 px-4 md:px-8">
       {user?.image ? (
         <div className="border-default-border aspect-square w-10 overflow-hidden rounded-full border">
           <Image

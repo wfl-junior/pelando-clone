@@ -159,6 +159,12 @@ module.exports = {
             `,
           },
         },
+        ".grid-template-areas-product-page-tip": {
+          gridTemplateAreas: `
+            ". badge" 
+            "image tip"
+          `,
+        },
       });
     },
   ],
