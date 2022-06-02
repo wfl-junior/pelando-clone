@@ -35,7 +35,10 @@ export const SidebarSection: React.FC = () => {
           {price > 0 ? (
             <Fragment>
               <small>R$</small>
-              {price}
+              {price.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
             </Fragment>
           ) : (
             "Grátis"
