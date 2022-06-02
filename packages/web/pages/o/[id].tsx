@@ -25,6 +25,7 @@ export const getServerSideProps: GetServerSideProps<
   const { id } = params!;
 
   const variables = getVariables(id);
+  const queries = [sdk.query.stores()];
 
   try {
     const accessToken = await refreshAccessTokenServerSide(req, res);
@@ -41,6 +42,7 @@ export const getServerSideProps: GetServerSideProps<
     const [response] = await Promise.allSettled([
       sdk.query.product({ variables, ...options }),
       sdk.query.me(options),
+      ...queries,
     ]);
 
     if (
@@ -59,7 +61,7 @@ export const getServerSideProps: GetServerSideProps<
     });
   } catch {
     // põe em cache estas queries
-    await Promise.allSettled([sdk.query.product({ variables })]);
+    await Promise.allSettled([sdk.query.product({ variables }), ...queries]);
 
     // por fake me query em cache, para não precisar dar fetch no client, já que não está autenticado, não tem necessidade
     applyFakeMeQuery(apolloClient);
