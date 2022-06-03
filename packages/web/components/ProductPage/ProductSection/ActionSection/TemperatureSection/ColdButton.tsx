@@ -47,7 +47,7 @@ export const ColdButton: React.FC = () => {
       {loading ? (
         <Spinner className="w-4.5 before:w-3/5" color="inactive-background" />
       ) : (
-        <ColdIcon className="w-4" />
+        <ColdIcon className="w-4.5" />
       )}
     </button>
   );

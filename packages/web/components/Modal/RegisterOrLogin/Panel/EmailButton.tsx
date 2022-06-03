@@ -1,4 +1,4 @@
-import { ArrowRightIcon } from "@/components/icons/register-or-login-modal/ArrowRight";
+import { ArrowRightIcon } from "@/components/icons/register-or-login-modal/ArrowRightIcon";
 import { useModalContext } from "@/contexts/ModalContext";
 import React from "react";
 import { PanelProps } from ".";

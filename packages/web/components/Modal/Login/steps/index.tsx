@@ -1,5 +1,5 @@
 import { Button } from "@/components/Button";
-import { ArrowRightIcon } from "@/components/icons/register-or-login-modal/ArrowRight";
+import { ArrowRightIcon } from "@/components/icons/register-or-login-modal/ArrowRightIcon";
 import { Form, useFormikContext } from "formik";
 import React, { useEffect, useRef } from "react";
 import { LoginFields } from "..";

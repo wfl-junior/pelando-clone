@@ -60,7 +60,7 @@ export const ThemeToggler: React.FC = () => {
                   )}
                 >
                   {checked && (
-                    <CheckIcon className="text-default-background w-4" />
+                    <CheckIcon className="text-default-background w-full" />
                   )}
                 </div>
               </Fragment>

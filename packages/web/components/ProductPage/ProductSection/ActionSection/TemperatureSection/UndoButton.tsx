@@ -61,7 +61,7 @@ export const UndoButton: React.FC<UndoButtonProps> = ({ hovering }) => {
               {userVoteType === "HOT" ? (
                 <HotIcon className="w-4.5" />
               ) : (
-                <ColdIcon className="w-4" />
+                <ColdIcon className="w-4.5" />
               )}
             </Fragment>
           )}

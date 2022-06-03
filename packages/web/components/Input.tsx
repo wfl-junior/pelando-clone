@@ -1,8 +1,8 @@
 import classNames from "classnames";
 import { ErrorMessage, Field, FieldAttributes } from "formik";
 import React, { useState } from "react";
-import { Eye } from "./icons/Eye";
-import { EyeSlash } from "./icons/EyeSlash";
+import { EyeIcon } from "./icons/EyeIcon";
+import { EyeSlashIcon } from "./icons/EyeSlashIcon";
 
 export const Input: React.FC<FieldAttributes<{}>> = ({
   className,
@@ -32,9 +32,9 @@ export const Input: React.FC<FieldAttributes<{}>> = ({
             onClick={() => setHidden(!hidden)}
           >
             {hidden ? (
-              <Eye className="w-4.5" />
+              <EyeIcon className="w-4.5" />
             ) : (
-              <EyeSlash className="w-4.5" />
+              <EyeSlashIcon className="w-4.5" />
             )}
           </button>
         )}

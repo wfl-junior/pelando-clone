@@ -1,7 +1,8 @@
-import { Icon } from "@/@types/app";
 import React from "react";
 
-export const ArrowRightIcon: Icon = props => (
+export const ArrowRightIcon: React.FC<
+  React.SVGProps<SVGSVGElement>
+> = props => (
   <svg viewBox="0 0 300 300" fill="currentColor" {...props}>
     <path
       transform="matrix(1 0 0 -1 0 300)"

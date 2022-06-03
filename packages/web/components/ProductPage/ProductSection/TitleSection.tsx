@@ -14,7 +14,7 @@ export const TitleSection: React.FC = () => {
         </Link>
 
         <div className="bg-inactive-background flex items-center gap-1 rounded-full py-px pr-1.5 pl-1 text-[10px] uppercase md:py-0.5 md:pr-2 md:text-xs">
-          <CheckIcon className="w-2.5 md:w-3" />
+          <CheckIcon className="w-3.5 md:w-4" />
           <span>Loja Verificada</span>
         </div>
       </div>

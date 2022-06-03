@@ -1,4 +1,4 @@
-import { ArrowRightIcon } from "@/components/icons/register-or-login-modal/ArrowRight";
+import { ArrowLeftIcon } from "@/components/icons/header/top/ArrowLeftIcon";
 import { useModalContext } from "@/contexts/ModalContext";
 import { useRegisterOrLoginContext } from "@/contexts/RegisterOrLoginContext";
 import React from "react";
@@ -21,7 +21,7 @@ export const BackButton: React.FC<PanelProps> = ({ type }) => {
         }
       }}
     >
-      <ArrowRightIcon className="w-6 rotate-180" />
+      <ArrowLeftIcon className="w-6" />
     </button>
   );
 };
