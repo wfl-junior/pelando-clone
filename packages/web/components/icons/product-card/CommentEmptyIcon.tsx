@@ -1,7 +1,7 @@
 import { Icon } from "@/@types/app";
 import React from "react";
 
-export const CommentIcon: Icon = props => (
+export const CommentEmptyIcon: Icon = props => (
   <svg viewBox="0 0 300 300" fill="currentColor" {...props}>
     <path
       transform="matrix(1 0 0 -1 0 300)"

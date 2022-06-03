@@ -16,8 +16,13 @@ export const productsQuery = gql`
           image
           temperature
           userVoteType
+          couponCode
           store {
             name
+          }
+          category {
+            title
+            slug
           }
         }
       }

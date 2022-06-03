@@ -1,3 +1,4 @@
+import { ProductsQueryVariables } from "@/@types/api";
 import { getVariables, ProductPage } from "@/components/ProductPage";
 import {
   getRandomTip,
@@ -24,8 +25,16 @@ export const getServerSideProps: GetServerSideProps<
 
   const { id } = params!;
 
-  const variables = getVariables(id);
   const queries = [sdk.query.stores()];
+  const productVariables = getVariables(id);
+  const productsVariables: ProductsQueryVariables = {
+    input: {
+      perPage: 20,
+      orderBy: {
+        temperature: "DESC",
+      },
+    },
+  };
 
   try {
     const accessToken = await refreshAccessTokenServerSide(req, res);
@@ -40,8 +49,9 @@ export const getServerSideProps: GetServerSideProps<
 
     // põe em cache estas queries
     const [response] = await Promise.allSettled([
-      sdk.query.product({ variables, ...options }),
+      sdk.query.product({ variables: productVariables, ...options }),
       sdk.query.me(options),
+      sdk.query.products({ variables: productsVariables, ...options }),
       ...queries,
     ]);
 
@@ -61,7 +71,11 @@ export const getServerSideProps: GetServerSideProps<
     });
   } catch {
     // põe em cache estas queries
-    await Promise.allSettled([sdk.query.product({ variables }), ...queries]);
+    await Promise.allSettled([
+      sdk.query.product({ variables: productVariables }),
+      sdk.query.products({ variables: productsVariables }),
+      ...queries,
+    ]);
 
     // por fake me query em cache, para não precisar dar fetch no client, já que não está autenticado, não tem necessidade
     applyFakeMeQuery(apolloClient);

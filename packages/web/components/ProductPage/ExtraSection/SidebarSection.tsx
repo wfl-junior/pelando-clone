@@ -14,7 +14,7 @@ export const SidebarSection: React.FC = () => {
 
   return (
     <section
-      className="hidden flex-col gap-2 lg:sticky lg:top-[4.5rem] lg:flex lg:flex-col lg:gap-2"
+      className="hidden flex-col gap-2 lg:flex lg:flex-col lg:gap-2"
       style={{ gridArea: "sidebar" }}
     >
       <div className="bg-default-background border-default-border flex flex-col gap-2 rounded-lg border p-4">
