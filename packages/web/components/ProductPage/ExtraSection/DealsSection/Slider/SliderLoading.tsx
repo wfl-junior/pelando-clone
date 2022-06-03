@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/Skeleton";
 import React from "react";
 
-export const LoadingSlider: React.FC = () => (
+export const SliderLoading: React.FC = () => (
   <div className="lg:no-scrollbar grid snap-x snap-proximity grid-flow-col gap-2 overflow-x-auto">
     {Array.from({ length: 6 }, (_, i) => i).map(number => (
       <div
