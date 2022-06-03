@@ -31,6 +31,10 @@ const tips: Tip[] = [
     heading: "🙏 🗣 Nós evitamos falar de política e religião por aqui.",
     body: "Sabemos que, às vezes, até entre família e amigos é complicado falar sobre estes assuntos, imaginem só no Pelando! 🤣",
   },
+  {
+    heading: "🏴‍☠️ Não apoiamos a pirataria.",
+    body: "Menções a VPN, IPTV, formas de burlar sistemas, pirataria e similares podem ser deletadas do Pelando. Vamos deixar a comunidade mais leve?",
+  },
 ];
 
 export function getRandomTip() {
