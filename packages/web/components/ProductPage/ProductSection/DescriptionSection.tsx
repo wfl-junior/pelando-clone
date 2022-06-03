@@ -1,5 +1,6 @@
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import classNames from "classnames";
+import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AngleDownIcon } from "../../icons/header/top/AngleDownIcon";
 
@@ -8,6 +9,7 @@ export const DescriptionSection: React.FC = () => {
   const [shouldShowMoreButton, setShouldShowMoreButton] = useState(false);
   const [open, setOpen] = useState(false);
   const { body } = useProductForProductPage();
+  const { asPath } = useRouter();
 
   const updateButtonVisibility = useCallback(() => {
     // Aqui a ref já vai ter inicializado
@@ -18,8 +20,13 @@ export const DescriptionSection: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    updateButtonVisibility();
+    // para sempre começar com open false quando trocar de páginas, porque aparentemente quando troca de página com Next Link mantém state
+    setOpen(false);
+    // setTimeout para evitar batching, precisa de open como false primeiro
+    setTimeout(updateButtonVisibility, 0);
+  }, [asPath]);
 
+  useEffect(() => {
     window.addEventListener("resize", updateButtonVisibility);
     window.addEventListener("orientationchange", updateButtonVisibility);
 
@@ -36,7 +43,8 @@ export const DescriptionSection: React.FC = () => {
     >
       <p
         ref={paragraphRef}
-        className={classNames("mb-4 overflow-hidden", {
+        // break-all para prevenir quebra de layout
+        className={classNames("mb-4 overflow-hidden break-all", {
           "max-h-[210px]": !open,
         })}
       >
