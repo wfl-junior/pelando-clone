@@ -2,6 +2,7 @@ import { CheckIcon } from "@/components/icons/CheckIcon";
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import Link from "next/link";
 import React from "react";
+import { MenuButton } from "./MenuButton";
 
 export const TitleSection: React.FC = () => {
   const { store, title } = useProductForProductPage();
@@ -19,18 +20,10 @@ export const TitleSection: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex justify-between gap-1">
         <h1 className="text-xl font-bold md:text-2xl">{title}</h1>
 
-        {/* TODO: adicionar menu */}
-        <button className="flex cursor-pointer flex-col gap-1 px-3.5 py-2">
-          {Array.from({ length: 3 }, (_, i) => i).map(number => (
-            <div
-              className="bg-default-foreground aspect-square w-1 rounded-full"
-              key={number}
-            ></div>
-          ))}
-        </button>
+        <MenuButton />
       </div>
     </div>
   );

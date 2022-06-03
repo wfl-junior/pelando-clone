@@ -77,7 +77,9 @@ module.exports = {
         97: "0.97",
       },
       boxShadow: {
-        "user-menu": "0 4px 12px 0 rgba(var(--color-default-shadow) / 0.2)",
+        "user-menu": "0 4px 12px 0 rgb(var(--color-default-shadow) / 0.2)",
+        "product-page-action-menu":
+          "0 4px 12px 0 rgb(var(--color-default-shadow) / 0.2)",
         "notifications-menu":
           "0 0 10px 0 rgb(var(--color-default-shadow) / 0.3)",
       },
