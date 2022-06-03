@@ -57,21 +57,25 @@ export const getServerSideProps: GetServerSideProps<
 
     if (
       response.status === "fulfilled" &&
-      response.value.data.product.errors?.some(error => {
+      !response.value.data.product.errors?.some(error => {
         return error.message.toLowerCase().includes("not found");
       })
     ) {
-      return {
-        notFound: true,
-      };
+      return addApolloState(apolloClient, {
+        props: {
+          accessToken,
+          // key para poder atualizar quando alterar de página
+          key: response.value.data.product.product.id,
+        },
+      });
     }
 
-    return addApolloState(apolloClient, {
-      props: { accessToken },
-    });
+    return {
+      notFound: true,
+    };
   } catch {
     // põe em cache estas queries
-    await Promise.allSettled([
+    const [response] = await Promise.allSettled([
       sdk.query.product({ variables: productVariables }),
       sdk.query.products({ variables: productsVariables }),
       ...queries,
@@ -80,7 +84,23 @@ export const getServerSideProps: GetServerSideProps<
     // por fake me query em cache, para não precisar dar fetch no client, já que não está autenticado, não tem necessidade
     applyFakeMeQuery(apolloClient);
 
-    return addApolloState(apolloClient);
+    if (
+      response.status === "fulfilled" &&
+      !response.value.data.product.errors?.some(error => {
+        return error.message.toLowerCase().includes("not found");
+      })
+    ) {
+      return addApolloState(apolloClient, {
+        props: {
+          // key para poder atualizar quando alterar de página
+          key: response.value.data.product.product.id,
+        },
+      });
+    }
+
+    return {
+      notFound: true,
+    };
   }
 };
 
