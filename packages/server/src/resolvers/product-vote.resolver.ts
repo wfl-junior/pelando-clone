@@ -10,6 +10,7 @@ import { VoteOnProductInput } from "../graphql-types/Input/products/VoteOnProduc
 import { ProductQueryResponse } from "../graphql-types/Object/products/ProductQueryResponse";
 import { AuthGuard } from "../guards/auth.guard";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
+import { getEntityNotFoundMessage } from "../utils/getEntityNotFoundMessage";
 
 @Resolver(() => Product)
 export class ProductVoteResolver {
@@ -24,7 +25,7 @@ export class ProductVoteResolver {
     try {
       const product = await Product.findOne({
         where: { id: productId },
-        relations: ["store"],
+        relations: ["store", "category"],
       });
 
       if (!product) {
@@ -33,7 +34,7 @@ export class ProductVoteResolver {
           errors: [
             {
               path: "productId",
-              message: "product doesn't exist",
+              message: getEntityNotFoundMessage("Product"),
             },
           ],
         };
@@ -102,7 +103,7 @@ export class ProductVoteResolver {
     try {
       const product = await Product.findOne({
         where: { id: productId },
-        relations: ["store"],
+        relations: ["store", "category"],
       });
 
       if (!product) {
@@ -111,7 +112,7 @@ export class ProductVoteResolver {
           errors: [
             {
               path: "productId",
-              message: "product doesn't exist",
+              message: getEntityNotFoundMessage("Product"),
             },
           ],
         };
