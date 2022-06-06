@@ -34,7 +34,7 @@ export interface IResolverBadResponse {
   errors: FieldError[];
 }
 
-export type IResolverResponse<T extends ResolverResponse> =
+export type IResolverResponse<T extends ResolverResponse = ResolverResponse> =
   | IResolverGoodResponse<T>
   | IResolverBadResponse;
 

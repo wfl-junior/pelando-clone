@@ -215,9 +215,7 @@ export class AuthResolver {
   }
 
   @Mutation(() => ResolverResponse)
-  logout(
-    @Context() { response }: IContext,
-  ): IResolverResponse<ResolverResponse> {
+  logout(@Context() { response }: IContext): IResolverResponse {
     try {
       response.clearCookie(process.env.COOKIE_NAME);
       return { ok: true };
