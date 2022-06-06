@@ -4,7 +4,9 @@ import { QueryFailedError } from "typeorm";
 import { IContextWithUser, IResolverResponse } from "../@types/app";
 import { Comment, Product } from "../entities";
 import { AddCommentInput } from "../graphql-types/Input/comments/AddCommentInput";
+import { EditCommentInput } from "../graphql-types/Input/comments/EditCommentInput";
 import { CommentResponse } from "../graphql-types/Object/comments/CommentResponse";
+import { ResolverResponse } from "../graphql-types/Object/ResolverResponse";
 import { AuthGuard } from "../guards/auth.guard";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
 import { getEntityNotFoundMessage } from "../utils/getEntityNotFoundMessage";
@@ -75,6 +77,60 @@ export class CommentResolver {
   }
 
   @Mutation(() => CommentResponse)
+  @UseGuards(new AuthGuard())
+  async editComment(
+    @Args("input", { type: () => EditCommentInput }) input: EditCommentInput,
+    @Context() { user }: IContextWithUser,
+  ): Promise<IResolverResponse<CommentResponse>> {
+    try {
+      const comment = await Comment.findOne({
+        where: { id: input.id },
+        relations: ["user", "product", "product.store", "product.category"],
+      });
+
+      if (!comment) {
+        return {
+          ok: false,
+          errors: [
+            {
+              path: "id",
+              message: getEntityNotFoundMessage("Comment"),
+            },
+          ],
+        };
+      }
+
+      if (comment.userId !== user.id) {
+        return {
+          ok: false,
+          errors: [
+            {
+              path: "userId",
+              message: "you must be the owner to edit the comment",
+            },
+          ],
+        };
+      }
+
+      comment.body = input.body;
+      await comment.save();
+
+      return {
+        ok: true,
+        comment,
+      };
+    } catch (error) {
+      console.log({
+        time: new Date(),
+        where: "mutation edit comment",
+        error,
+      });
+
+      return defaultErrorResponse();
+    }
+  }
+
+  @Mutation(() => ResolverResponse)
   @UseGuards(new AuthGuard())
   async deleteComment(
     @Args("id", { type: () => ID }) id: string,
