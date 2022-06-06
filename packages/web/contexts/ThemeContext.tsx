@@ -20,8 +20,10 @@ const ThemeContext = createContext({} as IThemeContext);
 
 export const useThemeContext = () => useContext(ThemeContext);
 
-function getOSPrefersDark() {
-  return isBrowser() && window.matchMedia("prefers-color-schema: dark").matches;
+function getOSPrefersDark(): boolean {
+  return (
+    isBrowser() && window.matchMedia("(prefers-color-scheme: dark)").matches
+  );
 }
 
 export const ThemeContextProvider: React.FC<{
