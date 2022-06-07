@@ -43,7 +43,10 @@ export class Product extends EntityNode {
   @Column("float", { default: 0 })
   public temperature: number;
 
-  @Field(() => UserProductVoteType, { nullable: true })
+  @Field(() => UserProductVoteType, {
+    nullable: true,
+    description: "Requires logged in user with valid access token",
+  })
   public userVoteType: UserProductVoteType;
 
   @Column("uuid", { name: "store_id" })
