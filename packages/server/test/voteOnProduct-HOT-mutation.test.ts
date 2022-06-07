@@ -97,10 +97,13 @@ describe("voteOnProduct mutation HOT type", () => {
     expect(ok).toBe(true);
     expect(errors).toBeNull();
     expect(product).not.toBeNull();
-    expect(product!.temperature).toBe(
+
+    // expect.toBeCloseTo porque cálculos com floats não são extremamente precisos
+    expect(product!.temperature).toBeCloseTo(
       randomProduct.temperature + newUser.productVoteValue,
     );
     product!.temperature = randomProduct.temperature;
+
     expect(transformEntityDatesToString(randomProduct)).toEqual(product);
   });
 
@@ -133,7 +136,8 @@ describe("voteOnProduct mutation HOT type", () => {
       select: { temperature: true },
     });
 
-    expect(product.temperature).toBe(
+    // expect.toBeCloseTo porque cálculos com floats não são extremamente precisos
+    expect(product.temperature).toBeCloseTo(
       randomProduct.temperature + newUser.productVoteValue,
     );
   });

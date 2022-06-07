@@ -12,8 +12,8 @@ import { TestRegisterMutationResponse } from "./client/types";
 
 const password = "super-secret-password";
 const userInput: Omit<RegisterInput, "password"> = {
-  email: "test@test.com",
-  username: "testing",
+  email: "test@register-successful.com",
+  username: "testing-register-successful",
 };
 
 describe("successful register mutation", () => {

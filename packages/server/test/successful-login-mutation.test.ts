@@ -10,8 +10,8 @@ import { TestLoginMutationResponse } from "./client/types";
 
 const password = "some-super-secret-password";
 const userInput: Pick<User, "email" | "username"> = {
-  email: "test@test.com",
-  username: "testing",
+  email: "test@login-successful.com",
+  username: "testing-login-successful",
 };
 
 describe("successful login mutation", () => {
