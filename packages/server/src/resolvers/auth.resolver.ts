@@ -2,7 +2,6 @@ import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 import axios from "axios";
 import bcrypt from "bcrypt";
 import { IsNull, QueryFailedError } from "typeorm";
-import { ValidationError } from "yup";
 import {
   GoogleOAuthResponse,
   IContext,
@@ -16,27 +15,23 @@ import { FieldError } from "../graphql-types/Object/FieldError";
 import { ResolverResponse } from "../graphql-types/Object/ResolverResponse";
 import { LoginResponse } from "../graphql-types/Object/users/LoginResponse";
 import { RegisterResponse } from "../graphql-types/Object/users/RegisterResponse";
+import { UseValidation } from "../interceptors/validation.interceptor";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
 import { getShortCode } from "../utils/getShortCode";
 import { createAccessToken, sendRefreshToken } from "../utils/jwt";
 import { removeNullPropertiesDeep } from "../utils/removeNullPropertiesDeep";
-import { yupErrorResponse } from "../utils/yupErrorResponse";
 import { loginValidationSchema } from "../yup/loginValidationSchema";
 import { registerValidationSchema } from "../yup/registerValidationSchema";
 
 @Resolver(() => User)
 export class AuthResolver {
   @Mutation(() => RegisterResponse)
+  @UseValidation(registerValidationSchema)
   async register(
     @Args("input", { type: () => RegisterInput }) input: RegisterInput,
     @Context() { response }: IContext,
   ): Promise<IResolverResponse<RegisterResponse>> {
     try {
-      await registerValidationSchema.validate(input, {
-        abortEarly: false,
-        strict: true,
-      });
-
       const user = await User.create(input).save();
 
       sendRefreshToken(response, user);
@@ -46,10 +41,6 @@ export class AuthResolver {
         accessToken: createAccessToken(user),
       };
     } catch (error) {
-      if (error instanceof ValidationError) {
-        return yupErrorResponse(error);
-      }
-
       if (error instanceof QueryFailedError) {
         const match = error.message.match(
           new RegExp(`${UNIQUE_EMAIL_INDEX}|${UNIQUE_USERNAME_INDEX}`),
@@ -76,20 +67,13 @@ export class AuthResolver {
   }
 
   @Mutation(() => LoginResponse)
+  @UseValidation(loginValidationSchema)
   async login(
     @Args("input", { type: () => LoginInput })
     { password, ...input }: LoginInput,
     @Context() { response }: IContext,
   ): Promise<IResolverResponse<LoginResponse>> {
     try {
-      await loginValidationSchema.validate(
-        { ...input, password },
-        {
-          abortEarly: false,
-          strict: true,
-        },
-      );
-
       const user = await User.findOne({
         where: {
           ...removeNullPropertiesDeep(input),
@@ -128,10 +112,6 @@ export class AuthResolver {
         ),
       };
     } catch (error) {
-      if (error instanceof ValidationError) {
-        return yupErrorResponse(error);
-      }
-
       console.log({ time: new Date(), where: "mutation login", error });
       return defaultErrorResponse();
     }

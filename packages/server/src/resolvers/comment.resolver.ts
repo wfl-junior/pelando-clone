@@ -1,6 +1,5 @@
 import { Args, Context, ID, Mutation, Resolver } from "@nestjs/graphql";
 import { QueryFailedError } from "typeorm";
-import { ValidationError } from "yup";
 import { IContextWithUser, IResolverResponse } from "../@types/app";
 import { Comment, Product } from "../entities";
 import { AddCommentInput } from "../graphql-types/Input/comments/AddCommentInput";
@@ -8,25 +7,21 @@ import { EditCommentInput } from "../graphql-types/Input/comments/EditCommentInp
 import { CommentResponse } from "../graphql-types/Object/comments/CommentResponse";
 import { ResolverResponse } from "../graphql-types/Object/ResolverResponse";
 import { UseAuthGuard } from "../guards/auth.guard";
+import { UseValidation } from "../interceptors/validation.interceptor";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
 import { getEntityNotFoundMessage } from "../utils/getEntityNotFoundMessage";
-import { yupErrorResponse } from "../utils/yupErrorResponse";
 import { commentValidationSchema } from "../yup/commentValidationSchema";
 
 @Resolver(() => Comment)
 export class CommentResolver {
   @Mutation(() => CommentResponse)
   @UseAuthGuard()
+  @UseValidation(commentValidationSchema)
   async addComment(
     @Args("input", { type: () => AddCommentInput }) input: AddCommentInput,
     @Context() { user }: IContextWithUser,
   ): Promise<IResolverResponse<CommentResponse>> {
     try {
-      await commentValidationSchema.validate(input, {
-        abortEarly: false,
-        strict: true,
-      });
-
       const comment = await Comment.create({
         ...input,
         userId: user.id,
@@ -58,10 +53,6 @@ export class CommentResolver {
         comment,
       };
     } catch (error) {
-      if (error instanceof ValidationError) {
-        return yupErrorResponse(error);
-      }
-
       if (
         error instanceof QueryFailedError &&
         error.message.toLowerCase().includes("foreign key")
@@ -89,16 +80,12 @@ export class CommentResolver {
 
   @Mutation(() => CommentResponse)
   @UseAuthGuard()
+  @UseValidation(commentValidationSchema)
   async editComment(
     @Args("input", { type: () => EditCommentInput }) input: EditCommentInput,
     @Context() { user }: IContextWithUser,
   ): Promise<IResolverResponse<CommentResponse>> {
     try {
-      await commentValidationSchema.validate(input, {
-        abortEarly: false,
-        strict: true,
-      });
-
       const comment = await Comment.findOne({
         where: { id: input.id },
         relations: ["user", "product", "product.store", "product.category"],
@@ -136,10 +123,6 @@ export class CommentResolver {
         comment,
       };
     } catch (error) {
-      if (error instanceof ValidationError) {
-        return yupErrorResponse(error);
-      }
-
       console.log({
         time: new Date(),
         where: "mutation edit comment",
