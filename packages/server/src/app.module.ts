@@ -13,7 +13,7 @@ import * as Resolvers from "./resolvers";
     ...Object.values(Resolvers),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      playground: true,
+      playground: process.env.NODE_ENV === "development",
       autoSchemaFile: "schema.gql",
       context: ({ req, res }): IContext => ({ request: req, response: res }),
       cors: false,
