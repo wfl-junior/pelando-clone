@@ -14,7 +14,7 @@ const userInput: Pick<User, "email" | "username"> = {
   username: "testing-login-successful",
 };
 
-describe("successful login mutation", () => {
+describe("login mutation successful", () => {
   let app: INestApplication;
   let client: TestClient;
   let response: TestLoginMutationResponse;
@@ -37,6 +37,7 @@ describe("successful login mutation", () => {
     response = await client.mutation.login({
       input: {
         email: userInput.email,
+        username: userInput.username,
         password,
       },
     });
@@ -49,6 +50,28 @@ describe("successful login mutation", () => {
   });
 
   it("user can login", async () => {
+    expect(response.status).toBe(200);
+  });
+
+  it("user can login with only email", async () => {
+    const response = await client.mutation.login({
+      input: {
+        email: userInput.email,
+        password,
+      },
+    });
+
+    expect(response.status).toBe(200);
+  });
+
+  it("user can login with only username", async () => {
+    const response = await client.mutation.login({
+      input: {
+        username: userInput.username,
+        password,
+      },
+    });
+
     expect(response.status).toBe(200);
   });
 

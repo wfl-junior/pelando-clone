@@ -16,7 +16,7 @@ const userInput: Omit<RegisterInput, "password"> = {
   username: "testing-register-successful",
 };
 
-describe("successful register mutation", () => {
+describe("register mutation successful", () => {
   let app: INestApplication;
   let client: TestClient;
   let response: TestRegisterMutationResponse;
