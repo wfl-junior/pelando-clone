@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   Injectable,
   UnauthorizedException,
+  UseGuards,
 } from "@nestjs/common";
 import { GqlExecutionContext } from "@nestjs/graphql";
 import { IContext } from "../@types/app";
@@ -23,4 +24,8 @@ export class AuthGuard implements CanActivate {
 
     throw new UnauthorizedException();
   }
+}
+
+export function UseAuthGuard() {
+  return UseGuards(new AuthGuard());
 }

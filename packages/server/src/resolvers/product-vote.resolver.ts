@@ -1,4 +1,3 @@
-import { UseGuards } from "@nestjs/common";
 import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 import { QueryFailedError } from "typeorm";
 import { IContextWithUser, IResolverResponse } from "../@types/app";
@@ -8,14 +7,14 @@ import { UserProductVoteType } from "../graphql-types/enums/UserProductVoteType"
 import { RemoveVoteFromProductInput } from "../graphql-types/Input/products/RemoveVoteFromProductInput";
 import { VoteOnProductInput } from "../graphql-types/Input/products/VoteOnProductInput";
 import { ProductQueryResponse } from "../graphql-types/Object/products/ProductQueryResponse";
-import { AuthGuard } from "../guards/auth.guard";
+import { UseAuthGuard } from "../guards/auth.guard";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
 import { getEntityNotFoundMessage } from "../utils/getEntityNotFoundMessage";
 
 @Resolver(() => Product)
 export class ProductVoteResolver {
   @Mutation(() => ProductQueryResponse)
-  @UseGuards(new AuthGuard())
+  @UseAuthGuard()
   async voteOnProduct(
     @Args("input", { type: () => VoteOnProductInput })
     { productId, type }: VoteOnProductInput,
@@ -93,7 +92,7 @@ export class ProductVoteResolver {
   }
 
   @Mutation(() => ProductQueryResponse)
-  @UseGuards(new AuthGuard())
+  @UseAuthGuard()
   async removeVoteFromProduct(
     @Args("input", { type: () => RemoveVoteFromProductInput })
     { productId }: RemoveVoteFromProductInput,

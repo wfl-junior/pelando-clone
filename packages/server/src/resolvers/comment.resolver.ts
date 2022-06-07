@@ -1,4 +1,3 @@
-import { UseGuards } from "@nestjs/common";
 import { Args, Context, ID, Mutation, Resolver } from "@nestjs/graphql";
 import { QueryFailedError } from "typeorm";
 import { IContextWithUser, IResolverResponse } from "../@types/app";
@@ -7,14 +6,14 @@ import { AddCommentInput } from "../graphql-types/Input/comments/AddCommentInput
 import { EditCommentInput } from "../graphql-types/Input/comments/EditCommentInput";
 import { CommentResponse } from "../graphql-types/Object/comments/CommentResponse";
 import { ResolverResponse } from "../graphql-types/Object/ResolverResponse";
-import { AuthGuard } from "../guards/auth.guard";
+import { UseAuthGuard } from "../guards/auth.guard";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
 import { getEntityNotFoundMessage } from "../utils/getEntityNotFoundMessage";
 
 @Resolver(() => Comment)
 export class CommentResolver {
   @Mutation(() => CommentResponse)
-  @UseGuards(new AuthGuard())
+  @UseAuthGuard()
   async addComment(
     @Args("input", { type: () => AddCommentInput }) input: AddCommentInput,
     @Context() { user }: IContextWithUser,
@@ -77,7 +76,7 @@ export class CommentResolver {
   }
 
   @Mutation(() => CommentResponse)
-  @UseGuards(new AuthGuard())
+  @UseAuthGuard()
   async editComment(
     @Args("input", { type: () => EditCommentInput }) input: EditCommentInput,
     @Context() { user }: IContextWithUser,
@@ -131,7 +130,7 @@ export class CommentResolver {
   }
 
   @Mutation(() => ResolverResponse)
-  @UseGuards(new AuthGuard())
+  @UseAuthGuard()
   async deleteComment(
     @Args("id", { type: () => ID }) id: string,
     @Context() { user }: IContextWithUser,
