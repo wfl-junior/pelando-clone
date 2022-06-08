@@ -7,10 +7,10 @@ import type { INestApplication } from "@nestjs/common";
 import { print } from "graphql";
 import supertest from "supertest";
 import { graphqlEndpoint } from "../constants";
-import { loginMutation } from "../mutations/loginMutation";
-import { registerMutation } from "../mutations/registerMutation";
-import { removeVoteFromProductMutation } from "../mutations/removeVoteFromProductMutation";
-import { voteOnProductMutation } from "../mutations/voteOnProductMutation";
+import { loginMutation } from "../graphql/mutations/loginMutation";
+import { registerMutation } from "../graphql/mutations/registerMutation";
+import { removeVoteFromProductMutation } from "../graphql/mutations/removeVoteFromProductMutation";
+import { voteOnProductMutation } from "../graphql/mutations/voteOnProductMutation";
 import type {
   ResponseWithErrors,
   TestLoginMutationResponse,

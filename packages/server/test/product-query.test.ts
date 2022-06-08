@@ -1,9 +1,9 @@
-import { Product } from "@/src/entities";
 import { getEntityNotFoundMessage } from "@/src/utils/getEntityNotFoundMessage";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { AppModule } from "../src/app.module";
 import { TestClient } from "./client";
+import { getRandomProduct } from "./utils/getRandomProduct";
 import { transformEntityDatesToString } from "./utils/transformDatesToString";
 
 describe("product query", () => {
@@ -25,32 +25,7 @@ describe("product query", () => {
   });
 
   it("returns product if it exists", async () => {
-    const randomProduct = await Product.createQueryBuilder("product")
-      .innerJoinAndSelect("product.store", "store")
-      .innerJoinAndSelect("product.category", "category")
-      .select([
-        "product.id",
-        "product.createdAt",
-        "product.body",
-        "product.couponCode",
-        "product.price",
-        "product.sourceUrl",
-        "product.title",
-        "product.image",
-        "product.temperature",
-        "store.id",
-        "store.createdAt",
-        "store.slug",
-        "store.name",
-        "store.url",
-        "store.image",
-        "category.id",
-        "category.createdAt",
-        "category.slug",
-        "category.title",
-      ])
-      .orderBy("RANDOM()", Math.random() > 0.5 ? "ASC" : "DESC")
-      .getOneOrFail();
+    const randomProduct = await getRandomProduct();
 
     const response = await client.query.product({
       input: {

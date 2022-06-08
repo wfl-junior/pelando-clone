@@ -7,6 +7,7 @@ import { INestApplication, UnauthorizedException } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { AppModule } from "../src/app.module";
 import { TestClient } from "./client";
+import { getRandomProduct } from "./utils/getRandomProduct";
 import { transformEntityDatesToString } from "./utils/transformDatesToString";
 
 const password = "national-secret-password";
@@ -38,32 +39,7 @@ describe("voteOnProduct mutation HOT type", () => {
         ...userInput,
         password,
       }).save(),
-      Product.createQueryBuilder("product")
-        .innerJoinAndSelect("product.store", "store")
-        .innerJoinAndSelect("product.category", "category")
-        .select([
-          "product.id",
-          "product.createdAt",
-          "product.body",
-          "product.couponCode",
-          "product.price",
-          "product.sourceUrl",
-          "product.title",
-          "product.image",
-          "product.temperature",
-          "store.id",
-          "store.createdAt",
-          "store.slug",
-          "store.name",
-          "store.url",
-          "store.image",
-          "category.id",
-          "category.createdAt",
-          "category.slug",
-          "category.title",
-        ])
-        .orderBy("RANDOM()", Math.random() > 0.5 ? "ASC" : "DESC")
-        .getOneOrFail(),
+      getRandomProduct(),
     ]);
 
     accessToken = createAccessToken(newUser);

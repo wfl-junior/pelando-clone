@@ -9,10 +9,10 @@ import type { INestApplication } from "@nestjs/common";
 import { print } from "graphql";
 import supertest from "supertest";
 import { graphqlEndpoint } from "../constants";
-import { meQuery } from "../queries/meQuery";
-import { productQuery } from "../queries/productQuery";
-import { productsQuery } from "../queries/productsQuery";
-import { storesQuery } from "../queries/storesQuery";
+import { meQuery } from "../graphql/queries/meQuery";
+import { productQuery } from "../graphql/queries/productQuery";
+import { productsQuery } from "../graphql/queries/productsQuery";
+import { storesQuery } from "../graphql/queries/storesQuery";
 import type { Response, ResponseWithErrors, Variables } from "./types";
 
 export class TestQueryClient {
