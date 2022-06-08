@@ -72,6 +72,8 @@ describe("removeVoteFromProduct mutation HOT type", () => {
     expect(ok).toBe(true);
     expect(errors).toBeNull();
     expect(product).not.toBeNull();
+    expect(product!.temperature).toBeCloseTo(randomProduct.temperature);
+    product!.temperature = randomProduct.temperature;
     expect(transformEntityDatesToString(randomProduct)).toEqual(product);
   });
 

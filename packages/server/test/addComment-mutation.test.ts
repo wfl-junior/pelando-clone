@@ -63,6 +63,7 @@ describe("addComment mutation", () => {
         select: {
           id: true,
           userId: true,
+          productId: true,
         },
       });
     }
@@ -96,10 +97,18 @@ describe("addComment mutation", () => {
     expect(transformEntityDatesToString(newUser)).toEqual(
       expect.objectContaining(comment!.user),
     );
+    expect(transformEntityDatesToString(randomProduct)).toEqual(
+      expect.objectContaining(comment!.product),
+    );
   });
 
   it("inserts the comment into the database", () => {
     expect(newComment).not.toBeNull();
+  });
+
+  it("creates the comment for the right product", () => {
+    const { comment } = response.body.data!.addComment;
+    expect(newComment!.productId).toEqual(comment!.product.id);
   });
 
   it("creates the comment for the right user", () => {
@@ -130,7 +139,7 @@ describe("addComment mutation", () => {
       expect.arrayContaining([
         {
           path: "productId",
-          message: getEntityNotFoundMessage("product"),
+          message: getEntityNotFoundMessage("Product"),
         },
       ]),
     );

@@ -41,3 +41,7 @@ export interface ResponseWithErrors<TData> extends STResponse {
 export type TestAddCommentMutationResponse = ResponseWithErrors<{
   addComment: CommentResponse;
 }>;
+
+export type TestEditCommentMutationResponse = ResponseWithErrors<{
+  editComment: CommentResponse;
+}>;
