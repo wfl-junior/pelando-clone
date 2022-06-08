@@ -8,7 +8,6 @@ import { RemoveVoteFromProductInput } from "../graphql-types/Input/products/Remo
 import { VoteOnProductInput } from "../graphql-types/Input/products/VoteOnProductInput";
 import { ProductQueryResponse } from "../graphql-types/Object/products/ProductQueryResponse";
 import { UseAuthGuard } from "../guards/auth.guard";
-import { defaultErrorResponse } from "../utils/defaultErrorResponse";
 import { getEntityNotFoundMessage } from "../utils/getEntityNotFoundMessage";
 
 @Resolver(() => Product)
@@ -81,13 +80,8 @@ export class ProductVoteResolver {
         };
       }
 
-      console.log({
-        time: new Date(),
-        where: "mutation vote on product",
-        error,
-      });
-
-      return defaultErrorResponse();
+      // lança para o default error interceptor
+      throw error;
     }
   }
 
@@ -99,72 +93,62 @@ export class ProductVoteResolver {
     @Context() { user }: IContextWithUser,
   ): Promise<IResolverResponse<ProductQueryResponse>> {
     // TODO: adicionar transactions aqui
-    try {
-      const product = await Product.findOne({
-        where: { id: productId },
-        relations: ["store", "category"],
-      });
+    const product = await Product.findOne({
+      where: { id: productId },
+      relations: ["store", "category"],
+    });
 
-      if (!product) {
-        return {
-          ok: false,
-          errors: [
-            {
-              path: "productId",
-              message: getEntityNotFoundMessage("Product"),
-            },
-          ],
-        };
-      }
-
-      const vote = await UserProductVote.findOne({
-        where: {
-          userId: user.id,
-          productId,
-        },
-      });
-
-      if (!vote) {
-        return {
-          ok: false,
-          errors: [
-            {
-              path: "productId",
-              message: "user doesn't have a vote for this product",
-            },
-          ],
-        };
-      }
-
-      switch (vote.type) {
-        // voltar temperatura para como era antes do voto
-        case UserProductVoteType.HOT: {
-          product.temperature -= user.productVoteValue;
-          break;
-        }
-        case UserProductVoteType.COLD: {
-          product.temperature += user.productVoteValue;
-          break;
-        }
-      }
-
-      await product.save();
-
-      // remove voto somente se product tiver sido salvo
-      await vote.remove();
-
+    if (!product) {
       return {
-        ok: true,
-        product,
+        ok: false,
+        errors: [
+          {
+            path: "productId",
+            message: getEntityNotFoundMessage("Product"),
+          },
+        ],
       };
-    } catch (error) {
-      console.log({
-        time: new Date(),
-        where: "mutation remove vote from product",
-        error,
-      });
-
-      return defaultErrorResponse();
     }
+
+    const vote = await UserProductVote.findOne({
+      where: {
+        userId: user.id,
+        productId,
+      },
+    });
+
+    if (!vote) {
+      return {
+        ok: false,
+        errors: [
+          {
+            path: "productId",
+            message: "user doesn't have a vote for this product",
+          },
+        ],
+      };
+    }
+
+    switch (vote.type) {
+      // voltar temperatura para como era antes do voto
+      case UserProductVoteType.HOT: {
+        product.temperature -= user.productVoteValue;
+        break;
+      }
+      case UserProductVoteType.COLD: {
+        product.temperature += user.productVoteValue;
+        break;
+      }
+    }
+
+    await product.save();
+
+    // remove voto somente se product tiver sido salvo
+    await vote.remove();
+
+    return {
+      ok: true,
+      product,
+    };
   }
 }

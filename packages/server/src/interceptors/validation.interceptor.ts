@@ -40,6 +40,7 @@ export class ValidationInterceptor implements NestInterceptor {
         return of(yupErrorResponse(error));
       }
 
+      // Mantém esta parte, porque este interceptor vem depois do default error interceptor
       console.log({
         time: new Date(),
         where: `validation interceptor for ${context.getInfo().fieldName}`,
@@ -51,7 +52,7 @@ export class ValidationInterceptor implements NestInterceptor {
   }
 }
 
-export function UseValidation(
+export function UseValidationInterceptor(
   schema: YupSchema,
   argsPropertyToValidate?: string,
 ) {

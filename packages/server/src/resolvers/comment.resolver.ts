@@ -10,9 +10,8 @@ import { CommentResponse } from "../graphql-types/Object/comments/CommentRespons
 import { CommentsQueryResponse } from "../graphql-types/Object/comments/CommentsQueryResponse";
 import { ResolverResponse } from "../graphql-types/Object/ResolverResponse";
 import { UseAuthGuard } from "../guards/auth.guard";
-import { UseValidation } from "../interceptors/validation.interceptor";
+import { UseValidationInterceptor } from "../interceptors/validation.interceptor";
 import { calculatePaginationOffset } from "../utils/calculatePaginationOffset";
-import { defaultErrorResponse } from "../utils/defaultErrorResponse";
 import { getEntityNotFoundMessage } from "../utils/getEntityNotFoundMessage";
 import { getPageInfo } from "../utils/getPageInfo";
 import { removeNullPropertiesDeep } from "../utils/removeNullPropertiesDeep";
@@ -25,37 +24,32 @@ export class CommentResolver {
     @Args("input", { type: () => CommentsQueryInput })
     input: CommentsQueryInput,
   ): Promise<IResolverResponse<CommentsQueryResponse>> {
-    try {
-      const perPage = input.perPage || DEFAULT_PER_PAGE;
-      const page = input.page || 1;
-      const offset = calculatePaginationOffset(page, perPage);
+    const perPage = input.perPage || DEFAULT_PER_PAGE;
+    const page = input.page || 1;
+    const offset = calculatePaginationOffset(page, perPage);
 
-      const [comments, count] = await Comment.findAndCount({
-        take: perPage,
-        skip: offset,
-        relations: ["user", "product", "product.store", "product.category"],
-        where: input.where,
-        order: input.orderBy
-          ? removeNullPropertiesDeep(input.orderBy)
-          : undefined,
-      });
+    const [comments, count] = await Comment.findAndCount({
+      take: perPage,
+      skip: offset,
+      relations: ["user", "product", "product.store", "product.category"],
+      where: input.where,
+      order: input.orderBy
+        ? removeNullPropertiesDeep(input.orderBy)
+        : undefined,
+    });
 
-      return {
-        ok: true,
-        comments: {
-          edges: comments,
-          info: getPageInfo({ count, perPage, offset }),
-        },
-      };
-    } catch (error) {
-      console.log({ time: new Date(), where: "query comments", error });
-      return defaultErrorResponse();
-    }
+    return {
+      ok: true,
+      comments: {
+        edges: comments,
+        info: getPageInfo({ count, perPage, offset }),
+      },
+    };
   }
 
   @Mutation(() => CommentResponse)
   @UseAuthGuard()
-  @UseValidation(commentValidationSchema)
+  @UseValidationInterceptor(commentValidationSchema)
   async addComment(
     @Args("input", { type: () => AddCommentInput }) input: AddCommentInput,
     @Context() { user }: IContextWithUser,
@@ -107,69 +101,54 @@ export class CommentResolver {
         };
       }
 
-      console.log({
-        time: new Date(),
-        where: "mutation add comment",
-        error,
-      });
-
-      return defaultErrorResponse();
+      // lança para o default error interceptor
+      throw error;
     }
   }
 
   @Mutation(() => CommentResponse)
   @UseAuthGuard()
-  @UseValidation(commentValidationSchema)
+  @UseValidationInterceptor(commentValidationSchema)
   async editComment(
     @Args("input", { type: () => EditCommentInput }) input: EditCommentInput,
     @Context() { user }: IContextWithUser,
   ): Promise<IResolverResponse<CommentResponse>> {
-    try {
-      const comment = await Comment.findOne({
-        where: { id: input.id },
-        relations: ["user", "product", "product.store", "product.category"],
-      });
+    const comment = await Comment.findOne({
+      where: { id: input.id },
+      relations: ["user", "product", "product.store", "product.category"],
+    });
 
-      if (!comment) {
-        return {
-          ok: false,
-          errors: [
-            {
-              path: "id",
-              message: getEntityNotFoundMessage("Comment"),
-            },
-          ],
-        };
-      }
-
-      if (comment.userId !== user.id) {
-        return {
-          ok: false,
-          errors: [
-            {
-              path: "userId",
-              message: "you must be the owner to edit the comment",
-            },
-          ],
-        };
-      }
-
-      comment.body = input.body;
-      await comment.save();
-
+    if (!comment) {
       return {
-        ok: true,
-        comment,
+        ok: false,
+        errors: [
+          {
+            path: "id",
+            message: getEntityNotFoundMessage("Comment"),
+          },
+        ],
       };
-    } catch (error) {
-      console.log({
-        time: new Date(),
-        where: "mutation edit comment",
-        error,
-      });
-
-      return defaultErrorResponse();
     }
+
+    if (comment.userId !== user.id) {
+      return {
+        ok: false,
+        errors: [
+          {
+            path: "userId",
+            message: "you must be the owner to edit the comment",
+          },
+        ],
+      };
+    }
+
+    comment.body = input.body;
+    await comment.save();
+
+    return {
+      ok: true,
+      comment,
+    };
   }
 
   @Mutation(() => ResolverResponse)
@@ -178,49 +157,39 @@ export class CommentResolver {
     @Args("id", { type: () => ID }) id: string,
     @Context() { user }: IContextWithUser,
   ): Promise<IResolverResponse> {
-    try {
-      const comment = await Comment.findOne({
-        where: { id },
-        select: {
-          id: true,
-          userId: true,
-        },
-      });
+    const comment = await Comment.findOne({
+      where: { id },
+      select: {
+        id: true,
+        userId: true,
+      },
+    });
 
-      if (!comment) {
-        return {
-          ok: false,
-          errors: [
-            {
-              path: "id",
-              message: getEntityNotFoundMessage("Comment"),
-            },
-          ],
-        };
-      }
-
-      if (comment.userId !== user.id) {
-        return {
-          ok: false,
-          errors: [
-            {
-              path: "userId",
-              message: "you must be the owner to delete the comment",
-            },
-          ],
-        };
-      }
-
-      await comment.remove({ transaction: false });
-      return { ok: true };
-    } catch (error) {
-      console.log({
-        time: new Date(),
-        where: "mutation delete comment",
-        error,
-      });
-
-      return defaultErrorResponse();
+    if (!comment) {
+      return {
+        ok: false,
+        errors: [
+          {
+            path: "id",
+            message: getEntityNotFoundMessage("Comment"),
+          },
+        ],
+      };
     }
+
+    if (comment.userId !== user.id) {
+      return {
+        ok: false,
+        errors: [
+          {
+            path: "userId",
+            message: "you must be the owner to delete the comment",
+          },
+        ],
+      };
+    }
+
+    await comment.remove({ transaction: false });
+    return { ok: true };
   }
 }
