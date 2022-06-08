@@ -18,7 +18,7 @@ const userInput: Pick<User, "email" | "username"> = {
 const body = "hello world";
 const newBody = "you shall not pass";
 
-describe("addComment mutation", () => {
+describe("editComment mutation", () => {
   let app: INestApplication;
   let client: TestClient;
   let randomProduct: Product;

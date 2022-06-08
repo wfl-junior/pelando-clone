@@ -32,7 +32,6 @@ export class ProductResolver {
       const query = Product.createQueryBuilder("product")
         .innerJoinAndSelect("product.store", "store")
         .innerJoinAndSelect("product.category", "category")
-        .leftJoinAndSelect("product.comments", "comments")
         .take(perPage)
         .skip(offset);
 
@@ -122,7 +121,6 @@ export class ProductResolver {
       const query = Product.createQueryBuilder("product")
         .innerJoinAndSelect("product.store", "store")
         .innerJoinAndSelect("product.category", "category")
-        .leftJoinAndSelect("product.comments", "comments")
         .where(input.where);
 
       try {
