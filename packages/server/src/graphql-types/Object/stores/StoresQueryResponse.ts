@@ -1,6 +1,6 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { ResolverResponse } from "../ResolverResponse";
-import { PaginatedStores } from "./PaginatedProducts";
+import { PaginatedStores } from "./PaginatedStores";
 
 @ObjectType()
 export class StoresQueryResponse extends ResolverResponse {

@@ -20,7 +20,7 @@ export class StoreResolver {
       const page = input?.page || 1;
       const offset = calculatePaginationOffset(page, perPage);
 
-      const [result, count] = await Store.findAndCount({
+      const [stores, count] = await Store.findAndCount({
         take: perPage,
         skip: offset,
       });
@@ -28,7 +28,7 @@ export class StoreResolver {
       return {
         ok: true,
         stores: {
-          edges: result,
+          edges: stores,
           info: getPageInfo({ count, perPage, offset }),
         },
       };

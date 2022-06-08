@@ -1,19 +1,58 @@
-import { Args, Context, ID, Mutation, Resolver } from "@nestjs/graphql";
+import { Args, Context, ID, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { QueryFailedError } from "typeorm";
 import { IContextWithUser, IResolverResponse } from "../@types/app";
+import { DEFAULT_PER_PAGE } from "../constants";
 import { Comment, Product } from "../entities";
 import { AddCommentInput } from "../graphql-types/Input/comments/AddCommentInput";
+import { CommentsQueryInput } from "../graphql-types/Input/comments/CommentsQueryInput";
 import { EditCommentInput } from "../graphql-types/Input/comments/EditCommentInput";
 import { CommentResponse } from "../graphql-types/Object/comments/CommentResponse";
+import { CommentsQueryResponse } from "../graphql-types/Object/comments/CommentsQueryResponse";
 import { ResolverResponse } from "../graphql-types/Object/ResolverResponse";
 import { UseAuthGuard } from "../guards/auth.guard";
 import { UseValidation } from "../interceptors/validation.interceptor";
+import { calculatePaginationOffset } from "../utils/calculatePaginationOffset";
 import { defaultErrorResponse } from "../utils/defaultErrorResponse";
 import { getEntityNotFoundMessage } from "../utils/getEntityNotFoundMessage";
+import { getPageInfo } from "../utils/getPageInfo";
+import { removeNullPropertiesDeep } from "../utils/removeNullPropertiesDeep";
 import { commentValidationSchema } from "../yup/commentValidationSchema";
 
 @Resolver(() => Comment)
 export class CommentResolver {
+  @Query(() => CommentsQueryResponse)
+  async comments(
+    @Args("input", { type: () => CommentsQueryInput })
+    input: CommentsQueryInput,
+  ): Promise<IResolverResponse<CommentsQueryResponse>> {
+    try {
+      const perPage = input.perPage || DEFAULT_PER_PAGE;
+      const page = input.page || 1;
+      const offset = calculatePaginationOffset(page, perPage);
+
+      const [comments, count] = await Comment.findAndCount({
+        take: perPage,
+        skip: offset,
+        relations: ["user", "product", "product.store", "product.category"],
+        where: input.where,
+        order: input.orderBy
+          ? removeNullPropertiesDeep(input.orderBy)
+          : undefined,
+      });
+
+      return {
+        ok: true,
+        comments: {
+          edges: comments,
+          info: getPageInfo({ count, perPage, offset }),
+        },
+      };
+    } catch (error) {
+      console.log({ time: new Date(), where: "query comments", error });
+      return defaultErrorResponse();
+    }
+  }
+
   @Mutation(() => CommentResponse)
   @UseAuthGuard()
   @UseValidation(commentValidationSchema)
