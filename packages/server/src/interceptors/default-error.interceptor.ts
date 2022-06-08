@@ -6,6 +6,7 @@ import {
   NestInterceptor,
 } from "@nestjs/common";
 import { GqlExecutionContext } from "@nestjs/graphql";
+import { Request } from "express";
 import { GraphQLResolveInfo } from "graphql";
 import { catchError, Observable } from "rxjs";
 
@@ -19,14 +20,14 @@ export class DefaultErrorInterceptor implements NestInterceptor {
       catchError(error => {
         const gqlContext = GqlExecutionContext.create(context);
         const gqlInfo = gqlContext.getInfo<GraphQLResolveInfo>();
-        const request = context.switchToHttp().getRequest();
+        const request = context.switchToHttp().getRequest<Request>();
 
         console.log({
           time: new Date(),
           where: `default error interceptor for ${
             context.contextType === "graphql"
-              ? `${gqlInfo.fieldName} ${gqlInfo.operation.operation}`
-              : `${request.route.path} ${JSON.stringify(request.route.methods)}`
+              ? `graphql ${gqlInfo.fieldName} ${gqlInfo.operation.operation}`
+              : `${request.method} ${request.url}`
           }`,
           error,
         });
