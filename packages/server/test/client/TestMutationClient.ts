@@ -1,3 +1,4 @@
+import { AddCommentInput } from "@/src/graphql-types/Input/comments/AddCommentInput";
 import { RemoveVoteFromProductInput } from "@/src/graphql-types/Input/products/RemoveVoteFromProductInput";
 import { VoteOnProductInput } from "@/src/graphql-types/Input/products/VoteOnProductInput";
 import { LoginInput } from "@/src/graphql-types/Input/users/LoginInput";
@@ -7,12 +8,14 @@ import type { INestApplication } from "@nestjs/common";
 import { print } from "graphql";
 import supertest from "supertest";
 import { graphqlEndpoint } from "../constants";
+import { addCommentMutation } from "../graphql/mutations/addCommentMutation";
 import { loginMutation } from "../graphql/mutations/loginMutation";
 import { registerMutation } from "../graphql/mutations/registerMutation";
 import { removeVoteFromProductMutation } from "../graphql/mutations/removeVoteFromProductMutation";
 import { voteOnProductMutation } from "../graphql/mutations/voteOnProductMutation";
 import type {
   ResponseWithErrors,
+  TestAddCommentMutationResponse,
   TestLoginMutationResponse,
   TestRegisterMutationResponse,
   Variables,
@@ -65,6 +68,19 @@ export class TestMutationClient {
       .set("authorization", `Bearer ${accessToken}`)
       .send({
         query: print(removeVoteFromProductMutation),
+        variables,
+      });
+  }
+
+  addComment(
+    variables: Variables<AddCommentInput>,
+    accessToken: string | null = null,
+  ): Promise<TestAddCommentMutationResponse> {
+    return supertest(this.app.getHttpServer())
+      .post(graphqlEndpoint)
+      .set("authorization", `Bearer ${accessToken}`)
+      .send({
+        query: print(addCommentMutation),
         variables,
       });
   }

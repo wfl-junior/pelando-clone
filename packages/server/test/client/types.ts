@@ -1,3 +1,4 @@
+import { CommentResponse } from "@/src/graphql-types/Object/comments/CommentResponse";
 import { LoginResponse } from "@/src/graphql-types/Object/users/LoginResponse";
 import { RegisterResponse } from "@/src/graphql-types/Object/users/RegisterResponse";
 import { Response as STResponse } from "supertest";
@@ -36,3 +37,7 @@ export interface ResponseWithErrors<TData> extends STResponse {
         errors?: undefined;
       };
 }
+
+export type TestAddCommentMutationResponse = ResponseWithErrors<{
+  addComment: CommentResponse;
+}>;

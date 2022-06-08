@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client";
 import { fieldErrorFieldsFragment } from "../fragments/fieldErrorFieldsFragment";
+import { productFieldsFragment } from "../fragments/productFieldsFragment";
 
 export const voteOnProductMutation = gql`
   mutation VoteOnProduct($input: VoteOnProductInput!) {
@@ -15,4 +16,5 @@ export const voteOnProductMutation = gql`
   }
 
   ${fieldErrorFieldsFragment}
+  ${productFieldsFragment}
 `;
