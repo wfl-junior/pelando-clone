@@ -5,26 +5,21 @@ import { INestApplication, UnauthorizedException } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { AppModule } from "../src/app.module";
 import { TestClient } from "./client";
-import { TestAddCommentMutationResponse } from "./client/types";
 import { getRandomProduct } from "./utils/getRandomProduct";
-import { transformEntityDatesToString } from "./utils/transformDatesToString";
 
 const password = "some-super-secret-password";
 const userInput: Pick<User, "email" | "username"> = {
-  email: "test@add-comment-mutation.com",
-  username: "testing-add-comment_mutation",
+  email: "test@delete-comment-mutation.com",
+  username: "testing-delete-comment_mutation",
 };
 
-const body = "hello world";
-
-describe("addComment mutation", () => {
+describe("deleteComment mutation", () => {
   let app: INestApplication;
   let client: TestClient;
   let newUser: User;
   let randomProduct: Product;
   let accessToken: string;
-  let response: TestAddCommentMutationResponse;
-  let newComment: Comment | null = null;
+  let newComment: Comment;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -45,27 +40,11 @@ describe("addComment mutation", () => {
 
     accessToken = createAccessToken(newUser);
 
-    response = await client.mutation.addComment(
-      {
-        input: {
-          productId: randomProduct.id,
-          body,
-        },
-      },
-      accessToken,
-    );
-
-    if (response.body.data?.addComment.comment) {
-      newComment = await Comment.findOne({
-        where: {
-          id: response.body.data.addComment.comment.id,
-        },
-        select: {
-          id: true,
-          userId: true,
-        },
-      });
-    }
+    newComment = await Comment.create({
+      userId: newUser.id,
+      productId: randomProduct.id,
+      body: "hello world",
+    }).save();
   });
 
   afterAll(async () => {
@@ -77,43 +56,10 @@ describe("addComment mutation", () => {
     await app.close();
   });
 
-  it("logged in user can add comment", () => {
-    expect(response.status).toBe(200);
-    expect(response.body.data).not.toBeNull();
-  });
-
-  it("returns correct data", () => {
-    const { ok, errors, comment } = response.body.data!.addComment;
-
-    expect(ok).toBe(true);
-    expect(errors).toBeNull();
-    expect(comment).not.toBeNull();
-    expect(comment).toEqual(
-      expect.objectContaining({
-        body,
-      }),
-    );
-    expect(transformEntityDatesToString(newUser)).toEqual(
-      expect.objectContaining(comment!.user),
-    );
-  });
-
-  it("inserts the comment into the database", () => {
-    expect(newComment).not.toBeNull();
-  });
-
-  it("creates the comment for the right user", () => {
-    const { comment } = response.body.data!.addComment;
-    expect(newComment!.userId).toEqual(comment!.user.id);
-  });
-
-  it("returns not found for nonexistent product", async () => {
-    const response = await client.mutation.addComment(
+  it("logged in user can delete comment", async () => {
+    const response = await client.mutation.deleteComment(
       {
-        input: {
-          productId: "hello-world",
-          body,
-        },
+        id: newComment.id,
       },
       accessToken,
     );
@@ -121,27 +67,50 @@ describe("addComment mutation", () => {
     expect(response.status).toBe(200);
     expect(response.body.data).not.toBeNull();
 
-    const { ok, errors, comment } = response.body.data!.addComment;
+    const { ok, errors } = response.body.data!.deleteComment;
+
+    expect(ok).toBe(true);
+    expect(errors).toBeNull();
+  });
+
+  it("comment was removed from the database", async () => {
+    const comment = await Comment.findOne({
+      where: {
+        id: newComment.id,
+      },
+    });
+
+    expect(comment).toBeNull();
+  });
+
+  it("returns not found for nonexistent comment", async () => {
+    const response = await client.mutation.deleteComment(
+      {
+        id: newComment.id,
+      },
+      accessToken,
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.body.data).not.toBeNull();
+
+    const { ok, errors } = response.body.data!.deleteComment;
 
     expect(ok).toBe(false);
     expect(errors).not.toBeNull();
-    expect(comment).toBeNull();
     expect(errors).toEqual(
       expect.arrayContaining([
         {
-          path: "productId",
-          message: getEntityNotFoundMessage("product"),
+          path: "id",
+          message: getEntityNotFoundMessage("Comment"),
         },
       ]),
     );
   });
 
   it("throws Unauthorized error if no access token is received", async () => {
-    const response = await client.mutation.addComment({
-      input: {
-        productId: randomProduct.id,
-        body,
-      },
+    const response = await client.mutation.deleteComment({
+      id: newComment.id,
     });
 
     expect(response.status).toBe(200);

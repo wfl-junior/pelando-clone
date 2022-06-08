@@ -1,5 +1,4 @@
 import { Comment, Product, User } from "@/src/entities";
-import { getEntityNotFoundMessage } from "@/src/utils/getEntityNotFoundMessage";
 import { createAccessToken } from "@/src/utils/jwt";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
@@ -10,10 +9,9 @@ import { getRandomProduct } from "./utils/getRandomProduct";
 const password = "some-super-secret-password";
 const userInput: Pick<User, "email" | "username"> = {
   email: "test@add-comment-mutation_validation.com",
-  username: "testing-comment_mutation-validation",
+  username: "testing-add-comment_mutation-validation",
 };
 
-const badProductId = "hello-world";
 const badBody = "ba";
 const goodBody = "some real interesting comment";
 
@@ -83,45 +81,8 @@ describe("addComment validation mutation", () => {
         },
       ]);
 
-      expect(badResponse.body.data).not.toBeNull();
-      expect(goodResponse.body.data).not.toBeNull();
-      expect(badResponse.body.data!.addComment.errors).toEqual(expectedError);
-      expect(goodResponse.body.data!.addComment.errors).not.toEqual(
-        expectedError,
-      );
-    });
-  });
-
-  describe("productId", () => {
-    it("returns not found for nonexistent product", async () => {
-      const [badResponse, goodResponse] = await Promise.all([
-        client.mutation.addComment(
-          {
-            input: {
-              productId: badProductId,
-              body: goodBody,
-            },
-          },
-          accessToken,
-        ),
-        client.mutation.addComment(
-          {
-            input: {
-              productId: randomProduct.id,
-              body: goodBody,
-            },
-          },
-          accessToken,
-        ),
-      ]);
-
-      const expectedError = expect.arrayContaining([
-        {
-          path: "productId",
-          message: getEntityNotFoundMessage("product"),
-        },
-      ]);
-
+      expect(badResponse.status).toBe(200);
+      expect(goodResponse.status).toBe(200);
       expect(badResponse.body.data).not.toBeNull();
       expect(goodResponse.body.data).not.toBeNull();
       expect(badResponse.body.data!.addComment.errors).toEqual(expectedError);

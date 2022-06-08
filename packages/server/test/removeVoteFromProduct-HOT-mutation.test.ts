@@ -101,7 +101,7 @@ describe("removeVoteFromProduct mutation HOT type", () => {
       select: { temperature: true },
     });
 
-    expect(product.temperature).toBe(randomProduct.temperature);
+    expect(product.temperature).toBeCloseTo(randomProduct.temperature);
   });
 
   it("returns not found error if product doesn't exist", async () => {
