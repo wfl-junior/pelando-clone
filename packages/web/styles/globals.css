@@ -15,6 +15,7 @@
     --color-default-shadow: 0 0 0;
     --color-default-fade: 255 255 255;
     --color-default-border: 233 233 233;
+    --color-image-border: 233 234 237;
     --color-secondary-background: 246 246 246;
     --color-secondary-foreground: 153 153 153;
     --color-secondary-button: 233 233 233;
@@ -35,6 +36,7 @@
     --color-default-shadow: 0 0 0;
     --color-default-fade: 0 0 0;
     --color-default-border: 38 42 43;
+    --color-image-border: 233 234 237;
     --color-secondary-background: 16 17 18;
     --color-secondary-foreground: 184 178 169;
     --color-secondary-button: 38 42 43;
@@ -55,5 +57,9 @@
 
   textarea::placeholder {
     @apply text-secondary-foreground;
+  }
+
+  pre {
+    @apply font-sans;
   }
 }

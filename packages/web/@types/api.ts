@@ -225,3 +225,16 @@ export interface VoteOnProductResponse {
 export interface RemoveVoteFromProductResponse {
   removeVoteFromProduct: GraphQLResponse & { product: Product };
 }
+
+export interface AddCommentInput {
+  productId: string;
+  body: string;
+}
+
+export interface AddCommentVariables {
+  input: AddCommentInput;
+}
+
+export interface AddCommentResponse {
+  addComment: GraphQLResponse & { comment: Comment };
+}

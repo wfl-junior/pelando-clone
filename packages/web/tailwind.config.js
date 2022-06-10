@@ -17,6 +17,7 @@ const colors = [
   "default-shadow",
   "default-fade",
   "default-border",
+  "image-border",
   "secondary-background",
   "secondary-foreground",
   "secondary-button",

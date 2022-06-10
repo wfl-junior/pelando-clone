@@ -9,7 +9,7 @@ export const TipSection: React.FC = () => {
   return (
     <div className="grid-template-areas-product-page-tip grid grid-cols-[auto_1fr] gap-y-2 gap-x-1 px-4 pt-4 md:px-8">
       <div
-        className="border-default-border my-auto aspect-square w-9 overflow-hidden rounded-full border"
+        className="border-image-border my-auto aspect-square w-9 overflow-hidden rounded-full border"
         style={{ gridArea: "image" }}
       >
         <Image

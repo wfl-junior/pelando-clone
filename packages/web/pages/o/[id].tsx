@@ -1,5 +1,6 @@
 import { ProductsQueryVariables } from "@/@types/api";
 import { getVariables, ProductPage } from "@/components/ProductPage";
+import { getCommentsVariables } from "@/components/ProductPage/ExtraSection/CommentsSection/CommentList";
 import {
   getRandomTip,
   tipQuery,
@@ -28,15 +29,7 @@ export const getServerSideProps: GetServerSideProps<
   const queries = [
     sdk.query.stores(),
     sdk.query.comments({
-      variables: {
-        input: {
-          page: 1,
-          perPage: 10,
-          where: {
-            productId: id,
-          },
-        },
-      },
+      variables: getCommentsVariables(id),
     }),
   ];
   const productVariables = getVariables(id);

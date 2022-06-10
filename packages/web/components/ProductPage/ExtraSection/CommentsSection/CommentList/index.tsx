@@ -1,3 +1,4 @@
+import { CommentsQueryVariables } from "@/@types/api";
 import { ChevronLeftIcon } from "@/components/icons/header/nav/ChevronLeft";
 import { ChevronRightIcon } from "@/components/icons/header/nav/ChevronRight";
 import { ConversationIcon } from "@/components/icons/product-page/ConversationIcon";
@@ -17,19 +18,25 @@ import { NoComments } from "./NoComments";
 
 const perPage = 10;
 
+export function getCommentsVariables(
+  productId: string,
+  page = 1,
+): CommentsQueryVariables {
+  return {
+    input: {
+      page,
+      perPage,
+      where: { productId },
+      orderBy: { createdAt: "ASC" },
+    },
+  };
+}
+
 export const CommentList: React.FC = () => {
   const { id } = useProductForProductPage();
   const [page, setPage] = useState(1);
   const { data, loading, error } = useCommentsQuery({
-    variables: {
-      input: {
-        page,
-        perPage,
-        where: {
-          productId: id,
-        },
-      },
-    },
+    variables: getCommentsVariables(id, page),
   });
 
   if (loading) {
@@ -78,7 +85,7 @@ export const CommentList: React.FC = () => {
           {comments.map(comment => (
             <div key={comment.id} className="flex gap-1">
               <Link href="#">
-                <a className="border-default-border flex aspect-square w-10 items-center justify-center self-start overflow-hidden rounded-full border">
+                <a className="border-image-border flex aspect-square w-10 items-center justify-center self-start overflow-hidden rounded-full border">
                   {comment.user.image ? (
                     <Image
                       src={comment.user.image}
@@ -114,7 +121,7 @@ export const CommentList: React.FC = () => {
                     </button>
                   </div>
 
-                  <p className="break-words">{comment.body}</p>
+                  <pre className="break-words">{comment.body}</pre>
                 </div>
 
                 <div className="flex items-center gap-6 self-end px-2 md:self-start">
