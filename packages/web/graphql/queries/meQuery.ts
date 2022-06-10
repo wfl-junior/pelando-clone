@@ -4,6 +4,7 @@ export const meQuery = gql`
   query MeQuery {
     me {
       user {
+        id
         createdAt
         email
         username

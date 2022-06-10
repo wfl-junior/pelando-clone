@@ -3,7 +3,6 @@ import { ChevronLeftIcon } from "@/components/icons/header/nav/ChevronLeft";
 import { ChevronRightIcon } from "@/components/icons/header/nav/ChevronRight";
 import { ConversationIcon } from "@/components/icons/product-page/ConversationIcon";
 import { LikeEmptyIcon } from "@/components/icons/product-page/LikeEmptyIcon";
-import { MoreOptionsIcon } from "@/components/icons/product-page/MoreOptionsIcon";
 import { ReplyIcon } from "@/components/icons/product-page/ReplyIcon";
 import { UserImagePlaceholder } from "@/components/UserImagePlaceholder";
 import { useCommentsQuery } from "@/hooks/apollo/queries/useCommentsQuery";
@@ -14,6 +13,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { CommentListError } from "./CommentListError";
 import { CommentListLoading } from "./CommentListLoading";
+import { MoreOptionsMenu } from "./MoreOptionsMenu";
 import { NoComments } from "./NoComments";
 
 const perPage = 10;
@@ -51,7 +51,7 @@ export const CommentList: React.FC = () => {
 
   return (
     <div className="p-4 md:px-8">
-      {comments.length ? (
+      {info.total ? (
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2 font-bold">
             <h3>Todos os comentários</h3>
@@ -115,10 +115,7 @@ export const CommentList: React.FC = () => {
                       </time>
                     </div>
 
-                    {/* TODO: adicionar menu */}
-                    <button type="button" className="text-secondary-foreground">
-                      <MoreOptionsIcon className="w-4.5" />
-                    </button>
+                    <MoreOptionsMenu comment={comment} />
                   </div>
 
                   <pre className="break-words">{comment.body}</pre>

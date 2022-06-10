@@ -5,6 +5,7 @@ export const commentsQuery = gql`
     comments(input: $input) {
       comments {
         info {
+          total
           hasNextPage
           hasPreviousPage
         }
@@ -13,6 +14,7 @@ export const commentsQuery = gql`
           createdAt
           body
           user {
+            id
             username
             image
           }

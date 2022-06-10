@@ -82,6 +82,7 @@ export interface ProductQueryVariables {
 export interface Model {
   id: string;
   createdAt: string;
+  __typename: string;
 }
 
 export interface PageInfo {
@@ -238,4 +239,12 @@ export interface AddCommentVariables {
 
 export interface AddCommentResponse {
   addComment: GraphQLResponse & { comment: Comment };
+}
+
+export interface DeleteCommentResponse {
+  deleteComment: GraphQLResponse;
+}
+
+export interface DeleteCommentVariables {
+  id: Comment["id"];
 }

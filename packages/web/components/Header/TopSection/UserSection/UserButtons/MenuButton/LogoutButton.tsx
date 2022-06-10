@@ -3,7 +3,6 @@ import { Spinner } from "@/components/Spinner";
 import { useLogoutMutation } from "@/hooks/apollo/mutations/useLogoutMutation";
 import { Menu } from "@headlessui/react";
 import classNames from "classnames";
-import React from "react";
 
 export const LogoutButton = () => {
   const [logoutMutation, { loading }] = useLogoutMutation();
@@ -25,6 +24,7 @@ export const LogoutButton = () => {
             try {
               await logoutMutation();
             } catch (error) {
+              // TODO: adicionar toast
               console.log({ error });
             }
           }}

@@ -2,19 +2,14 @@ import { LogoutMutationResponse } from "@/@types/api";
 import { logoutMutation } from "@/graphql/mutations/logoutMutation";
 import { setAccessToken } from "@/utils/accessToken";
 import { applyFakeMeQuery } from "@/utils/applyFakeMeQuery";
-import {
-  ApolloCache,
-  MutationHookOptions,
-  NormalizedCacheObject,
-  useMutation,
-} from "@apollo/client";
+import { MutationHookOptions, useMutation } from "@apollo/client";
 
 export function useLogoutMutation(
   options?: Omit<MutationHookOptions<LogoutMutationResponse>, "update">,
 ) {
   return useMutation(logoutMutation, {
     ...options,
-    update: (cache: ApolloCache<NormalizedCacheObject>) => {
+    update: cache => {
       // remove accessToken de state
       setAccessToken(null);
 

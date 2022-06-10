@@ -3,7 +3,6 @@ import { useAddCommentMutation } from "@/hooks/apollo/mutations/useAddCommentMut
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import { useUser } from "@/hooks/useUser";
 import { commentValidationSchema } from "@/yup/commentValidationSchema";
-import { ApolloCache, NormalizedCacheObject } from "@apollo/client";
 import { Formik } from "formik";
 import Image from "next/image";
 import React from "react";
@@ -47,8 +46,9 @@ export const AddCommentSection: React.FC = () => {
                 productId: product.id,
               },
             },
-            update: (cache: ApolloCache<NormalizedCacheObject>, { data }) => {
+            update: (cache, { data }) => {
               if (data?.addComment.ok) {
+                // atualizar commentCount do product
                 cache.modify({
                   id: cache.identify(product as any),
                   fields: {
