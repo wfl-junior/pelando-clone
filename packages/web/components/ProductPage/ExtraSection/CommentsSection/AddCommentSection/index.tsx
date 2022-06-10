@@ -3,6 +3,7 @@ import { useAddCommentMutation } from "@/hooks/apollo/mutations/useAddCommentMut
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import { useUser } from "@/hooks/useUser";
 import { commentValidationSchema } from "@/yup/commentValidationSchema";
+import { ApolloCache, NormalizedCacheObject } from "@apollo/client";
 import { Formik } from "formik";
 import Image from "next/image";
 import React from "react";
@@ -14,7 +15,7 @@ const initialValues = {
 
 export const AddCommentSection: React.FC = () => {
   const { user } = useUser();
-  const { id } = useProductForProductPage();
+  const product = useProductForProductPage();
   const [addComment] = useAddCommentMutation();
 
   return (
@@ -43,8 +44,20 @@ export const AddCommentSection: React.FC = () => {
             variables: {
               input: {
                 ...values,
-                productId: id,
+                productId: product.id,
               },
+            },
+            update: (cache: ApolloCache<NormalizedCacheObject>, { data }) => {
+              if (data?.addComment.ok) {
+                cache.modify({
+                  id: cache.identify(product as any),
+                  fields: {
+                    commentCount: () => product.commentCount + 1,
+                  },
+                });
+
+                // TODO: adicionar novo comentário a ui
+              }
             },
           });
 

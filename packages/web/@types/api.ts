@@ -122,6 +122,7 @@ export interface Product extends Model {
   image: string;
   temperature: number;
   userVoteType: UserProductVoteType;
+  commentCount: number;
   store: Store;
   category: Category;
 }

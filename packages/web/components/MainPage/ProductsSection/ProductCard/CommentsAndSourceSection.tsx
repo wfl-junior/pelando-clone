@@ -12,8 +12,7 @@ export const CommentsAndSourceSection: React.FC = () => {
       <Link href="#">
         <a className="hover:text-tertiary-foreground flex items-center gap-1 p-2 transition-colors">
           <CommentEmptyIcon className="w-4" />
-          {/* TODO: adicionar commentCount */}
-          <span>0</span>
+          <span>{product.commentCount}</span>
         </a>
       </Link>
 

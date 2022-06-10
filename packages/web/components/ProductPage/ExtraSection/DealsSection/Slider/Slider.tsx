@@ -74,7 +74,8 @@ export const Slider: React.FC<SliderProps> = ({ products }) => {
                     </div>
 
                     <div className="flex items-center gap-0.5 font-bold">
-                      <CommentIcon className="w-3.5" />0
+                      <CommentIcon className="w-3.5" />
+                      <span>{product.commentCount}</span>
                     </div>
                   </div>
 
