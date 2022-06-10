@@ -56,6 +56,25 @@ export interface ProductsQueryVariables {
   input?: ProductsQueryInput | null;
 }
 
+export interface CommentsWhereInput {
+  productId: string;
+}
+
+export interface CommentsOrderByInput {
+  id?: OrderByDirection | null;
+  createdAt?: OrderByDirection | null;
+  body?: OrderByDirection | null;
+}
+
+export interface CommentsQueryInput extends PaginatedQueryInput {
+  where: CommentsWhereInput;
+  orderBy?: CommentsOrderByInput | null;
+}
+
+export interface CommentsQueryVariables {
+  input: CommentsQueryInput;
+}
+
 export interface ProductQueryVariables {
   input: ProductQueryInput;
 }
@@ -107,6 +126,12 @@ export interface Product extends Model {
   category: Category;
 }
 
+export interface Comment extends Model {
+  body: string;
+  user: User;
+  product: Product;
+}
+
 export interface Category extends Model {
   slug: string;
   title: string;
@@ -118,6 +143,10 @@ export interface StoresQueryResponse {
 
 export interface ProductsQueryResponse {
   products: GraphQLResponse & { products: PaginatedData<Product> };
+}
+
+export interface CommentsQueryResponse {
+  comments: GraphQLResponse & { comments: PaginatedData<Comment> };
 }
 
 export interface ProductQueryResponse {

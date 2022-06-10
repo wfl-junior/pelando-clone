@@ -1,4 +1,6 @@
 import {
+  CommentsQueryResponse,
+  CommentsQueryVariables,
   MeQueryResponse,
   PaginatedQueryVariables,
   ProductQueryResponse,
@@ -9,6 +11,7 @@ import {
 } from "@/@types/api";
 import { ApolloQueryResult, QueryOptions } from "@apollo/client";
 import { Client } from "./client";
+import { commentsQuery } from "./queries/commentsQuery";
 import { meQuery } from "./queries/meQuery";
 import { productQuery } from "./queries/productQuery";
 import { productsQuery } from "./queries/productsQuery";
@@ -24,6 +27,7 @@ interface Sdk {
     products: ClientQuery<ProductsQueryResponse, ProductsQueryVariables>;
     me: ClientQuery<MeQueryResponse>;
     product: ClientQuery<ProductQueryResponse, ProductQueryVariables>;
+    comments: ClientQuery<CommentsQueryResponse, CommentsQueryVariables>;
   };
 }
 
@@ -52,6 +56,12 @@ export function getSdk(client: Client): Sdk {
         return client.query({
           ...options,
           query: productQuery,
+        });
+      },
+      comments: options => {
+        return client.query({
+          ...options,
+          query: commentsQuery,
         });
       },
     },

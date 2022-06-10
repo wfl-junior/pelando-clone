@@ -25,7 +25,20 @@ export const getServerSideProps: GetServerSideProps<
 
   const { id } = params!;
 
-  const queries = [sdk.query.stores()];
+  const queries = [
+    sdk.query.stores(),
+    sdk.query.comments({
+      variables: {
+        input: {
+          page: 1,
+          perPage: 10,
+          where: {
+            productId: id,
+          },
+        },
+      },
+    }),
+  ];
   const productVariables = getVariables(id);
   const productsVariables: ProductsQueryVariables = {
     input: {
