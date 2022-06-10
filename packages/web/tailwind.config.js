@@ -27,6 +27,7 @@ const colors = [
   "blue",
 ];
 
+/** @type {import("tailwindcss").Config} */
 module.exports = {
   mode: "jit",
   darkMode: "class",
@@ -43,7 +44,7 @@ module.exports = {
       colors: colors.reduce(
         (object, key) => ({
           ...object,
-          [key]: colorWithOpacityValue(key),
+          [key]: `rgb(var(--color-${key}) / <alpha-value>)`,
         }),
         {},
       ),
@@ -169,13 +170,3 @@ module.exports = {
     },
   ],
 };
-
-function colorWithOpacityValue(variable) {
-  return ({ opacityValue }) => {
-    if (opacityValue === undefined) {
-      return `rgb(var(--color-${variable}))`;
-    }
-
-    return `rgb(var(--color-${variable}) / ${opacityValue})`;
-  };
-}
