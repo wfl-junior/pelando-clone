@@ -18,7 +18,9 @@ export class Comment extends EntityNode {
   public readonly productId: string;
 
   @Field(() => Product)
-  @ManyToOne(() => Product, { onDelete: "CASCADE" })
+  @ManyToOne(() => Product, product => product.comments, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "product_id" })
   public readonly product: Product;
 

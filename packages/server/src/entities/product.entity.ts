@@ -1,6 +1,13 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, JoinColumn, JoinTable, ManyToOne } from "typeorm";
-import { Category, Store } from ".";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToOne,
+  OneToMany,
+} from "typeorm";
+import { Category, Comment, Store } from ".";
 import { UserProductVoteType } from "../graphql-types/enums/UserProductVoteType";
 import { EntityNode } from "./node.entity";
 
@@ -41,6 +48,9 @@ export class Product extends EntityNode {
   })
   public userVoteType: UserProductVoteType;
 
+  @Field()
+  commentCount: number = 0;
+
   @Column("uuid", { name: "store_id" })
   public storeId: string;
 
@@ -60,4 +70,7 @@ export class Product extends EntityNode {
     onDelete: "CASCADE",
   })
   public category: Category;
+
+  @OneToMany(() => Comment, comment => comment.product, { onDelete: "CASCADE" })
+  comments: Comment[];
 }

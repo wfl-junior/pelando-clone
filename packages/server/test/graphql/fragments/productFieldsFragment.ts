@@ -13,6 +13,7 @@ export const productFieldsFragment = gql`
     title
     image
     temperature
+    commentCount
     store {
       ...StoreFieldsFragment
     }
