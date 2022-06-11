@@ -13,6 +13,7 @@ export const addCommentMutation = gql`
         createdAt
         body
         user {
+          id
           username
           image
         }

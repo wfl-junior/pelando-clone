@@ -1,3 +1,4 @@
+import { CommentListContextProvider } from "@/contexts/CommentListContext";
 import React from "react";
 import { AddCommentSection } from "./AddCommentSection";
 import { CommentList } from "./CommentList";
@@ -16,9 +17,11 @@ export const CommentsSection: React.FC = () => (
       </div>
 
       <div className="divide-secondary-background flex flex-col gap-4 divide-y-2">
-        <AddCommentSection />
-        <TipSection />
-        <CommentList />
+        <CommentListContextProvider>
+          <AddCommentSection />
+          <TipSection />
+          <CommentList />
+        </CommentListContextProvider>
       </div>
     </div>
 

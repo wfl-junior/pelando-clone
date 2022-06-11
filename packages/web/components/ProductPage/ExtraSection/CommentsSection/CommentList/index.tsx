@@ -5,12 +5,13 @@ import { ConversationIcon } from "@/components/icons/product-page/ConversationIc
 import { LikeEmptyIcon } from "@/components/icons/product-page/LikeEmptyIcon";
 import { ReplyIcon } from "@/components/icons/product-page/ReplyIcon";
 import { UserImagePlaceholder } from "@/components/UserImagePlaceholder";
+import { useCommentListContext } from "@/contexts/CommentListContext";
 import { useCommentsQuery } from "@/hooks/apollo/queries/useCommentsQuery";
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import { getReadableDate } from "@/utils/getReadableDate";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import { CommentListError } from "./CommentListError";
 import { CommentListLoading } from "./CommentListLoading";
 import { MoreOptionsMenu } from "./MoreOptionsMenu";
@@ -34,7 +35,7 @@ export function getCommentsVariables(
 
 export const CommentList: React.FC = () => {
   const { id } = useProductForProductPage();
-  const [page, setPage] = useState(1);
+  const { page, setPage } = useCommentListContext();
   const { data, loading, error } = useCommentsQuery({
     variables: getCommentsVariables(id, page),
   });
