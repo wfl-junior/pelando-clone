@@ -47,6 +47,12 @@
     --color-blue: 102 153 255;
   }
 
+  html {
+    scroll-behavior: smooth;
+    /* desconta o height do sticky header para não atrapalhar a posição de scroll */
+    scroll-padding-top: 5rem;
+  }
+
   body {
     @apply font-sans;
   }

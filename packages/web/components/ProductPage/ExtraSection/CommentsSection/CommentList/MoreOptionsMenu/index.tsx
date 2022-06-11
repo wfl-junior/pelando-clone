@@ -5,6 +5,7 @@ import { useUser } from "@/hooks/useUser";
 import { Menu } from "@headlessui/react";
 import classNames from "classnames";
 import React, { Fragment } from "react";
+import { CopyLinkButton } from "./CopyLinkButton";
 import { DeleteCommentButton } from "./DeleteCommentButton";
 import { MenuButton } from "./MenuButton";
 
@@ -38,7 +39,8 @@ export const MoreOptionsMenu: React.FC<MoreOptionsMenuProps> = ({
                 { "absolute right-0 translate-y-4": isMediumBreakpoint },
               )}
             >
-              <MenuButton>Copiar link</MenuButton>
+              <CopyLinkButton comment={comment} />
+
               {user && user.id === comment.user.id ? (
                 <Fragment>
                   <MenuButton>Editar</MenuButton>
@@ -50,6 +52,7 @@ export const MoreOptionsMenu: React.FC<MoreOptionsMenuProps> = ({
               ) : (
                 <MenuButton>SPAM ou comentário ofensivo</MenuButton>
               )}
+
               <MenuButton fontBold={false}>Cancelar</MenuButton>
             </Menu.Items>
           </div>

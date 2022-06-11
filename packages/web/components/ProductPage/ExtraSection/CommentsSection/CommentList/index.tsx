@@ -83,7 +83,12 @@ export const CommentList: React.FC = () => {
           </div>
 
           {comments.map(comment => (
-            <div key={comment.id} className="flex gap-1">
+            <div
+              key={comment.id}
+              // para habilitar scrolling para cá
+              id={`comment-${comment.id}`}
+              className="flex gap-1"
+            >
               <Link href="#">
                 <a className="border-image-border flex aspect-square w-10 items-center justify-center self-start overflow-hidden rounded-full border">
                   {comment.user.image ? (
