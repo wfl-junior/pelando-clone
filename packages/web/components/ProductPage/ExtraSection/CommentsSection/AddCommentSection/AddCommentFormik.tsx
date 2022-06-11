@@ -2,7 +2,6 @@ import { Comment, CommentsQueryResponse } from "@/@types/api";
 import { useCommentListContext } from "@/contexts/CommentListContext";
 import { commentsQuery } from "@/graphql/queries/commentsQuery";
 import { useAddCommentMutation } from "@/hooks/apollo/mutations/useAddCommentMutation";
-import { useCommentsQuery } from "@/hooks/apollo/queries/useCommentsQuery";
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import { commentValidationSchema } from "@/yup/commentValidationSchema";
 import { Formik } from "formik";
@@ -17,8 +16,6 @@ const initialValues = {
 export const AddCommentFormik: React.FC = () => {
   const product = useProductForProductPage();
   const [addComment] = useAddCommentMutation();
-  const variables = getCommentsVariables(product.id);
-  const { data: firstPageData } = useCommentsQuery({ variables });
   const { setPage } = useCommentListContext();
 
   const getCommentElement = useCallback((id: Comment["id"]) => {
@@ -78,110 +75,65 @@ export const AddCommentFormik: React.FC = () => {
               },
             },
             update: (cache, { data }) => {
-              if (data?.addComment.comment) {
-                // atualizar commentCount do product
-                cache.modify({
-                  id: cache.identify(product as any),
-                  fields: {
-                    commentCount: () => product.commentCount + 1,
-                  },
-                });
+              if (!data?.addComment.comment) {
+                return;
+              }
 
-                // adicionar novo comentário a ui
+              // atualizar commentCount do product
+              cache.modify({
+                id: cache.identify(product as any),
+                fields: {
+                  commentCount: () => product.commentCount + 1,
+                },
+              });
 
-                const lastPage = Math.ceil(
-                  firstPageData!.comments.comments.info.total /
-                    variables.input.perPage!,
-                );
+              // adicionar novo comentário a ui
+              const firstPageVariables = getCommentsVariables(product.id);
+              const firstPageData = cache.readQuery<CommentsQueryResponse>({
+                query: commentsQuery,
+                variables: firstPageVariables,
+              })!;
 
-                // atualiza page para última, não entra em conflito com o último caso, por causa de state batching
-                setPage(lastPage);
+              const perPage = firstPageVariables.input.perPage!;
+              const totalComments = firstPageData.comments.comments.info.total;
+              const lastPage = Math.ceil(totalComments / perPage);
 
-                const lastPageData = cache.readQuery<CommentsQueryResponse>({
-                  query: commentsQuery,
-                  variables: {
-                    ...variables,
-                    input: {
-                      ...variables.input,
-                      page: lastPage,
-                    },
-                  },
-                });
+              // atualiza page para última, não entra em conflito com o último caso, por causa de state batching
+              setPage(lastPage);
 
-                // atualiza dados da query da página 1 para sincronizar com próximos updates
-                cache.writeQuery<CommentsQueryResponse>({
-                  query: commentsQuery,
-                  variables: {
-                    ...variables,
-                    input: {
-                      ...variables.input,
-                      page: 1,
-                    },
-                  },
-                  data: {
-                    ...firstPageData!,
+              const lastPageData = cache.readQuery<CommentsQueryResponse>({
+                query: commentsQuery,
+                variables: getCommentsVariables(product.id, lastPage),
+              });
+
+              // atualiza dados da query da página 1 para sincronizar com próximos updates
+              cache.writeQuery<CommentsQueryResponse>({
+                query: commentsQuery,
+                variables: firstPageVariables,
+                data: {
+                  ...firstPageData,
+                  comments: {
+                    ...firstPageData.comments,
                     comments: {
-                      ...firstPageData!.comments,
-                      comments: {
-                        ...firstPageData!.comments.comments,
-                        info: {
-                          ...firstPageData!.comments.comments.info,
-                          total:
-                            firstPageData!.comments.comments.info.total + 1,
-                        },
+                      ...firstPageData.comments.comments,
+                      info: {
+                        ...firstPageData.comments.comments.info,
+                        total: firstPageData.comments.comments.info.total + 1,
                       },
                     },
                   },
-                });
+                },
+              });
 
-                // checa se existe cache da última página
-                if (lastPageData) {
-                  // atualiza última página se existir em cache
-                  // checa se página já está cheia
-                  if (lastPageData.comments.comments.edges.length < 10) {
-                    // se não estiver cheia, inserir novo comentário nesta página
-                    cache.writeQuery<CommentsQueryResponse>({
-                      query: commentsQuery,
-                      variables: {
-                        ...variables,
-                        input: {
-                          ...variables.input,
-                          page: lastPage,
-                        },
-                      },
-                      data: {
-                        ...lastPageData,
-                        comments: {
-                          ...lastPageData.comments,
-                          comments: {
-                            ...lastPageData.comments.comments,
-                            info: {
-                              ...lastPageData.comments.comments.info,
-                              total:
-                                lastPageData.comments.comments.info.total + 1,
-                            },
-                            edges: [
-                              ...lastPageData.comments.comments.edges,
-                              data.addComment.comment,
-                            ],
-                          },
-                        },
-                      },
-                    });
-
-                    return scrollToNewComment(data.addComment.comment.id);
-                  }
-
-                  // cria outra página e adiciona novo comentário nela se a última já estiver cheia
+              // checa se existe cache da última página
+              if (lastPageData) {
+                // atualiza última página se existir em cache
+                // checa se página já está cheia
+                if (lastPageData.comments.comments.edges.length < 10) {
+                  // se não estiver cheia, inserir novo comentário nesta página
                   cache.writeQuery<CommentsQueryResponse>({
                     query: commentsQuery,
-                    variables: {
-                      ...variables,
-                      input: {
-                        ...variables.input,
-                        page: lastPage + 1,
-                      },
-                    },
+                    variables: getCommentsVariables(product.id, lastPage),
                     data: {
                       ...lastPageData,
                       comments: {
@@ -190,72 +142,11 @@ export const AddCommentFormik: React.FC = () => {
                           ...lastPageData.comments.comments,
                           info: {
                             ...lastPageData.comments.comments.info,
-                            hasPreviousPage: true,
                             total:
                               lastPageData.comments.comments.info.total + 1,
-                          },
-                          edges: [data.addComment.comment],
-                        },
-                      },
-                    },
-                  });
-
-                  // atualiza cache da página anterior
-                  cache.writeQuery<CommentsQueryResponse>({
-                    query: commentsQuery,
-                    variables: {
-                      ...variables,
-                      input: {
-                        ...variables.input,
-                        page: lastPage,
-                      },
-                    },
-                    data: {
-                      ...lastPageData,
-                      comments: {
-                        ...lastPageData.comments,
-                        comments: {
-                          ...lastPageData.comments.comments,
-                          info: {
-                            ...lastPageData.comments.comments.info,
-                            hasNextPage: true,
-                            total:
-                              lastPageData.comments.comments.info.total + 1,
-                          },
-                        },
-                      },
-                    },
-                  });
-
-                  // atualiza page state para nova página
-                  setPage(lastPage + 1);
-                  return scrollToNewComment(data.addComment.comment.id);
-                }
-
-                // caso não tivesse comentários antes
-                if (lastPage === 0) {
-                  cache.writeQuery<CommentsQueryResponse>({
-                    query: commentsQuery,
-                    variables: {
-                      ...variables,
-                      input: {
-                        ...variables.input,
-                        page: 1,
-                      },
-                    },
-                    data: {
-                      ...firstPageData!,
-                      comments: {
-                        ...firstPageData!.comments,
-                        comments: {
-                          ...firstPageData!.comments.comments,
-                          info: {
-                            ...firstPageData!.comments.comments.info,
-                            total:
-                              firstPageData!.comments.comments.info.total + 1,
                           },
                           edges: [
-                            ...firstPageData!.comments.comments.edges,
+                            ...lastPageData.comments.comments.edges,
                             data.addComment.comment,
                           ],
                         },
@@ -266,22 +157,90 @@ export const AddCommentFormik: React.FC = () => {
                   return scrollToNewComment(data.addComment.comment.id);
                 }
 
-                // atualiza para última página para dar fetch, porque ainda não está em cache
-                setPage(() => {
-                  // calcula para ver se novo comentário vai entrar na última página ou se vai ser criada uma nova
-                  if (
-                    firstPageData!.comments.comments.info.total %
-                      variables.input.perPage! ===
-                    0
-                  ) {
-                    return lastPage + 1;
-                  }
+                // cria outra página e adiciona novo comentário nela se a última já estiver cheia
+                cache.writeQuery<CommentsQueryResponse>({
+                  query: commentsQuery,
+                  variables: getCommentsVariables(product.id, lastPage + 1),
+                  data: {
+                    ...lastPageData,
+                    comments: {
+                      ...lastPageData.comments,
+                      comments: {
+                        ...lastPageData.comments.comments,
+                        info: {
+                          ...lastPageData.comments.comments.info,
+                          hasPreviousPage: true,
+                          total: lastPageData.comments.comments.info.total + 1,
+                        },
+                        edges: [data.addComment.comment],
+                      },
+                    },
+                  },
+                });
 
-                  return lastPage;
+                // atualiza cache da página anterior
+                cache.writeQuery<CommentsQueryResponse>({
+                  query: commentsQuery,
+                  variables: getCommentsVariables(product.id, lastPage),
+                  data: {
+                    ...lastPageData,
+                    comments: {
+                      ...lastPageData.comments,
+                      comments: {
+                        ...lastPageData.comments.comments,
+                        info: {
+                          ...lastPageData.comments.comments.info,
+                          hasNextPage: true,
+                          total: lastPageData.comments.comments.info.total + 1,
+                        },
+                      },
+                    },
+                  },
+                });
+
+                // atualiza page state para nova página
+                setPage(lastPage + 1);
+                return scrollToNewComment(data.addComment.comment.id);
+              }
+
+              // caso não tivesse comentários antes
+              if (lastPage === 0) {
+                cache.writeQuery<CommentsQueryResponse>({
+                  query: commentsQuery,
+                  variables: firstPageVariables,
+                  data: {
+                    ...firstPageData,
+                    comments: {
+                      ...firstPageData.comments,
+                      comments: {
+                        ...firstPageData.comments.comments,
+                        info: {
+                          ...firstPageData.comments.comments.info,
+                          total: firstPageData.comments.comments.info.total + 1,
+                        },
+                        edges: [
+                          ...firstPageData.comments.comments.edges,
+                          data.addComment.comment,
+                        ],
+                      },
+                    },
+                  },
                 });
 
                 return scrollToNewComment(data.addComment.comment.id);
               }
+
+              // atualiza para última página para dar fetch, porque ainda não está em cache
+              setPage(() => {
+                // calcula para ver se novo comentário vai entrar na última página ou se vai ser criada uma nova
+                if (totalComments % perPage === 0) {
+                  return lastPage + 1;
+                }
+
+                return lastPage;
+              });
+
+              return scrollToNewComment(data.addComment.comment.id);
             },
           });
 
