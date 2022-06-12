@@ -1,22 +1,29 @@
 import { Comment } from "@/@types/api";
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 interface ICommentItemContext {
   comment: Comment;
+  editing: boolean;
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CommentItemContext = createContext({} as ICommentItemContext);
 
 export const useCommentItemContext = () => useContext(CommentItemContext);
 
-interface CommentItemContextProviderProps extends ICommentItemContext {
+interface CommentItemContextProviderProps {
+  comment: Comment;
   children?: React.ReactNode;
 }
 
 export const CommentItemContextProvider: React.FC<
   CommentItemContextProviderProps
-> = ({ children, ...props }) => (
-  <CommentItemContext.Provider value={props}>
-    {children}
-  </CommentItemContext.Provider>
-);
+> = ({ children, ...props }) => {
+  const [editing, setEditing] = useState(false);
+
+  return (
+    <CommentItemContext.Provider value={{ editing, setEditing, ...props }}>
+      {children}
+    </CommentItemContext.Provider>
+  );
+};

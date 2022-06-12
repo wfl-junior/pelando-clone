@@ -242,6 +242,19 @@ export interface AddCommentResponse {
   addComment: GraphQLResponse & { comment: Comment };
 }
 
+export interface EditCommentInput {
+  id: string;
+  body: string;
+}
+
+export interface EditCommentVariables {
+  input: EditCommentInput;
+}
+
+export interface EditCommentResponse {
+  editComment: GraphQLResponse & { comment: Comment };
+}
+
 export interface DeleteCommentResponse {
   deleteComment: GraphQLResponse;
 }

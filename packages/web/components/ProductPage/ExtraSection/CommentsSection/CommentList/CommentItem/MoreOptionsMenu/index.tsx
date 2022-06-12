@@ -7,6 +7,7 @@ import classNames from "classnames";
 import React, { Fragment } from "react";
 import { CopyLinkButton } from "./CopyLinkButton";
 import { DeleteCommentButton } from "./DeleteCommentButton";
+import { EditCommentButton } from "./EditCommentButton";
 import { MenuButton } from "./MenuButton";
 
 export const MoreOptionsMenu: React.FC = () => {
@@ -40,8 +41,7 @@ export const MoreOptionsMenu: React.FC = () => {
 
               {user && user.id === comment.user.id ? (
                 <Fragment>
-                  <MenuButton>Editar</MenuButton>
-
+                  <EditCommentButton />
                   <DeleteCommentButton />
                 </Fragment>
               ) : (
