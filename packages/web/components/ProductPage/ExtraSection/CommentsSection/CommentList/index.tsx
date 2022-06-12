@@ -6,8 +6,6 @@ import { LikeEmptyIcon } from "@/components/icons/product-page/LikeEmptyIcon";
 import { ReplyIcon } from "@/components/icons/product-page/ReplyIcon";
 import { UserImagePlaceholder } from "@/components/UserImagePlaceholder";
 import { useCommentListContext } from "@/contexts/CommentListContext";
-import { useCommentsQuery } from "@/hooks/apollo/queries/useCommentsQuery";
-import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import { getReadableDate } from "@/utils/getReadableDate";
 import Image from "next/image";
 import Link from "next/link";
@@ -34,11 +32,11 @@ export function getCommentsVariables(
 }
 
 export const CommentList: React.FC = () => {
-  const { id } = useProductForProductPage();
-  const { page, setPage } = useCommentListContext();
-  const { data, loading, error } = useCommentsQuery({
-    variables: getCommentsVariables(id, page),
-  });
+  const {
+    page,
+    setPage,
+    queryResult: { data, loading, error },
+  } = useCommentListContext();
 
   if (loading) {
     return <CommentListLoading perPage={perPage} />;
@@ -62,7 +60,7 @@ export const CommentList: React.FC = () => {
           <div className="flex items-center gap-6">
             <button
               type="button"
-              className="disabled:text-secondary-foreground text-primary flex items-center gap-0.5"
+              className="disabled:text-secondary-foreground text-primary hover:enabled:text-primary-hover flex items-center gap-0.5"
               disabled={!info.hasPreviousPage}
               onClick={() => setPage(page - 1)}
             >
@@ -74,7 +72,7 @@ export const CommentList: React.FC = () => {
 
             <button
               type="button"
-              className="disabled:text-secondary-foreground text-primary flex items-center gap-0.5"
+              className="disabled:text-secondary-foreground text-primary hover:enabled:text-primary-hover flex items-center gap-0.5"
               disabled={!info.hasNextPage}
               onClick={() => setPage(page + 1)}
             >

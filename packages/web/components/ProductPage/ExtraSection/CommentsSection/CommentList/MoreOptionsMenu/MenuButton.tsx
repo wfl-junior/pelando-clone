@@ -12,19 +12,25 @@ export const MenuButton: React.FC<MenuButtonProps> = ({
   fontBold = true,
   className,
   ...props
-}) => {
-  return (
-    <Menu.Item
-      as="button"
-      type="button"
-      className={classNames(
-        "bg-default-background hover:bg-secondary-foreground/10 py-3 px-4 transition-colors",
-        { "font-bold": fontBold },
+}) => (
+  <Menu.Item
+    as="button"
+    type="button"
+    className={({ active }) =>
+      classNames(
+        "py-3 px-4 transition-colors",
+        props.disabled
+          ? "bg-inactive-background cursor-not-allowed"
+          : "bg-default-background",
+        {
+          "font-bold": fontBold,
+          "bg-secondary-foreground/10": active,
+        },
         className,
-      )}
-      {...props}
-    >
-      {children}
-    </Menu.Item>
-  );
-};
+      )
+    }
+    {...props}
+  >
+    {children}
+  </Menu.Item>
+);
