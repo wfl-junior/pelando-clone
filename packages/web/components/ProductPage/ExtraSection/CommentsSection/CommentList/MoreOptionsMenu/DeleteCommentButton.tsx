@@ -19,11 +19,7 @@ export const DeleteCommentButton: React.FC<DeleteCommentButtonProps> = ({
 }) => {
   const [deleteComment, { loading }] = useDeleteCommentMutation();
   const product = useProductForProductPage();
-  const {
-    page: currentPage,
-    setPage,
-    queryResult: { refetch },
-  } = useCommentListContext();
+  const { page: currentPage, setPage } = useCommentListContext();
 
   return (
     <MenuButton
@@ -99,16 +95,13 @@ export const DeleteCommentButton: React.FC<DeleteCommentButtonProps> = ({
 
               if (currentPage !== lastPage) {
                 // TODO: melhorar esta parte, fazer evict somente das páginas necessárias
-                // remove páginas depois da página atual do cache
-                for (let page = lastPage; page > currentPage; page--) {
+                // remove páginas depois da página atual do cache, e também a página atual, fazendo com que a página atual leve refetch
+                for (let page = lastPage; page >= currentPage; page--) {
                   cache.evict({
                     fieldName: "comments",
                     args: getCommentsVariables(product.id, page),
                   });
                 }
-
-                // faz refetch na página atual para atualizar a lista
-                refetch();
               }
 
               // volta 1 página e remove a atual se estiver na última e estiver somente com o comentário que vai ser deletado
@@ -118,15 +111,40 @@ export const DeleteCommentButton: React.FC<DeleteCommentButtonProps> = ({
               ) {
                 setPage(currentPage - 1);
 
-                // timeout para acontecer depois de setPage
-                setTimeout(() => {
+                // espera trocar de página para remover a atual, assim evitando refetch desnecessário
+                new Promise<boolean>(resolve => {
+                  let timeout: NodeJS.Timeout;
+                  const element = document.querySelector<HTMLDivElement>(
+                    `#comment-${comment.id}`,
+                  )!.parentElement!;
+
+                  const observer = new MutationObserver(entries => {
+                    for (const entry of entries) {
+                      if (entry.addedNodes.length) {
+                        observer.disconnect();
+                        clearTimeout(timeout);
+                        return resolve(true);
+                      }
+                    }
+                  });
+
+                  observer.observe(element, {
+                    childList: true,
+                    subtree: true,
+                  });
+
+                  timeout = setTimeout(() => {
+                    observer.disconnect();
+                    resolve(false);
+                  }, 1000);
+                }).then(() => {
                   cache.evict({
                     fieldName: "comments",
                     args: currentPageVariables,
                   });
 
                   cache.gc();
-                }, 100);
+                });
 
                 // atualiza cache da página anterior se existir
                 const previousPageVariables = getCommentsVariables(

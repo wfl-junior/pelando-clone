@@ -23,26 +23,24 @@ export const AddCommentFormik: React.FC = () => {
     return document.querySelector<HTMLDivElement>(`#comment-${id}`);
   }, []);
 
-  const scrollToNewComment = useCallback((id: Comment["id"]) => {
+  const scrollToNewComment = useCallback(async (id: Comment["id"]) => {
     // espera novo comentário aparecer na tela para dar scroll até ele
-    return new Promise<boolean>((resolve, reject) => {
-      const el = getCommentElement(id);
+    const element = await new Promise<HTMLDivElement>((resolve, reject) => {
+      const element = getCommentElement(id);
 
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-        return resolve(true);
+      if (element) {
+        return resolve(element);
       }
 
       let timeout: NodeJS.Timeout;
 
       const observer = new MutationObserver(() => {
-        const el = getCommentElement(id);
+        const element = getCommentElement(id);
 
-        if (el) {
+        if (element) {
           observer.disconnect();
           clearTimeout(timeout);
-          el.scrollIntoView({ behavior: "smooth" });
-          resolve(true);
+          resolve(element);
         }
       });
 
@@ -57,6 +55,8 @@ export const AddCommentFormik: React.FC = () => {
         reject(new Error("Não foi possível rolar para o novo comentário"));
       }, 1000);
     });
+
+    element.scrollIntoView({ behavior: "smooth" });
   }, []);
 
   return (

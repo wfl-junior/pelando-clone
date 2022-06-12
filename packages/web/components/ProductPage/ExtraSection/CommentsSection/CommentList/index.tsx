@@ -6,6 +6,8 @@ import { LikeEmptyIcon } from "@/components/icons/product-page/LikeEmptyIcon";
 import { ReplyIcon } from "@/components/icons/product-page/ReplyIcon";
 import { UserImagePlaceholder } from "@/components/UserImagePlaceholder";
 import { useCommentListContext } from "@/contexts/CommentListContext";
+import { useCommentsQuery } from "@/hooks/apollo/queries/useCommentsQuery";
+import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import { getReadableDate } from "@/utils/getReadableDate";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,11 +34,12 @@ export function getCommentsVariables(
 }
 
 export const CommentList: React.FC = () => {
-  const {
-    page,
-    setPage,
-    queryResult: { data, loading, error },
-  } = useCommentListContext();
+  const { page, setPage } = useCommentListContext();
+  const { id } = useProductForProductPage();
+  const { data, loading, error } = useCommentsQuery({
+    variables: getCommentsVariables(id, page),
+    notifyOnNetworkStatusChange: true,
+  });
 
   if (loading) {
     return <CommentListLoading perPage={perPage} />;
