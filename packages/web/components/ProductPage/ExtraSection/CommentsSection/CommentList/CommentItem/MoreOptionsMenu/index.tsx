@@ -1,5 +1,5 @@
-import { Comment } from "@/@types/api";
 import { MoreOptionsIcon } from "@/components/icons/product-page/MoreOptionsIcon";
+import { useCommentItemContext } from "@/contexts/CommentItemContext";
 import { useIsBreakpoint } from "@/hooks/useIsBreakpoint";
 import { useUser } from "@/hooks/useUser";
 import { Menu } from "@headlessui/react";
@@ -9,18 +9,13 @@ import { CopyLinkButton } from "./CopyLinkButton";
 import { DeleteCommentButton } from "./DeleteCommentButton";
 import { MenuButton } from "./MenuButton";
 
-interface MoreOptionsMenuProps {
-  comment: Comment;
-}
-
-export const MoreOptionsMenu: React.FC<MoreOptionsMenuProps> = ({
-  comment,
-}) => {
+export const MoreOptionsMenu: React.FC = () => {
   const isMediumBreakpoint = useIsBreakpoint("md");
   const { user } = useUser();
+  const { comment } = useCommentItemContext();
 
   return (
-    <Menu as="div" className="relative">
+    <Menu as="div" className="relative flex justify-center">
       {({ open }) => (
         <Fragment>
           <Menu.Button type="button" className="text-secondary-foreground">
@@ -36,18 +31,18 @@ export const MoreOptionsMenu: React.FC<MoreOptionsMenuProps> = ({
             <Menu.Items
               className={classNames(
                 "divide-default-border bg-default-background shadow-product-page-action-menu z-40 flex w-64 flex-col divide-y overflow-hidden rounded-lg",
-                { "absolute right-0 translate-y-4": isMediumBreakpoint },
+                {
+                  "absolute right-0 top-full translate-y-4": isMediumBreakpoint,
+                },
               )}
             >
-              <CopyLinkButton comment={comment} />
+              <CopyLinkButton />
 
               {user && user.id === comment.user.id ? (
                 <Fragment>
                   <MenuButton>Editar</MenuButton>
 
-                  <DeleteCommentButton comment={comment}>
-                    Deletar
-                  </DeleteCommentButton>
+                  <DeleteCommentButton />
                 </Fragment>
               ) : (
                 <MenuButton>SPAM ou comentário ofensivo</MenuButton>

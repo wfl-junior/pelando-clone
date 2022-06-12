@@ -1,25 +1,20 @@
-import { Comment, CommentsQueryResponse } from "@/@types/api";
+import { CommentsQueryResponse } from "@/@types/api";
 import { Spinner } from "@/components/Spinner";
+import { useCommentItemContext } from "@/contexts/CommentItemContext";
 import { useCommentListContext } from "@/contexts/CommentListContext";
 import { commentsQuery } from "@/graphql/queries/commentsQuery";
 import { useDeleteCommentMutation } from "@/hooks/apollo/mutations/useDeleteCommentMutation";
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import { authorizationHeaderWithToken } from "@/utils/accessToken";
 import React from "react";
-import { getCommentsVariables } from "..";
+import { getCommentsVariables } from "../..";
 import { MenuButton } from "./MenuButton";
 
-interface DeleteCommentButtonProps {
-  children?: React.ReactNode;
-  comment: Comment;
-}
-
-export const DeleteCommentButton: React.FC<DeleteCommentButtonProps> = ({
-  comment,
-}) => {
+export const DeleteCommentButton: React.FC = () => {
   const [deleteComment, { loading }] = useDeleteCommentMutation();
   const product = useProductForProductPage();
   const { page: currentPage, setPage } = useCommentListContext();
+  const { comment } = useCommentItemContext();
 
   return (
     <MenuButton

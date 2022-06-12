@@ -2,19 +2,14 @@ import { CommentsQueryVariables } from "@/@types/api";
 import { ChevronLeftIcon } from "@/components/icons/header/nav/ChevronLeft";
 import { ChevronRightIcon } from "@/components/icons/header/nav/ChevronRight";
 import { ConversationIcon } from "@/components/icons/product-page/ConversationIcon";
-import { LikeEmptyIcon } from "@/components/icons/product-page/LikeEmptyIcon";
-import { ReplyIcon } from "@/components/icons/product-page/ReplyIcon";
-import { UserImagePlaceholder } from "@/components/UserImagePlaceholder";
+import { CommentItemContextProvider } from "@/contexts/CommentItemContext";
 import { useCommentListContext } from "@/contexts/CommentListContext";
 import { useCommentsQuery } from "@/hooks/apollo/queries/useCommentsQuery";
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
-import { getReadableDate } from "@/utils/getReadableDate";
-import Image from "next/image";
-import Link from "next/link";
 import React from "react";
+import { CommentItem } from "./CommentItem";
 import { CommentListError } from "./CommentListError";
 import { CommentListLoading } from "./CommentListLoading";
-import { MoreOptionsMenu } from "./MoreOptionsMenu";
 import { NoComments } from "./NoComments";
 
 const perPage = 10;
@@ -85,68 +80,9 @@ export const CommentList: React.FC = () => {
           </div>
 
           {comments.map(comment => (
-            <div
-              key={comment.id}
-              // para habilitar scrolling para cá
-              id={`comment-${comment.id}`}
-              className="flex gap-1"
-            >
-              <Link href="#">
-                <a className="border-image-border flex aspect-square w-10 items-center justify-center self-start overflow-hidden rounded-full border">
-                  {comment.user.image ? (
-                    <Image
-                      src={comment.user.image}
-                      width={40}
-                      height={40}
-                      className="max-w-full object-contain"
-                    />
-                  ) : (
-                    <UserImagePlaceholder className="w-full" />
-                  )}
-                </a>
-              </Link>
-
-              <div className="flex w-full flex-col gap-2">
-                <div className="bg-secondary-background flex flex-col gap-1 rounded-xl p-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Link href="#">
-                        <a className="font-bold">{comment.user.username}</a>
-                      </Link>
-
-                      <time
-                        dateTime={new Date(comment.createdAt).toLocaleString()}
-                        className="text-secondary-foreground text-xs"
-                      >
-                        {getReadableDate(comment.createdAt)}
-                      </time>
-                    </div>
-
-                    <MoreOptionsMenu comment={comment} />
-                  </div>
-
-                  <pre className="break-words">{comment.body}</pre>
-                </div>
-
-                <div className="flex items-center gap-6 self-end px-2 md:self-start">
-                  <button
-                    type="button"
-                    className="flex items-center gap-1 text-sm"
-                  >
-                    0
-                    <LikeEmptyIcon className="w-4.5" />
-                  </button>
-
-                  <button
-                    type="button"
-                    className="flex items-center gap-1 font-bold"
-                  >
-                    <ReplyIcon className="w-4.5 text-primary" />
-                    Responder
-                  </button>
-                </div>
-              </div>
-            </div>
+            <CommentItemContextProvider key={comment.id} comment={comment}>
+              <CommentItem />
+            </CommentItemContextProvider>
           ))}
         </div>
       ) : (

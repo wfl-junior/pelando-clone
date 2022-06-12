@@ -16,8 +16,8 @@ export const MenuButton: React.FC<MenuButtonProps> = ({
   <Menu.Item
     as="button"
     type="button"
-    className={({ active }) =>
-      classNames(
+    className={({ active }) => {
+      return classNames(
         "py-3 px-4 transition-colors",
         props.disabled
           ? "bg-inactive-background cursor-not-allowed"
@@ -27,8 +27,8 @@ export const MenuButton: React.FC<MenuButtonProps> = ({
           "bg-secondary-foreground/10": active,
         },
         className,
-      )
-    }
+      );
+    }}
     {...props}
   >
     {children}
