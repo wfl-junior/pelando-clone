@@ -94,13 +94,103 @@ export const DeleteCommentButton: React.FC<DeleteCommentButtonProps> = ({
               const lastPage = Math.ceil(totalComments / perPage);
 
               if (currentPage !== lastPage) {
-                // TODO: melhorar esta parte, fazer evict somente das páginas necessárias
-                // remove páginas depois da página atual do cache, e também a página atual, fazendo com que a página atual leve refetch
-                for (let page = lastPage; page >= currentPage; page--) {
-                  cache.evict({
-                    fieldName: "comments",
-                    args: getCommentsVariables(product.id, page),
+                // atualiza cache ou remove páginas depois da página atual se existir em cache
+                for (let page = currentPage; page <= lastPage; page++) {
+                  const pageVariables = getCommentsVariables(product.id, page);
+
+                  const pageData = cache.readQuery<CommentsQueryResponse>({
+                    query: commentsQuery,
+                    variables: pageVariables,
                   });
+
+                  // se existir página em cache
+                  if (pageData) {
+                    // se existir próxima página
+                    if (pageData.comments.comments.info.hasNextPage) {
+                      const nextPageVariables = getCommentsVariables(
+                        product.id,
+                        page + 1,
+                      );
+
+                      const nextPageData =
+                        cache.readQuery<CommentsQueryResponse>({
+                          query: commentsQuery,
+                          variables: nextPageVariables,
+                        });
+
+                      // se próxima página estiver em cache
+                      if (nextPageData) {
+                        const nextPageComments =
+                          nextPageData.comments.comments.edges;
+                        const nextPageFirstComment = nextPageComments[0];
+                        let hasNextPage = true;
+
+                        if (nextPageComments.length === 1) {
+                          // remove próxima página se for ficar vazia
+                          cache.evict({
+                            fieldName: "comments",
+                            args: nextPageVariables,
+                          });
+
+                          // ajusta hasNextPage da página atual
+                          hasNextPage = false;
+                        } else {
+                          // caso contrário remove primeiro comment da próxima página
+                          cache.writeQuery<CommentsQueryResponse>({
+                            query: commentsQuery,
+                            variables: nextPageVariables,
+                            data: {
+                              ...nextPageData,
+                              comments: {
+                                ...nextPageData.comments,
+                                comments: {
+                                  ...nextPageData.comments.comments,
+                                  info: {
+                                    ...nextPageData.comments.comments.info,
+                                    total: newTotal,
+                                  },
+                                  edges: nextPageComments.filter(
+                                    ({ id }) => id !== nextPageFirstComment.id,
+                                  ),
+                                },
+                              },
+                            },
+                          });
+                        }
+
+                        // insere primeiro comment da próxima página no final desta página
+
+                        cache.writeQuery<CommentsQueryResponse>({
+                          query: commentsQuery,
+                          variables: pageVariables,
+                          data: {
+                            ...pageData,
+                            comments: {
+                              ...pageData.comments,
+                              comments: {
+                                ...pageData.comments.comments,
+                                info: {
+                                  ...pageData.comments.comments.info,
+                                  total: newTotal,
+                                  hasNextPage,
+                                },
+                                edges: [
+                                  ...pageData.comments.comments.edges,
+                                  nextPageFirstComment,
+                                ],
+                              },
+                            },
+                          },
+                        });
+                      } else {
+                        // remove página do cache se próxima página não estiver em cache, porque não será possível organizar os comentários dessa página
+                        cache.evict({
+                          fieldName: "comments",
+                          args: pageVariables,
+                        });
+                      }
+                    }
+                  }
                 }
               }
 
