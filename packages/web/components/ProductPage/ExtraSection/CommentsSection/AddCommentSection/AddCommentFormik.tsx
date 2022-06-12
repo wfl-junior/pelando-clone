@@ -86,10 +86,11 @@ export const AddCommentFormik: React.FC = () => {
               }
 
               // atualizar commentCount do product
+              const newTotal = product.commentCount + 1;
               cache.modify({
                 id: cache.identify(product as any),
                 fields: {
-                  commentCount: () => product.commentCount + 1,
+                  commentCount: () => newTotal,
                 },
               });
 
@@ -103,6 +104,33 @@ export const AddCommentFormik: React.FC = () => {
               const perPage = firstPageVariables.input.perPage!;
               const totalComments = firstPageData.comments.comments.info.total;
               const lastPage = Math.ceil(totalComments / perPage);
+
+              // caso não tivesse comentários antes
+              if (lastPage === 0) {
+                cache.writeQuery<CommentsQueryResponse>({
+                  query: commentsQuery,
+                  variables: firstPageVariables,
+                  data: {
+                    ...firstPageData,
+                    comments: {
+                      ...firstPageData.comments,
+                      comments: {
+                        ...firstPageData.comments.comments,
+                        info: {
+                          ...firstPageData.comments.comments.info,
+                          total: newTotal,
+                        },
+                        edges: [
+                          ...firstPageData.comments.comments.edges,
+                          data.addComment.comment,
+                        ],
+                      },
+                    },
+                  },
+                });
+
+                return scrollToNewComment(data.addComment.comment.id);
+              }
 
               // atualiza page para última, não entra em conflito com o último caso, por causa de state batching
               setPage(lastPage);
@@ -124,7 +152,7 @@ export const AddCommentFormik: React.FC = () => {
                       ...firstPageData.comments.comments,
                       info: {
                         ...firstPageData.comments.comments.info,
-                        total: firstPageData.comments.comments.info.total + 1,
+                        total: newTotal,
                       },
                     },
                   },
@@ -148,8 +176,7 @@ export const AddCommentFormik: React.FC = () => {
                           ...lastPageData.comments.comments,
                           info: {
                             ...lastPageData.comments.comments.info,
-                            total:
-                              lastPageData.comments.comments.info.total + 1,
+                            total: newTotal,
                           },
                           edges: [
                             ...lastPageData.comments.comments.edges,
@@ -176,7 +203,7 @@ export const AddCommentFormik: React.FC = () => {
                         info: {
                           ...lastPageData.comments.comments.info,
                           hasPreviousPage: true,
-                          total: lastPageData.comments.comments.info.total + 1,
+                          total: newTotal,
                         },
                         edges: [data.addComment.comment],
                       },
@@ -197,7 +224,7 @@ export const AddCommentFormik: React.FC = () => {
                         info: {
                           ...lastPageData.comments.comments.info,
                           hasNextPage: true,
-                          total: lastPageData.comments.comments.info.total + 1,
+                          total: newTotal,
                         },
                       },
                     },
@@ -206,33 +233,6 @@ export const AddCommentFormik: React.FC = () => {
 
                 // atualiza page state para nova página
                 setPage(lastPage + 1);
-                return scrollToNewComment(data.addComment.comment.id);
-              }
-
-              // caso não tivesse comentários antes
-              if (lastPage === 0) {
-                cache.writeQuery<CommentsQueryResponse>({
-                  query: commentsQuery,
-                  variables: firstPageVariables,
-                  data: {
-                    ...firstPageData,
-                    comments: {
-                      ...firstPageData.comments,
-                      comments: {
-                        ...firstPageData.comments.comments,
-                        info: {
-                          ...firstPageData.comments.comments.info,
-                          total: firstPageData.comments.comments.info.total + 1,
-                        },
-                        edges: [
-                          ...firstPageData.comments.comments.edges,
-                          data.addComment.comment,
-                        ],
-                      },
-                    },
-                  },
-                });
-
                 return scrollToNewComment(data.addComment.comment.id);
               }
 
@@ -249,7 +249,7 @@ export const AddCommentFormik: React.FC = () => {
                         ...firstPageData.comments.comments,
                         info: {
                           ...firstPageData.comments.comments.info,
-                          total: firstPageData.comments.comments.info.total + 1,
+                          total: newTotal,
                           hasPreviousPage: true,
                           hasNextPage: false,
                         },
