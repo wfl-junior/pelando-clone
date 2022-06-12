@@ -27,4 +27,9 @@ export class Comment extends EntityNode {
   @Field()
   @Column()
   public body: string;
+
+  @Field()
+  public get edited(): boolean {
+    return this.createdAt.toISOString() !== this.updatedAt.toISOString();
+  }
 }

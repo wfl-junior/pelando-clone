@@ -60,6 +60,9 @@ describe("editComment mutation", () => {
       body,
     }).save();
 
+    // sleep de 1s para dar tempo para updated_at vir com data diferente
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     response = await client.mutation.editComment(
       {
         input: {
@@ -98,6 +101,7 @@ describe("editComment mutation", () => {
           id: newComment.id,
           body: newBody,
           createdAt: newComment.createdAt,
+          edited: true,
         }),
       ),
     );
@@ -117,11 +121,15 @@ describe("editComment mutation", () => {
       select: {
         id: true,
         body: true,
+        updatedAt: true,
       },
     });
 
     expect(comment.body).not.toBe(body);
     expect(comment.body).toBe(newBody);
+    expect(comment.updatedAt.toISOString()).not.toBe(
+      newComment.createdAt.toISOString(),
+    );
   });
 
   it("returns you must be the owner error if logged in user is not the owner", async () => {

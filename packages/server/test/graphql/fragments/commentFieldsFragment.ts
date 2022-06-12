@@ -7,6 +7,7 @@ export const commentFieldsFragment = gql`
     id
     createdAt
     body
+    edited
     user {
       ...UserFieldsFragment
     }
