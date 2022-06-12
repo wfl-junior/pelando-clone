@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { commentFieldsFragment } from "../fragments/commentFieldsFragment";
 
 // importante atualizar outros campos de info quando adicionar comentário caso adicione para pegar outros campos de info aqui no futuro
 
@@ -12,16 +13,11 @@ export const commentsQuery = gql`
           hasPreviousPage
         }
         edges {
-          id
-          createdAt
-          body
-          user {
-            id
-            username
-            image
-          }
+          ...CommentFieldsFragment
         }
       }
     }
   }
+
+  ${commentFieldsFragment}
 `;

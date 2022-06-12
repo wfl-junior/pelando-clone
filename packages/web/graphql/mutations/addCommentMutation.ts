@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { commentFieldsFragment } from "../fragments/commentFieldsFragment";
 import { errorFieldsFragment } from "../fragments/errorFieldsFragment";
 
 export const addCommentMutation = gql`
@@ -9,17 +10,11 @@ export const addCommentMutation = gql`
         ...ErrorFieldsFragment
       }
       comment {
-        id
-        createdAt
-        body
-        user {
-          id
-          username
-          image
-        }
+        ...CommentFieldsFragment
       }
     }
   }
 
   ${errorFieldsFragment}
+  ${commentFieldsFragment}
 `;

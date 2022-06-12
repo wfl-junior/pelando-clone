@@ -130,6 +130,7 @@ export interface Product extends Model {
 
 export interface Comment extends Model {
   body: string;
+  edited: boolean;
   user: User;
   product: Product;
 }

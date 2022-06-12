@@ -7,6 +7,7 @@ export const productsUserVotesQuery = gql`
         edges {
           id
           userVoteType
+          commentCount
         }
       }
     }
