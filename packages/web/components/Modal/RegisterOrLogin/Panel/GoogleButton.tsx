@@ -1,6 +1,8 @@
 import { GoogleIcon } from "@/components/icons/register-or-login-modal/GoogleIcon";
+import { defaultErrorMessage } from "@/constants";
 import { useModalContext } from "@/contexts/ModalContext";
 import { useLoginWithGoogleMutation } from "@/hooks/apollo/mutations/useLoginWithGoogleMutation";
+import { Toast } from "@/utils/Toast";
 import { updateProductsVotesForUser } from "@/utils/updateProductsVotesForUser";
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import React from "react";
@@ -26,17 +28,22 @@ const _GoogleButton: React.FC<GoogleButtonProps> = ({ setLoading }) => {
       });
 
       if (response.data?.loginWithGoogle.errors) {
-        // TODO: adicionar toast
-        return;
+        return new Toast({
+          message: response.data.loginWithGoogle.errors[0].message,
+          type: "error",
+        }).fire();
       }
 
       // sucesso
+      new Toast({ message: "Você está logado", type: "success" }).fire();
       await updateProductsVotesForUser();
       toggleModal(false);
     },
     onError: response => {
-      // TODO: adicionar toast
-      console.log(response);
+      new Toast({
+        message: response.error_description || defaultErrorMessage,
+        type: "error",
+      }).fire();
     },
   });
 

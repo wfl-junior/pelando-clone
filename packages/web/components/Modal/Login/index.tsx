@@ -1,6 +1,8 @@
+import { defaultErrorMessage } from "@/constants";
 import { useModalContext } from "@/contexts/ModalContext";
 import { useRegisterOrLoginContext } from "@/contexts/RegisterOrLoginContext";
 import { useLoginMutation } from "@/hooks/apollo/mutations/useLoginMutation";
+import { Toast } from "@/utils/Toast";
 import { updateProductsVotesForUser } from "@/utils/updateProductsVotesForUser";
 import { loginValidationSchemas } from "@/yup/loginValidationSchema";
 import { ApolloError } from "@apollo/client";
@@ -96,15 +98,21 @@ export const Login: React.FC = () => {
               }
 
               // sucesso
+              new Toast({
+                message: "Você está logado",
+                type: "success",
+              }).fire();
+
               await updateProductsVotesForUser();
               toggleModal(false);
             } catch (error) {
               if (error instanceof ApolloError) {
                 setStep(lastStep);
-
                 // trocar por toast?
-                setErrors({ password: error.message });
+                return setErrors({ password: error.message });
               }
+
+              new Toast({ message: defaultErrorMessage, type: "error" }).fire();
             }
           }}
         >

@@ -1,10 +1,13 @@
 import { ColdIcon } from "@/components/icons/product-card/ColdIcon";
 import { Spinner } from "@/components/Spinner";
+import { defaultErrorMessage } from "@/constants";
 import { useModalContext } from "@/contexts/ModalContext";
 import { useVoteOnProductMutation } from "@/hooks/apollo/mutations/useVoteOnProductMutation";
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import { useUser } from "@/hooks/useUser";
 import { authorizationHeaderWithToken } from "@/utils/accessToken";
+import { Toast } from "@/utils/Toast";
+import { ApolloError } from "@apollo/client";
 import React from "react";
 
 export const ColdButton: React.FC = () => {
@@ -25,7 +28,7 @@ export const ColdButton: React.FC = () => {
         }
 
         try {
-          await vote({
+          const { data } = await vote({
             variables: {
               input: {
                 type: "COLD",
@@ -38,9 +41,18 @@ export const ColdButton: React.FC = () => {
               },
             },
           });
+
+          if (data?.voteOnProduct.errors) {
+            new Toast({
+              message: data.voteOnProduct.errors[0].message,
+              type: "error",
+            }).fire();
+          }
         } catch (error) {
-          // TODO: adicionar toast
-          console.log({ error });
+          // se for ApolloError, o onError global resolve
+          if (!(error instanceof ApolloError)) {
+            new Toast({ message: defaultErrorMessage, type: "error" }).fire();
+          }
         }
       }}
     >

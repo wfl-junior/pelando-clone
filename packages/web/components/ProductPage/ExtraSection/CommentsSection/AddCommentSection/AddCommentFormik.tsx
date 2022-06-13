@@ -1,10 +1,13 @@
 import { Comment, CommentsQueryResponse } from "@/@types/api";
+import { defaultErrorMessage } from "@/constants";
 import { useCommentListContext } from "@/contexts/CommentListContext";
 import { commentsQuery } from "@/graphql/queries/commentsQuery";
 import { useAddCommentMutation } from "@/hooks/apollo/mutations/useAddCommentMutation";
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import { authorizationHeaderWithToken } from "@/utils/accessToken";
+import { Toast } from "@/utils/Toast";
 import { commentValidationSchema } from "@/yup/commentValidationSchema";
+import { ApolloError } from "@apollo/client";
 import { Formik } from "formik";
 import React, { useCallback } from "react";
 import { getCommentsVariables } from "../CommentList";
@@ -273,8 +276,10 @@ export const AddCommentFormik: React.FC = () => {
           resetForm();
           validateForm(initialValues);
         } catch (error) {
-          // TODO: adicionar toast
-          console.log({ error });
+          // se for ApolloError, o onError global resolve
+          if (!(error instanceof ApolloError)) {
+            new Toast({ message: defaultErrorMessage, type: "error" }).fire();
+          }
         }
       }}
     >

@@ -1,6 +1,9 @@
 import { SignOutIcon } from "@/components/icons/header/top/SignOutIcon";
 import { Spinner } from "@/components/Spinner";
+import { defaultErrorMessage } from "@/constants";
 import { useLogoutMutation } from "@/hooks/apollo/mutations/useLogoutMutation";
+import { Toast } from "@/utils/Toast";
+import { ApolloError } from "@apollo/client";
 import { Menu } from "@headlessui/react";
 import classNames from "classnames";
 
@@ -24,8 +27,13 @@ export const LogoutButton = () => {
             try {
               await logoutMutation();
             } catch (error) {
-              // TODO: adicionar toast
-              console.log({ error });
+              // se for ApolloError, o onError global resolve
+              if (!(error instanceof ApolloError)) {
+                new Toast({
+                  message: defaultErrorMessage,
+                  type: "error",
+                }).fire();
+              }
             }
           }}
         >

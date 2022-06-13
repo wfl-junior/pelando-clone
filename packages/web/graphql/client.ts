@@ -1,4 +1,4 @@
-import { API_URL } from "@/constants";
+import { API_URL, defaultErrorMessage } from "@/constants";
 import {
   authorizationHeaderWithToken,
   setAccessToken,
@@ -6,6 +6,7 @@ import {
 import { isBrowser } from "@/utils/isBrowser";
 import { isEqual } from "@/utils/isEqual";
 import { refreshAccessToken } from "@/utils/refreshAccessToken";
+import { Toast } from "@/utils/Toast";
 import {
   ApolloClient,
   concat,
@@ -32,31 +33,45 @@ export function createApolloClient() {
     credentials: "include",
   });
 
-  const errorLink = onError(({ graphQLErrors, operation, forward }) => {
-    if (graphQLErrors?.some(error => error.message === "Unauthorized")) {
-      try {
-        return fromPromise(
-          refreshAccessToken().then(({ accessToken }) => {
-            if (accessToken) {
-              setAccessToken(accessToken);
-              const context = operation.getContext();
+  const errorLink = onError(
+    ({ graphQLErrors, operation, forward, networkError }) => {
+      if (graphQLErrors?.some(error => error.message === "Unauthorized")) {
+        try {
+          return fromPromise(
+            refreshAccessToken().then(({ accessToken }) => {
+              if (accessToken) {
+                setAccessToken(accessToken);
+                const context = operation.getContext();
 
-              operation.setContext({
-                ...context,
-                headers: {
-                  ...context.headers,
-                  authorization: authorizationHeaderWithToken(accessToken),
-                },
-              });
-            }
-          }),
-        ).flatMap(() => forward(operation));
-      } catch (error) {
-        // TODO: adicionar toast
-        console.log({ error });
+                operation.setContext({
+                  ...context,
+                  headers: {
+                    ...context.headers,
+                    authorization: authorizationHeaderWithToken(accessToken),
+                  },
+                });
+              }
+            }),
+          ).flatMap(() => forward(operation));
+        } catch {}
       }
-    }
-  });
+
+      if (isBrowser()) {
+        if (networkError) {
+          new Toast({
+            message: "Ocorreu um erro de rede, verifique sua conexão. 😬",
+            type: "error",
+          }).fire();
+          return;
+        }
+
+        new Toast({
+          message: defaultErrorMessage,
+          type: "error",
+        }).fire();
+      }
+    },
+  );
 
   return new ApolloClient({
     ssrMode: !isBrowser(),

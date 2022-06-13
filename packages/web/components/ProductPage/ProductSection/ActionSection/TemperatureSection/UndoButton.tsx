@@ -1,9 +1,12 @@
 import { ColdIcon } from "@/components/icons/product-card/ColdIcon";
 import { HotIcon } from "@/components/icons/product-card/HotIcon";
 import { Spinner } from "@/components/Spinner";
+import { defaultErrorMessage } from "@/constants";
 import { useRemoveVoteFromProductMutation } from "@/hooks/apollo/mutations/useRemoveVoteFromProductMutation";
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import { authorizationHeaderWithToken } from "@/utils/accessToken";
+import { Toast } from "@/utils/Toast";
+import { ApolloError } from "@apollo/client";
 import classNames from "classnames";
 import React, { Fragment } from "react";
 
@@ -30,7 +33,7 @@ export const UndoButton: React.FC<UndoButtonProps> = ({ hovering }) => {
       )}
       onClick={async () => {
         try {
-          await removeVote({
+          const { data } = await removeVote({
             variables: {
               input: {
                 productId: id,
@@ -42,9 +45,18 @@ export const UndoButton: React.FC<UndoButtonProps> = ({ hovering }) => {
               },
             },
           });
+
+          if (data?.removeVoteFromProduct.errors) {
+            new Toast({
+              message: data.removeVoteFromProduct.errors[0].message,
+              type: "error",
+            }).fire();
+          }
         } catch (error) {
-          // TODO: adicionar toast
-          console.log({ error });
+          // se for ApolloError, o onError global resolve
+          if (!(error instanceof ApolloError)) {
+            new Toast({ message: defaultErrorMessage, type: "error" }).fire();
+          }
         }
       }}
     >

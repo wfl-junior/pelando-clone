@@ -35,6 +35,7 @@ module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
+    "./utils/Toast.{js,ts,jsx,tsx}",
   ],
   corePlugins: {
     container: false,
@@ -57,6 +58,7 @@ module.exports = {
         "slide-left-in": "slide-left-in 300ms ease-out forwards",
         "grow-search-bar": "grow-search-bar 300ms ease-out forwards",
         "comment-focus": "comment-focus 4s linear",
+        "fade-in": "fade-in 300ms linear",
       },
       keyframes: {
         "slide-left-in": {
@@ -74,6 +76,10 @@ module.exports = {
           to: {
             backgroundColor: `rgb(var(--color-default-comment-focus) / 0)`,
           },
+        },
+        "fade-in": {
+          from: { opacity: 0 },
+          to: { opacity: 1 },
         },
       },
       spacing: {

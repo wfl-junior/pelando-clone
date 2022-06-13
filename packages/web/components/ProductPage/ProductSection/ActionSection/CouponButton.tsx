@@ -1,4 +1,5 @@
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
+import { Toast } from "@/utils/Toast";
 import React from "react";
 
 export const CouponButton: React.FC = () => {
@@ -13,9 +14,15 @@ export const CouponButton: React.FC = () => {
       type="button"
       className="bg-inactive-background hover:text-tertiary-foreground group relative flex items-center justify-center rounded-full py-1.5 px-4 font-bold transition-colors"
       onClick={async () => {
-        await navigator.clipboard.writeText(couponCode);
-
-        // TODO: adicionar toast
+        try {
+          await navigator.clipboard.writeText(couponCode);
+          new Toast({ message: "Copiado", type: "success" }).fire();
+        } catch {
+          new Toast({
+            message: "Não foi possível copiar",
+            type: "error",
+          }).fire();
+        }
       }}
     >
       {couponCode}

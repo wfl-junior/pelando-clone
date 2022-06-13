@@ -1,7 +1,9 @@
 import { ProductsQueryResponse, ProductsQueryVariables } from "@/@types/api";
 import { AngleDownIcon } from "@/components/icons/header/top/AngleDownIcon";
+import { defaultErrorMessage } from "@/constants";
 import { useProductsQuery } from "@/hooks/apollo/queries/useProductsQuery";
-import { QueryHookOptions } from "@apollo/client";
+import { Toast } from "@/utils/Toast";
+import { ApolloError, QueryHookOptions } from "@apollo/client";
 import React, { Fragment } from "react";
 
 interface LoadMoreButtonProps {
@@ -24,14 +26,14 @@ export const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({ options }) => {
       disabled={loading}
       className="border-default-border mt-auto flex min-h-[40px] w-full items-center justify-center border-t font-bold"
       onClick={async () => {
-        try {
-          // Math.ceil em caso de products length estar quebrado, o que não deve acontecer, mas nextPage deve ser Int e se estiver quebrado pode causar erros de keys duplicadas
-          const nextPage = Math.ceil(
-            data.products.products.edges.length /
-              options.variables!.input!.perPage! +
-              1,
-          );
+        // Math.ceil em caso de products length estar quebrado, o que não deve acontecer, mas nextPage deve ser Int e se estiver quebrado pode causar erros de keys duplicadas
+        const nextPage = Math.ceil(
+          data.products.products.edges.length /
+            options.variables!.input!.perPage! +
+            1,
+        );
 
+        try {
           await fetchMore({
             ...options,
             variables: {
@@ -62,8 +64,10 @@ export const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({ options }) => {
             }),
           });
         } catch (error) {
-          // TODO: adicionar toast
-          console.log({ error });
+          // se for ApolloError, o onError global resolve
+          if (!(error instanceof ApolloError)) {
+            new Toast({ message: defaultErrorMessage, type: "error" }).fire();
+          }
         }
       }}
     >

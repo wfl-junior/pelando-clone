@@ -1,4 +1,5 @@
 import { useCommentItemContext } from "@/contexts/CommentItemContext";
+import { Toast } from "@/utils/Toast";
 import React from "react";
 import { MenuButton } from "./MenuButton";
 
@@ -12,11 +13,18 @@ export const CopyLinkButton: React.FC = () => {
       onClick={async () => {
         const { origin, pathname } = window.location;
 
-        await navigator.clipboard.writeText(
-          `${origin}${pathname}#comment-${id}`,
-        );
+        try {
+          await navigator.clipboard.writeText(
+            `${origin}${pathname}#comment-${id}`,
+          );
 
-        // TODO: adicionar toast
+          new Toast({ message: "Copiado", type: "success" }).fire();
+        } catch {
+          new Toast({
+            message: "Não foi possível copiar",
+            type: "error",
+          }).fire();
+        }
       }}
     >
       Copiar link

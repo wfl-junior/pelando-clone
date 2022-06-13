@@ -1,11 +1,14 @@
 import { CommentsQueryResponse } from "@/@types/api";
 import { Spinner } from "@/components/Spinner";
+import { defaultErrorMessage } from "@/constants";
 import { useCommentItemContext } from "@/contexts/CommentItemContext";
 import { useCommentListContext } from "@/contexts/CommentListContext";
 import { commentsQuery } from "@/graphql/queries/commentsQuery";
 import { useDeleteCommentMutation } from "@/hooks/apollo/mutations/useDeleteCommentMutation";
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import { authorizationHeaderWithToken } from "@/utils/accessToken";
+import { Toast } from "@/utils/Toast";
+import { ApolloError } from "@apollo/client";
 import React from "react";
 import { getCommentsVariables } from "../..";
 import { MenuButton } from "./MenuButton";
@@ -275,8 +278,10 @@ export const DeleteCommentButton: React.FC = () => {
             },
           });
         } catch (error) {
-          // TODO: adicionar toast
-          console.log({ error });
+          // se for ApolloError, o onError global resolve
+          if (!(error instanceof ApolloError)) {
+            new Toast({ message: defaultErrorMessage, type: "error" }).fire();
+          }
         }
       }}
     >
