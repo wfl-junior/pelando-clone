@@ -47,15 +47,15 @@ export const CommentList: React.FC = () => {
   const { edges: comments, info } = data.comments.comments;
 
   return (
-    <div className="p-4 md:px-8">
+    <div className="py-4">
       {info.total ? (
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2 font-bold">
+          <div className="flex items-center gap-2 px-4 font-bold md:px-8">
             <h3>Todos os comentários</h3>
             <ConversationIcon className="w-4.5 text-[#70e291]" />
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 px-4 md:px-8">
             <button
               type="button"
               className="disabled:text-secondary-foreground text-primary hover:enabled:text-primary-hover flex items-center gap-0.5"
@@ -79,11 +79,13 @@ export const CommentList: React.FC = () => {
             </button>
           </div>
 
-          {comments.map(comment => (
-            <CommentItemContextProvider key={comment.id} comment={comment}>
-              <CommentItem />
-            </CommentItemContextProvider>
-          ))}
+          <div className="flex flex-col">
+            {comments.map(comment => (
+              <CommentItemContextProvider key={comment.id} comment={comment}>
+                <CommentItem />
+              </CommentItemContextProvider>
+            ))}
+          </div>
         </div>
       ) : (
         <NoComments />

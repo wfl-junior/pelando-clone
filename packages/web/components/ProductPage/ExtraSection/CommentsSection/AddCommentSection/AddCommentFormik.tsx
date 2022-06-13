@@ -56,7 +56,8 @@ export const AddCommentFormik: React.FC = () => {
       }, 1000);
     });
 
-    element.scrollIntoView({ behavior: "smooth" });
+    // muda target para o comentário, o que vai provocar o scroll junto com animação
+    location.hash = element.id;
   }, []);
 
   return (

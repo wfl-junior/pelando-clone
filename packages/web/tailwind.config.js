@@ -56,6 +56,7 @@ module.exports = {
       animation: {
         "slide-left-in": "slide-left-in 300ms ease-out forwards",
         "grow-search-bar": "grow-search-bar 300ms ease-out forwards",
+        "comment-focus": "comment-focus 4s linear",
       },
       keyframes: {
         "slide-left-in": {
@@ -65,6 +66,14 @@ module.exports = {
         "grow-search-bar": {
           from: { width: "20%", marginLeft: "auto" },
           to: { transform: "100%", marginLeft: "auto" },
+        },
+        "comment-focus": {
+          from: {
+            backgroundColor: `rgb(var(--color-default-comment-focus) / 1)`,
+          },
+          to: {
+            backgroundColor: `rgb(var(--color-default-comment-focus) / 0)`,
+          },
         },
       },
       spacing: {

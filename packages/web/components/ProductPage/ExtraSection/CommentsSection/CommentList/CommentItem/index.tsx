@@ -16,7 +16,7 @@ export const CommentItem: React.FC = () => {
     <div
       // para habilitar scrolling para cá
       id={`comment-${comment.id}`}
-      className="flex gap-1"
+      className="target:animate-comment-focus flex gap-1 px-4 py-2 md:px-8"
     >
       <Link href="#">
         <a className="border-image-border flex aspect-square w-10 items-center justify-center self-start overflow-hidden rounded-full border">
