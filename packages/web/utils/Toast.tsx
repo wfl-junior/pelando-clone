@@ -1,21 +1,31 @@
 import { CheckIcon } from "@/components/icons/CheckIcon";
 import classNames from "classnames";
-import { createRoot } from "react-dom/client";
+import { createRoot, Root } from "react-dom/client";
 import { match } from "./match";
 
 type Type = "success" | "error";
 
 interface ToastOptions {
+  /**
+   * @description Duration in milliseconds
+   * @default 3000
+   */
   duration?: number;
+
+  /**
+   * @description Notification message
+   */
   message: string;
+
+  /**
+   * @description Notification type for icon
+   */
   type?: Type;
 }
 
-/**
- * @property {duration} duration in milliseconds, default: 3000
- * @property {message} notification message
- * @property {type} notification type for icon
- */
+let toastContainerRoot: Root | undefined;
+let timeout: NodeJS.Timeout | undefined;
+
 export class Toast {
   private duration: number = 3000;
   private message!: string;
@@ -30,8 +40,23 @@ export class Toast {
   }
 
   private createToast(): HTMLDivElement {
-    const toast = document.createElement("div");
-    toast.className = "fixed inset-x-0 bottom-12 flex justify-center z-50";
+    const id = "toast-container";
+    const existingToastContainer = document.querySelector<HTMLDivElement>(
+      `#${id}`,
+    );
+
+    const toastContainer =
+      existingToastContainer || document.createElement("div");
+
+    if (!existingToastContainer) {
+      toastContainer.className =
+        "fixed inset-x-0 bottom-12 flex justify-center z-50";
+      toastContainer.id = id;
+    }
+
+    if (!toastContainerRoot) {
+      toastContainerRoot = createRoot(toastContainer);
+    }
 
     const Icon = match(
       this.type,
@@ -42,7 +67,7 @@ export class Toast {
       null,
     );
 
-    createRoot(toast).render(
+    toastContainerRoot.render(
       <div
         className={classNames(
           "bg-tertiary-foreground/75 animate-fade-in flex max-w-[calc(100vw-1rem)] items-center gap-2 rounded-3xl py-3 font-bold",
@@ -60,19 +85,28 @@ export class Toast {
       </div>,
     );
 
-    return toast;
+    return toastContainer;
   }
 
   public fire(options?: ToastOptions): Promise<void> {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
     if (options) {
       this.applyOptions(options);
     }
 
-    const toast = this.createToast();
-    document.body.appendChild(toast);
+    const toastContainer = this.createToast();
+    document.body.appendChild(toastContainer);
 
     return new Promise(resolve => {
-      setTimeout(() => resolve(toast.remove()), this.duration);
+      timeout = setTimeout(() => {
+        toastContainerRoot = undefined;
+        toastContainer.remove();
+        timeout = undefined;
+        resolve();
+      }, this.duration);
     });
   }
 }
