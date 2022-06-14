@@ -15,7 +15,7 @@ interface ToastOptions {
   /**
    * @description Notification message
    */
-  message: string;
+  message?: string;
 
   /**
    * @description Notification type for icon
@@ -28,15 +28,17 @@ let timeout: NodeJS.Timeout | undefined;
 
 export class Toast {
   private duration: number = 3000;
-  private message!: string;
+  private message?: string;
   private type?: Type;
 
-  constructor(options: ToastOptions) {
+  constructor(options?: ToastOptions) {
     this.applyOptions(options);
   }
 
-  private applyOptions(options: ToastOptions) {
-    Object.assign(this, options);
+  private applyOptions(options?: ToastOptions) {
+    if (options) {
+      Object.assign(this, options);
+    }
   }
 
   private createToast(): HTMLDivElement {
@@ -93,9 +95,7 @@ export class Toast {
       clearTimeout(timeout);
     }
 
-    if (options) {
-      this.applyOptions(options);
-    }
+    this.applyOptions(options);
 
     const toastContainer = this.createToast();
     document.body.appendChild(toastContainer);

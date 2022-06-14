@@ -27,6 +27,8 @@ const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
 let apolloClient: Client | undefined;
 
+const toast = new Toast({ type: "error" });
+
 export function createApolloClient() {
   const httpLink = new HttpLink({
     uri: `${API_URL}/graphql`,
@@ -58,17 +60,14 @@ export function createApolloClient() {
 
       if (isBrowser()) {
         if (networkError) {
-          new Toast({
+          toast.fire({
             message: "Ocorreu um erro de rede, verifique sua conexão. 😬",
-            type: "error",
-          }).fire();
+          });
+
           return;
         }
 
-        new Toast({
-          message: defaultErrorMessage,
-          type: "error",
-        }).fire();
+        toast.fire({ message: defaultErrorMessage });
       }
     },
   );
