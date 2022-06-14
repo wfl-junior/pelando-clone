@@ -1,4 +1,5 @@
 import { CommentsQueryResponse } from "@/@types/api";
+import { Confirm } from "@/alerts/Confirm";
 import { Toast } from "@/alerts/Toast";
 import { Spinner } from "@/components/Spinner";
 import { defaultErrorMessage } from "@/constants";
@@ -23,11 +24,18 @@ export const DeleteCommentButton: React.FC = () => {
     <MenuButton
       disabled={loading}
       className="flex items-center justify-center gap-1"
-      onClick={async e => {
-        // para impedir do menu fechar ao clicar
-        e.preventDefault();
-
+      onClick={async () => {
         try {
+          const confirmed = await new Confirm({
+            title: "Excluir Comentário?",
+            message: "Se confirmar, o comentário deixa de existir para todos.",
+            buttonText: "Sim, excluir",
+          }).fire();
+
+          if (!confirmed) {
+            return;
+          }
+
           await deleteComment({
             variables: { id: comment.id },
             context: {
