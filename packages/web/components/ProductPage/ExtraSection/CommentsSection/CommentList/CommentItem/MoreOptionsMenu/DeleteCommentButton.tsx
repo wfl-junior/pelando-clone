@@ -14,11 +14,16 @@ import React from "react";
 import { getCommentsVariables } from "../..";
 import { MenuButton } from "./MenuButton";
 
+const toast = new Toast({
+  message: defaultErrorMessage,
+  type: "error",
+});
+
 export const DeleteCommentButton: React.FC = () => {
   const [deleteComment, { loading }] = useDeleteCommentMutation();
   const product = useProductForProductPage();
   const { page: currentPage, setPage } = useCommentListContext();
-  const { comment } = useCommentItemContext();
+  const { comment, setDeleted } = useCommentItemContext();
 
   return (
     <MenuButton
@@ -36,6 +41,8 @@ export const DeleteCommentButton: React.FC = () => {
             return;
           }
 
+          setDeleted(true);
+
           await deleteComment({
             variables: { id: comment.id },
             context: {
@@ -44,8 +51,14 @@ export const DeleteCommentButton: React.FC = () => {
               },
             },
             update: (cache, { data }) => {
-              if (!data?.deleteComment.ok) {
-                return;
+              if (!data) {
+                toast.fire();
+                return setDeleted(false);
+              }
+
+              if (data.deleteComment.errors) {
+                toast.fire({ message: data.deleteComment.errors[0].message });
+                return setDeleted(false);
               }
 
               // atualiza commentCount do product
@@ -288,7 +301,7 @@ export const DeleteCommentButton: React.FC = () => {
         } catch (error) {
           // se for ApolloError, o onError global resolve
           if (!(error instanceof ApolloError)) {
-            new Toast({ message: defaultErrorMessage, type: "error" }).fire();
+            toast.fire();
           }
         }
       }}

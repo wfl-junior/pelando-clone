@@ -1,5 +1,6 @@
 import { LikeEmptyIcon } from "@/components/icons/product-page/LikeEmptyIcon";
 import { ReplyIcon } from "@/components/icons/product-page/ReplyIcon";
+import { TrashCanIcon } from "@/components/icons/TrashCanIcon";
 import { UserImagePlaceholder } from "@/components/UserImagePlaceholder";
 import { useCommentItemContext } from "@/contexts/CommentItemContext";
 import { getReadableDate } from "@/utils/getReadableDate";
@@ -10,7 +11,7 @@ import { EditCommentForm } from "./EditCommentForm";
 import { MoreOptionsMenu } from "./MoreOptionsMenu";
 
 export const CommentItem: React.FC = () => {
-  const { comment, editing } = useCommentItemContext();
+  const { comment, editing, deleted } = useCommentItemContext();
 
   return (
     <div
@@ -58,23 +59,38 @@ export const CommentItem: React.FC = () => {
                 )}
               </div>
 
-              <MoreOptionsMenu />
+              {!deleted && <MoreOptionsMenu />}
             </div>
 
-            <pre className="break-words">{comment.body}</pre>
+            {deleted ? (
+              <div className="text-secondary-foreground flex items-center gap-2">
+                <TrashCanIcon className="w-3.5" />
+
+                <p className="text-secondary-foreground text-sm">
+                  [comentário deletado]
+                </p>
+              </div>
+            ) : (
+              <pre className="break-words">{comment.body}</pre>
+            )}
           </div>
 
-          <div className="flex items-center gap-6 self-end px-2 md:self-start">
-            <button type="button" className="flex items-center gap-1 text-sm">
-              0
-              <LikeEmptyIcon className="w-4.5" />
-            </button>
+          {!deleted && (
+            <div className="flex items-center gap-6 self-end px-2 md:self-start">
+              <button type="button" className="flex items-center gap-1 text-sm">
+                0
+                <LikeEmptyIcon className="w-4.5" />
+              </button>
 
-            <button type="button" className="flex items-center gap-1 font-bold">
-              <ReplyIcon className="w-4.5 text-primary" />
-              Responder
-            </button>
-          </div>
+              <button
+                type="button"
+                className="flex items-center gap-1 font-bold"
+              >
+                <ReplyIcon className="w-4.5 text-primary" />
+                Responder
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

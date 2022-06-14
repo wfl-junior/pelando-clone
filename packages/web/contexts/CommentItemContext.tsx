@@ -5,6 +5,8 @@ interface ICommentItemContext {
   comment: Comment;
   editing: boolean;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  deleted: boolean;
+  setDeleted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CommentItemContext = createContext({} as ICommentItemContext);
@@ -20,9 +22,18 @@ export const CommentItemContextProvider: React.FC<
   CommentItemContextProviderProps
 > = ({ children, ...props }) => {
   const [editing, setEditing] = useState(false);
+  const [deleted, setDeleted] = useState(false);
 
   return (
-    <CommentItemContext.Provider value={{ editing, setEditing, ...props }}>
+    <CommentItemContext.Provider
+      value={{
+        editing,
+        setEditing,
+        deleted,
+        setDeleted,
+        ...props,
+      }}
+    >
       {children}
     </CommentItemContext.Provider>
   );
