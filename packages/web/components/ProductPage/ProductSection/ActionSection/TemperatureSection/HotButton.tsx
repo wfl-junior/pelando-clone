@@ -1,3 +1,4 @@
+import { Toast } from "@/alerts/Toast";
 import { HotIcon } from "@/components/icons/product-card/HotIcon";
 import { Spinner } from "@/components/Spinner";
 import { defaultErrorMessage } from "@/constants";
@@ -6,7 +7,6 @@ import { useVoteOnProductMutation } from "@/hooks/apollo/mutations/useVoteOnProd
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import { useUser } from "@/hooks/useUser";
 import { authorizationHeaderWithToken } from "@/utils/accessToken";
-import { Toast } from "@/utils/Toast";
 import { ApolloError } from "@apollo/client";
 import React from "react";
 

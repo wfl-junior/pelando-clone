@@ -1,11 +1,11 @@
 import { Comment, CommentsQueryResponse } from "@/@types/api";
+import { Toast } from "@/alerts/Toast";
 import { defaultErrorMessage } from "@/constants";
 import { useCommentListContext } from "@/contexts/CommentListContext";
 import { commentsQuery } from "@/graphql/queries/commentsQuery";
 import { useAddCommentMutation } from "@/hooks/apollo/mutations/useAddCommentMutation";
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import { authorizationHeaderWithToken } from "@/utils/accessToken";
-import { Toast } from "@/utils/Toast";
 import { commentValidationSchema } from "@/yup/commentValidationSchema";
 import { ApolloError } from "@apollo/client";
 import { Formik } from "formik";

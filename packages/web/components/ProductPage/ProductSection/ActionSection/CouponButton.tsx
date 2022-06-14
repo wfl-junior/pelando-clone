@@ -1,5 +1,5 @@
+import { Toast } from "@/alerts/Toast";
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
-import { Toast } from "@/utils/Toast";
 import React from "react";
 
 export const CouponButton: React.FC = () => {

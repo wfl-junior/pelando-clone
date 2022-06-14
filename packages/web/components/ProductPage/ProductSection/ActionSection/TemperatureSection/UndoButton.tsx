@@ -1,3 +1,4 @@
+import { Toast } from "@/alerts/Toast";
 import { ColdIcon } from "@/components/icons/product-card/ColdIcon";
 import { HotIcon } from "@/components/icons/product-card/HotIcon";
 import { Spinner } from "@/components/Spinner";
@@ -5,7 +6,6 @@ import { defaultErrorMessage } from "@/constants";
 import { useRemoveVoteFromProductMutation } from "@/hooks/apollo/mutations/useRemoveVoteFromProductMutation";
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import { authorizationHeaderWithToken } from "@/utils/accessToken";
-import { Toast } from "@/utils/Toast";
 import { ApolloError } from "@apollo/client";
 import classNames from "classnames";
 import React, { Fragment } from "react";

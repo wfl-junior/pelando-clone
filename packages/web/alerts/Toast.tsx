@@ -1,7 +1,7 @@
 import { CheckIcon } from "@/components/icons/CheckIcon";
+import { match } from "@/utils/match";
 import classNames from "classnames";
 import { createRoot, Root } from "react-dom/client";
-import { match } from "./match";
 
 type Type = "success" | "error";
 

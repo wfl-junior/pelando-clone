@@ -1,8 +1,8 @@
+import { Toast } from "@/alerts/Toast";
 import { GoogleIcon } from "@/components/icons/register-or-login-modal/GoogleIcon";
 import { defaultErrorMessage } from "@/constants";
 import { useModalContext } from "@/contexts/ModalContext";
 import { useLoginWithGoogleMutation } from "@/hooks/apollo/mutations/useLoginWithGoogleMutation";
-import { Toast } from "@/utils/Toast";
 import { updateProductsVotesForUser } from "@/utils/updateProductsVotesForUser";
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import React from "react";

@@ -35,7 +35,7 @@ module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
-    "./utils/Toast.{js,ts,jsx,tsx}",
+    "./alerts/**/*.{js,ts,jsx,tsx}",
   ],
   corePlugins: {
     container: false,

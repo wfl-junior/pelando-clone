@@ -1,8 +1,8 @@
+import { Toast } from "@/alerts/Toast";
 import { defaultErrorMessage } from "@/constants";
 import { useModalContext } from "@/contexts/ModalContext";
 import { useRegisterOrLoginContext } from "@/contexts/RegisterOrLoginContext";
 import { useLoginMutation } from "@/hooks/apollo/mutations/useLoginMutation";
-import { Toast } from "@/utils/Toast";
 import { updateProductsVotesForUser } from "@/utils/updateProductsVotesForUser";
 import { loginValidationSchemas } from "@/yup/loginValidationSchema";
 import { ApolloError } from "@apollo/client";

@@ -1,3 +1,4 @@
+import { Toast } from "@/alerts/Toast";
 import { API_URL, defaultErrorMessage } from "@/constants";
 import {
   authorizationHeaderWithToken,
@@ -6,7 +7,6 @@ import {
 import { isBrowser } from "@/utils/isBrowser";
 import { isEqual } from "@/utils/isEqual";
 import { refreshAccessToken } from "@/utils/refreshAccessToken";
-import { Toast } from "@/utils/Toast";
 import {
   ApolloClient,
   concat,

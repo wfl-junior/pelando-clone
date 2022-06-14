@@ -1,8 +1,8 @@
+import { Toast } from "@/alerts/Toast";
 import { SignOutIcon } from "@/components/icons/header/top/SignOutIcon";
 import { Spinner } from "@/components/Spinner";
 import { defaultErrorMessage } from "@/constants";
 import { useLogoutMutation } from "@/hooks/apollo/mutations/useLogoutMutation";
-import { Toast } from "@/utils/Toast";
 import { ApolloError } from "@apollo/client";
 import { Menu } from "@headlessui/react";
 import classNames from "classnames";

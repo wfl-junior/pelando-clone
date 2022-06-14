@@ -1,8 +1,8 @@
 import { ProductsQueryResponse, ProductsQueryVariables } from "@/@types/api";
+import { Toast } from "@/alerts/Toast";
 import { AngleDownIcon } from "@/components/icons/header/top/AngleDownIcon";
 import { defaultErrorMessage } from "@/constants";
 import { useProductsQuery } from "@/hooks/apollo/queries/useProductsQuery";
-import { Toast } from "@/utils/Toast";
 import { ApolloError, QueryHookOptions } from "@apollo/client";
 import React, { Fragment } from "react";
 

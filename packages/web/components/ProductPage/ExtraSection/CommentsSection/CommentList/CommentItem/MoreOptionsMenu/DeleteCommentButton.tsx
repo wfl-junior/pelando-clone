@@ -1,4 +1,5 @@
 import { CommentsQueryResponse } from "@/@types/api";
+import { Toast } from "@/alerts/Toast";
 import { Spinner } from "@/components/Spinner";
 import { defaultErrorMessage } from "@/constants";
 import { useCommentItemContext } from "@/contexts/CommentItemContext";
@@ -7,7 +8,6 @@ import { commentsQuery } from "@/graphql/queries/commentsQuery";
 import { useDeleteCommentMutation } from "@/hooks/apollo/mutations/useDeleteCommentMutation";
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import { authorizationHeaderWithToken } from "@/utils/accessToken";
-import { Toast } from "@/utils/Toast";
 import { ApolloError } from "@apollo/client";
 import React from "react";
 import { getCommentsVariables } from "../..";
