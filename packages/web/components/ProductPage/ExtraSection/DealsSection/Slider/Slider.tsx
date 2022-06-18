@@ -1,6 +1,7 @@
 import { Product } from "@/@types/api";
 import { HotIcon } from "@/components/icons/product-card/HotIcon";
 import { CommentIcon } from "@/components/icons/product-page/CommentIcon";
+import { formatTemperature } from "@/utils/formatTemperature";
 import { getReadableDate } from "@/utils/getReadableDate";
 import Image from "next/image";
 import Link from "next/link";
@@ -70,7 +71,7 @@ export const Slider: React.FC<SliderProps> = ({ products }) => {
                   <div className="flex items-center gap-2">
                     <div className="text-primary flex items-center gap-1 font-bold">
                       <HotIcon className="w-3.5" />
-                      {Math.floor(product.temperature)}º
+                      {formatTemperature(product.temperature)}
                     </div>
 
                     <div className="flex items-center gap-0.5 font-bold">

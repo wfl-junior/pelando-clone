@@ -1,5 +1,6 @@
 import { useProductCardContext } from "@/contexts/ProductCardContext";
 import { useUser } from "@/hooks/useUser";
+import { formatTemperature } from "@/utils/formatTemperature";
 import classNames from "classnames";
 import React, { Fragment, useState } from "react";
 import { ColdButton } from "./ColdButton";
@@ -43,7 +44,7 @@ export const TemperatureSection: React.FC = () => {
               },
         )}
       >
-        {Math.floor(temperature)}º
+        {formatTemperature(temperature)}
       </span>
 
       {isLoggedIn ? (
