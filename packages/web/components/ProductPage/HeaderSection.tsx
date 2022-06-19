@@ -1,6 +1,7 @@
+import { Price } from "@/components/Price";
 import { useProductQuery } from "@/hooks/apollo/queries/useProductQuery";
 import { useRouter } from "next/router";
-import React, { Fragment } from "react";
+import React from "react";
 import { getVariables } from ".";
 import { ArrowLeftIcon } from "../icons/header/top/ArrowLeftIcon";
 import { ExternalLinkIcon } from "../icons/product-page/ExternalLinkIcon";
@@ -29,17 +30,7 @@ export const HeaderSection: React.FC = () => {
 
       <div className="flex items-center gap-1.5">
         <div className="text-primary font-bold">
-          {price > 0 ? (
-            <Fragment>
-              <small>R$</small>
-              {price.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
-            </Fragment>
-          ) : (
-            "Grátis"
-          )}
+          <Price price={price} />
         </div>
 
         <a

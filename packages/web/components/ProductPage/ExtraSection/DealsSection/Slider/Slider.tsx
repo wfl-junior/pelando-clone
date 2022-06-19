@@ -1,11 +1,12 @@
 import { Product } from "@/@types/api";
 import { HotIcon } from "@/components/icons/product-card/HotIcon";
 import { CommentIcon } from "@/components/icons/product-page/CommentIcon";
+import { Price } from "@/components/Price";
 import { formatTemperature } from "@/utils/formatTemperature";
 import { getReadableDate } from "@/utils/getReadableDate";
 import Image from "next/image";
 import Link from "next/link";
-import React, { Fragment, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { SlideButton } from "./SlideButton";
 
 interface SliderProps {
@@ -98,17 +99,7 @@ export const Slider: React.FC<SliderProps> = ({ products }) => {
                 </h3>
 
                 <div className="text-base font-bold md:text-xl">
-                  {product.price > 0 ? (
-                    <Fragment>
-                      <small>R$</small>
-                      {product.price.toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
-                    </Fragment>
-                  ) : (
-                    "Grátis"
-                  )}
+                  <Price price={product.price} />
                 </div>
               </div>
             </a>

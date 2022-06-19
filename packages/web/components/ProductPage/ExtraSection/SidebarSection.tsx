@@ -1,8 +1,9 @@
 import { AdSkeleton } from "@/components/AdSkeleton";
 import { CheckIcon } from "@/components/icons/CheckIcon";
+import { Price } from "@/components/Price";
 import { useProductForProductPage } from "@/hooks/useProductForProductPage";
 import Link from "next/link";
-import React, { Fragment } from "react";
+import React from "react";
 import { CommentButton } from "../ProductSection/ActionSection/CommentButton";
 import { CouponButton } from "../ProductSection/ActionSection/CouponButton";
 import { LinkButton } from "../ProductSection/ActionSection/LinkButton";
@@ -30,17 +31,7 @@ export const SidebarSection: React.FC = () => {
           <h2 className="text-lg font-bold">{title}</h2>
 
           <div className="text-primary text-2xl font-bold">
-            {price > 0 ? (
-              <Fragment>
-                <small>R$</small>
-                {price.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </Fragment>
-            ) : (
-              "Grátis"
-            )}
+            <Price price={price} />
           </div>
 
           <div className="mt-4 flex flex-col gap-2">

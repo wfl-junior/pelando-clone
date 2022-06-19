@@ -1,5 +1,6 @@
 import { ProductsQueryResponse, ProductsQueryVariables } from "@/@types/api";
 import { useProductsQuery } from "@/hooks/apollo/queries/useProductsQuery";
+import { formatPrice } from "@/utils/formatPrice";
 import { getReadableDate } from "@/utils/getReadableDate";
 import { overflowText } from "@/utils/overflowText";
 import { QueryHookOptions } from "@apollo/client";
@@ -66,14 +67,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({
                 <div className="flex flex-col">
                   <p>
                     Tá pelando! {overflowText(product.title, 35)} -&nbsp;
-                    {product.price > 0
-                      ? "R$" +
-                        product.price.toLocaleString(undefined, {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })
-                      : "Grátis"}
-                    , está super quente. Veja mais.
+                    {formatPrice(product.price)}, está super quente. Veja mais.
                   </p>
 
                   <span className="text-secondary-foreground">
