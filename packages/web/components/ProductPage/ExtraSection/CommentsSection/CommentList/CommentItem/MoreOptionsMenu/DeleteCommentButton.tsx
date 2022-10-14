@@ -62,7 +62,8 @@ export const DeleteCommentButton: React.FC = () => {
               }
 
               // atualiza commentCount do product
-              const newTotal = Math.max(product.commentCount - 1, 0);
+              const currentTotal = product.commentCount;
+              const newTotal = Math.max(currentTotal - 1, 0);
               cache.modify({
                 id: cache.identify(product as any),
                 fields: {
@@ -108,9 +109,7 @@ export const DeleteCommentButton: React.FC = () => {
               })!;
 
               const perPage = currentPageVariables.input.perPage!;
-              const totalComments =
-                currentPageData.comments.comments.info.total;
-              const lastPage = Math.ceil(totalComments / perPage);
+              const lastPage = Math.ceil(currentTotal / perPage);
 
               if (currentPage !== lastPage) {
                 // atualiza cache ou remove páginas depois da página atual se existir em cache
